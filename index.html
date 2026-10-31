@@ -168,7 +168,8 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .pb .rc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:11mm;color:#d5392f}
 .pb .rc .wc .zy{width:8mm;border-left:1px solid #3155a2;display:grid;place-items:center;font-size:3.6mm;color:#d5392f}
 /* worksheet D: 同音不同字 */
-.wsD{display:flex;flex-direction:column;gap:4mm}
+.sheet.port:has(.wsD){display:flex;flex-direction:column}
+.wsD{display:flex;flex-direction:column;gap:4mm;flex:1;justify-content:space-evenly}
 .dr{display:flex;gap:5mm;justify-content:center}
 .dg{border:1.2px solid #3155a2;display:flex;flex-direction:column}
 .dg .zh{height:14mm;display:flex;align-items:center;justify-content:center;gap:3mm;border-bottom:1px solid #3155a2;font-size:3.8mm;letter-spacing:.4em}
@@ -176,13 +177,12 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .dg .cs{display:flex}
 .dc{width:22mm;display:flex;flex-direction:column;border-left:1px solid #3155a2}
 .dc:first-child{border-left:0}
-.dc .hz{height:19mm;border-bottom:1px solid #3155a2}
-.dc .hz .tz{width:100%;height:100%;border:0;display:grid;place-items:center;font-size:15mm}
+.dc .hz{height:21mm;border-bottom:1px solid #3155a2}
+.dc .hz .tz{width:100%;height:100%;border:0;display:grid;place-items:center;font-size:16mm}
 .dc .lb{height:6.5mm;display:grid;place-items:center;font-size:3.6mm;letter-spacing:.5em;border-bottom:1px solid #3155a2}
-.dc .bs{height:10mm;display:grid;place-items:center;font-size:7mm;color:#d5392f;border-bottom:1px solid #3155a2}
-.dc .wc{display:flex;height:13.5mm;border-bottom:1px solid #3155a2}
+.dc .wc{display:flex;height:18mm;border-bottom:1px solid #3155a2}
 .dc .wc:last-child{border-bottom:0}
-.dc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:10mm;color:#d5392f}
+.dc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:12mm;color:#d5392f}
 .dc .wc .zy{width:6mm;border-left:1px solid #3155a2;display:grid;place-items:center;font-size:2.9mm;color:#d5392f}
 .ansflag{position:absolute;top:3mm;right:9mm;font-size:4mm;color:#d5392f;font-family:var(--ui)}
 footer.src{border-top:1px dashed var(--line);padding-block:14px 30px;color:var(--muted);font-size:.88rem;line-height:1.6}
@@ -735,7 +735,7 @@ function sheetsD(ls,ans){const res=[];const {g,groups}=homoGroups(ls);if(!groups
     for(const row of rows.slice(p,p+3)){const r=el("div","dr");
       for(const gr of row){const b=el("div","dg");b.appendChild(el("div","zh",`<span>讀音</span><span class="zz">${zv(gr.z)}</span>`));
         const cs=el("div","cs");
-        for(const y of gr.m)cs.appendChild(el("div","dc",`<div class="hz"><div class="tz">${esc(y.c)}</div></div><div class="lb">部首</div><div class="bs">${ans?esc(y.b||""):""}</div><div class="lb">造詞</div>`+wordCells(pickW(y.w),y.c,y.z,ans,low)));
+        for(const y of gr.m)cs.appendChild(el("div","dc",`<div class="hz"><div class="tz">${esc(y.c)}</div></div><div class="lb">造詞</div>`+wordCells(pickW(y.w),y.c,y.z,ans,low)));
         b.appendChild(cs);r.appendChild(b);}
       D.appendChild(r);}
     s.appendChild(D);res.push(s);}
