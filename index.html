@@ -581,7 +581,7 @@ function homos(x,g){if(!HX)buildHX();const out=[],has=new Set([x.c]);const add=y
   const s=(HOMO[x.z]||[]);s.filter(y=>y.g<=g).sort((a,b)=>b.g-a.g).forEach(add);(HX[x.z]||[]).filter(y=>y.g<=g).forEach(add);s.filter(y=>y.g>g).sort((a,b)=>a.g-b.g).forEach(add);(HX[x.z]||[]).forEach(add);return out;}
 // state
 let grade=2,sel=new Set(),view="list";
-try{const s=JSON.parse(localStorage.getItem("szs-state")||"null");if(s){grade=s.g||2;sel=new Set(s.s||[]);view=["list","stroke","print","edit"].includes(s.v)?s.v:"list";}}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("szs-state")||"null");if(s){grade=s.g||2;sel=new Set(s.s||[]);}   // 打開網站一律從生字總覽開始（網址 #stroke 等例外），年級、課次照上次}catch(e){}
 function save(){try{localStorage.setItem("szs-state",JSON.stringify({g:grade,s:[...sel],v:view}))}catch(e){}}
 const key=ls=>ls.g+"-"+ls.l;
 function gLessons(){return L.filter(x=>x.g===grade);}
