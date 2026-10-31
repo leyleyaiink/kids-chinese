@@ -208,6 +208,7 @@ footer.src a{color:var(--green)}
 .sk-strip .st{position:absolute;right:2px;bottom:1px;font-size:9px;color:var(--amber);font-family:var(--ui)}
 .sk-board{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;display:flex;justify-content:center}
 .sk-board canvas{touch-action:none;display:block;border-radius:6px}
+.sk-board,.sk-board canvas{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}   /* iPad 長按不會跳出選字、放大鏡 */
 .sk-info{display:flex;align-items:center;gap:12px}
 .sk-info .bg{font-family:var(--kai);font-size:64px;line-height:1}
 .sk-info .zz{font-family:var(--kai);font-size:22px;color:var(--muted)}
@@ -978,6 +979,7 @@ const SB=(()=>{
     cv.addEventListener("pointermove",e=>{if(!drawing||e.pointerId!==pid)return;if(e.pointerType==="pen")penSeen=performance.now();const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce&&ce.length?ce:[e];for(const ev of evs)live.push(toLocal(ev));pen.move(live[live.length-1]);draw();});
     cv.addEventListener("pointerup",e=>{if(!drawing||e.pointerId!==pid)return;drawing=false;pen.stop();const user=live;live=null;
       if(!user||len(user)<4&&strokes[done].length>1){draw();return;}judge(user.length>1?user:[user[0],user[0]]);});
+    cv.addEventListener("touchstart",e=>e.preventDefault(),{passive:false});   /* iPad Safari：擋掉長按選字、雙擊放大，筆畫照樣用 pointer 事件 */
     cv.addEventListener("pointercancel",()=>{pen.stop();drawing=false;live=null;draw();});}
   window.addEventListener("resize",()=>{if(E)sizeCanvas();});
   return {
