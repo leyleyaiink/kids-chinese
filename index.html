@@ -146,7 +146,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .wsA .sep{flex:1;display:grid;place-items:center;font-size:5mm;color:#8a7a79}
 /* worksheet B: radical quiz */
 .ttl{font-size:6mm;margin:0 0 4mm;display:flex;justify-content:space-between;align-items:baseline}
-.ttl small{font-size:4mm;color:#534545}
+.ttl small{font-size:4mm;color:#534545;white-space:nowrap;margin-left:3mm}
 .wsB{display:grid;grid-template-columns:repeat(5,1fr);gap:3.5mm}
 .rb{border:1.2px solid #3155a2;display:flex;flex-direction:column}
 .rb .top{display:flex;height:22mm;border-bottom:1px solid #3155a2}
@@ -162,7 +162,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .pb .rd{display:flex;gap:3mm;justify-content:flex-start}
 .pb .rc{width:30mm;border:1.2px solid #3155a2;display:flex;flex-direction:column}
 .pb .rc .lb{height:7mm;display:grid;place-items:center;font-size:4.2mm;letter-spacing:.5em;border-bottom:1px solid #3155a2}
-.pb .rc .zyb{height:13mm;display:grid;place-items:center;font-size:6mm;color:#d5392f;border-bottom:1px solid #3155a2}
+.pb .rc .zyb{height:13mm;display:grid;place-items:center;font-size:4.3mm;line-height:1;overflow:hidden;color:#d5392f;border-bottom:1px solid #3155a2}
 .pb .rc .wc{display:flex;height:15mm;border-bottom:1px solid #3155a2}
 .pb .rc .wc:last-child{border-bottom:0}
 .pb .rc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:10mm;color:#d5392f}
@@ -846,6 +846,8 @@ function sheetsB(ls,ans){const res=[];if(!ls.length)return res;const multi=ls.le
   return res;}
 // C: polyphone, 2 per row, 3 rows per sheet
 // 多音字練習表：items=[{c, low(要不要注音格), reads:[[讀音,[語詞…]],…]}]
+// 練習卷標題的課次：一課「第一課」，好幾課「第一～三課」
+const lsRange=ls=>{if(!ls.length)return"";const a=titleParts(ls[0].t)[0]||ls[0].t;if(ls.length===1)return a;const b=titleParts(ls[ls.length-1].t)[0]||"";return a.replace(/課$/,"")+"～"+b.replace(/^第/,"");};
 function polySheets(items,ans,name,sub){const res=[];
   // 一頁 3 排：讀音 1～2 個的字兩個並排一排，3 個以上的字自己佔一整排
   const pg=[];let cur=[],rows=0,half=false;
@@ -864,7 +866,7 @@ function polySheets(items,ans,name,sub){const res=[];
     s.appendChild(C);res.push(s);}
   return res;}
 function sheetsC(ls,ans){const all=[];ls.forEach(x=>x.c.forEach(c=>{if(c.o.length)all.push({c:c.c,low:x.g<=2,reads:[[c.z,c.w.slice(0,1)],...c.o.slice(0,2)]});}));
-  return polySheets(all,ans,"多音字練習",`${G[ls[0].g-1]}上`+(ls.length===1?" "+(titleParts(ls[0].t)[0]||ls[0].t):""));}
+  return polySheets(all,ans,"多音字練習",`${G[ls[0].g-1]}上 ${lsRange(ls)}`);}
 // 造詞格：國字＋注音（注音格只有低年級，跟教育部作業簿規格一樣）。解答頁填上語詞和注音
 const pickW=ws=>(ws||[]).find(w=>[...w].length===2)||(ws||[])[0]||"";
 function wordZ(w,c,z){const ch=[...w];const rd=typeof autoRead==="function"?autoRead(ch):[];return ch.map((x,i)=>x===c?z:(rd[i]||(ZYT[x]||[])[0]||""));}
@@ -902,7 +904,7 @@ function homoSheets(groups,low,ans,name,sub){const res=[];if(!groups.length)retu
       D.appendChild(r);}
     s.appendChild(D);res.push(s);}
   return res;}
-function sheetsD(ls,ans){const {g,groups}=homoGroups(ls);return homoSheets(groups,g<=2,ans,"同音不同字練習",`${G[g-1]}上`+(ls.length===1?" "+(titleParts(ls[0].t)[0]||ls[0].t):""));}
+function sheetsD(ls,ans){const {g,groups}=homoGroups(ls);return homoSheets(groups,g<=2,ans,"同音不同字練習",`${G[g-1]}上 ${lsRange(ls)}`);}
 // ================= 筆順練習 (stroke order) =================
 const SDATA={};
 function addTracks(raw){for(const e of raw.split("|")){if(!e)continue;const i=e.indexOf(":");SDATA[e.slice(0,i)]=e.slice(i+1).split(",").map(s=>{const p=[];for(let k=0;k<s.length;k+=4)p.push([parseInt(s.slice(k,k+2),36),parseInt(s.slice(k+2,k+4),36)]);return p;});}}
@@ -1307,7 +1309,11 @@ function tplFrom(ls,kind){
 const MODE_NAME=["都顯示","國字空格","注音空格","都空白"];
 // 自編多音字：一行一個字，後面可以接「讀音:語詞/語詞」；沒寫就用課本資料，課本沒有就用字型裡的讀音
 function polyOf(c){for(const ls of L)for(const x of ls.c)if(x.c===c&&x.o.length)return [[x.z,x.w.slice(0,1)],...x.o.slice(0,2)];
-  const rs=ZYT[c]||[];const m=extraMember(c);return rs.slice(0,3).map(z=>[z,z===m.z?m.w.slice(0,1):[]]);}
+  if(READS[c])return READS[c].slice(0,3).map(([z,ws])=>[z,ws.slice(0,2)]);   /* 字典的讀音和例詞 */
+  /* 字型讀音＋破音詞表裡的語詞；有語詞的讀音排前面 */
+  const m=extraMember(c),bag=new Map((ZYT[c]||[]).map(z=>[z,z===m.z?m.w.slice(0,1):[]]));
+  for(const w in WD){const ch=[...w],j=ch.indexOf(c);if(j<0)continue;const z=WD[w][j];if(!bag.has(z))bag.set(z,[]);if(bag.get(z).length<2)bag.get(z).push(w);}
+  return [...bag].sort((x,y)=>(y[1].length>0)-(x[1].length>0)).slice(0,3);}
 function parsePoly(src,low){return src.split("\n").map(t=>t.trim().split(/[\s　]+/).filter(Boolean)).filter(t=>t.length&&isHan(t[0][0])).map(t=>{const c=[...t[0]][0];
   const own=t.slice(1).map(x=>{const [z,w=""]=x.split(/[:：]/);return [z,w.split("/").filter(Boolean)];});return {c,low,reads:own.length?own:polyOf(c)};});}
 // 自編同音字：一行一組，每個字可以寫成「字:語詞」
