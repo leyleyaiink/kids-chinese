@@ -1124,7 +1124,7 @@ const MODE_NAME=["都顯示","國字空格","注音空格","都空白"];
 function renderEdit(m,ls){
   $("pagesize").textContent="@page{size:A4 landscape;margin:0}";
   const w=el("div","ed");
-  const lsName=ls.length?`${G[ls[0].g-1]}上 ${ls.map(x=>titleParts(x.t)[0].replace("第","").replace("課","")).join("、")}課`:"";
+  const lsName=ls.length?`${VN[VER].replace("版","")} ${G[ls[0].g-1]}上 ${ls.map(x=>titleParts(x.t)[0].replace("第","").replace("課","")).join("、")}課`:"";
   w.innerHTML=`
   <div class="ed-side">
     <div class="panel">
