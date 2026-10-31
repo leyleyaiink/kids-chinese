@@ -659,7 +659,11 @@ $("sumEdit").onclick=()=>{SCOPE_OPEN=true;renderScope();};
 $("selDone").onclick=()=>{SCOPE_OPEN=false;renderScope();scrollTo(0,0);};
 $("selAll").onclick=()=>{gLessons().forEach(x=>sel.add(key(x)));save();renderBar();render();};
 $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
-["list","stroke","print","edit","sent"].forEach(v=>$("t-"+v).onclick=()=>{clearQ();view=v;FULL=true;SCOPE_OPEN=false;save();renderBar();render();});
+// 換功能記在瀏覽器歷史裡：手機的返回鍵、往右滑、主畫面 App 都能回到上一個功能
+function go(v){clearQ();view=v;FULL=true;SCOPE_OPEN=false;save();try{history.pushState({v,prev:true},"",location.pathname+location.search+"#"+v);}catch(e){}renderBar();render();scrollTo(0,0);}
+function goBack(){if(history.state&&history.state.prev)history.back();else go("list");}
+window.addEventListener("popstate",e=>{const v=(e.state&&e.state.v)||location.hash.slice(1)||"list";if(!["list","stroke","print","edit","sent"].includes(v))return;clearQ();view=v;FULL=true;renderBar();render();});
+["list","stroke","print","edit","sent"].forEach(v=>$("t-"+v).onclick=()=>go(v));
 // 匯出練習卷・自編生字練習：點開就是全螢幕，上方固定「返回」和「列印」
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
@@ -743,7 +747,7 @@ function renderPrint(m,ls){
   ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===PT);b.onclick=()=>{PT=b.dataset.t;render();};});
   $("pa").onchange=e=>{PA=e.target.checked;render();};
   if(PT==="A"){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
-    tip.querySelector("button").onclick=()=>{view="edit";save();renderBar();render();scrollTo(0,0);};m.appendChild(tip);}
+    tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
   const nt=el("div","note",INAPP?INAPP_MSG:"按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 在列印畫面按右上角分享鍵，選「儲存到檔案」。");m.appendChild(nt);
   const pages=el("div","pages");m.appendChild(pages);
   $("pagesize").textContent=PT==="A"?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
@@ -1031,10 +1035,11 @@ function renderStroke(m,ls){
   const seen=new Set(),all=[],missing=[];
   ls.forEach(x=>x.c.forEach(c=>{if(c.k==="r"&&!incR)return;if(seen.has(c.c))return;seen.add(c.c);(SDATA[c.c]?all:missing).push({c:c.c,z:c.z,k:c.k});}));
   const nWeak=all.filter(x=>SB.weak(x.c)).length;
-  top.innerHTML=`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="skR" ${incR?"checked":""}> 包含認讀字</label>
+  top.innerHTML=`<button class="mini" id="skBack" type="button">返回</button><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="skR" ${incR?"checked":""}> 包含認讀字</label>
     <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="skW" ${WEAKONLY?"checked":""}> 只練常錯的字（${nWeak}）</label>
     <button class="mini" id="skClr" type="button">清除練習紀錄</button>`;
   m.appendChild(top);
+  $("skBack").onclick=()=>goBack();
   $("skR").onchange=e=>{try{localStorage.setItem("szs-skr",e.target.checked?"1":"0")}catch(_){}render();};
   $("skW").onchange=e=>{WEAKONLY=e.target.checked;render();};
   $("skClr").onclick=()=>{if(confirm("要清除這台裝置上所有的筆順練習紀錄（常錯的字）嗎？星星會保留。")){SB.clearStat();WEAKONLY=false;render();}};
@@ -1128,7 +1133,7 @@ const XIDX={};[VER,...Object.keys(LV).filter(v=>v!==VER)].forEach(v=>LV[v].forEa
 const RAD={};Object.values(XIDX).forEach(a=>{const c=a[0].c;(RAD[c.b]=RAD[c.b]||[]).push(c);});
 const ZYI={};Object.values(XIDX).forEach(a=>{a.forEach(({c})=>{[c.z,...c.o.map(o=>o[0])].forEach(z=>{const k=z.replace(/[ˊˇˋ˙]/g,"");(ZYI[k]=ZYI[k]||[]);if(!ZYI[k].some(y=>y.c===c.c&&y.z===z))ZYI[k].push({c:c.c,z});});});});
 function clearQ(){Q="";$("srch").value="";$("srchX").hidden=true;}
-function goStroke(e){grade=e.ls.g;sel=new Set([key(e.ls)]);strokeStart=e.c.c;clearQ();view="stroke";save();renderBar();render();window.scrollTo(0,0);}
+function goStroke(e){grade=e.ls.g;sel=new Set([key(e.ls)]);strokeStart=e.c.c;go("stroke");}
 function charBtns(list){return `<div class="sr-list">${list.map(x=>`<button type="button" data-q="${esc(x.c)}"><b>${esc(x.c)}</b><small>${esc(x.z||"")}</small></button>`).join("")}</div>`;}
 function renderSearch(m){
   const q=Q.trim();const han=[...q].filter(ch=>/\p{Script=Han}/u.test(ch));const isZy=/[ㄅ-ㄩ˙ˊˇˋ]/.test(q)&&!han.length;
@@ -1439,6 +1444,7 @@ function edSheets(ans){const res=[];const sz=GRID[edSize()],ROWS=sz.rows,COLS=sz
 
 try{const hv=(location.hash||"").slice(1);if(["list","stroke","print","edit","sent"].includes(hv))view=hv;}catch(e){}
 if(!sel.size)sel=new Set(gLessons().slice(0,1).map(key));
+try{history.replaceState({v:view,prev:false},"");}catch(e){}
 renderBar();render();
 if(view==="fb"){view="list";}renderFb($("fbIn"));$("fbBox").addEventListener("toggle",e=>{$("fbBox").querySelector(".fbt").textContent=$("fbBox").open?"收合 ▴":"展開 ▾";});
 </script>
