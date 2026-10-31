@@ -155,11 +155,11 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .rb .lb{height:8mm;display:grid;place-items:center;font-size:4.4mm;letter-spacing:.6em;border-bottom:1px solid #3155a2}
 .rb .wr{height:22mm;display:grid;place-items:center;font-size:14mm;color:#d5392f}
 /* worksheet C: polyphone */
-.wsC{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm 8mm}
-.pb{display:flex;flex-direction:column;align-items:center;gap:2mm}
+.wsC{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm 8mm;justify-items:start;align-items:start}
+.pb{display:flex;flex-direction:column;align-items:flex-start;gap:2mm}
 .pb .hz{display:flex}
 .pb .hz .tz{width:30mm;height:30mm;display:grid;place-items:center;font-size:23mm;border-color:#3155a2;border-width:1.2px}
-.pb .rd{display:flex;gap:3mm;justify-content:center}
+.pb .rd{display:flex;gap:3mm;justify-content:flex-start}
 .pb .rc{width:30mm;border:1.2px solid #3155a2;display:flex;flex-direction:column}
 .pb .rc .lb{height:7mm;display:grid;place-items:center;font-size:4.2mm;letter-spacing:.5em;border-bottom:1px solid #3155a2}
 .pb .rc .zyb{height:16mm;display:grid;place-items:center;font-size:6mm;color:#d5392f;border-bottom:1px solid #3155a2}
@@ -168,9 +168,8 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .pb .rc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:11mm;color:#d5392f}
 .pb .rc .wc .zy{width:8mm;border-left:1px solid #3155a2;display:grid;place-items:center;font-size:3.6mm;color:#d5392f}
 /* worksheet D: 同音不同字 */
-.sheet.port:has(.wsD){display:flex;flex-direction:column}
-.wsD{display:flex;flex-direction:column;gap:4mm;flex:1;justify-content:space-evenly}
-.dr{display:flex;gap:5mm;justify-content:center}
+.wsD{display:flex;flex-direction:column;gap:6mm}
+.dr{display:flex;gap:5mm;justify-content:flex-start;align-items:flex-start}
 .dg{border:1.2px solid #3155a2;display:flex;flex-direction:column}
 .dg .zh{height:14mm;display:flex;align-items:center;justify-content:center;gap:3mm;border-bottom:1px solid #3155a2;font-size:3.8mm;letter-spacing:.4em}
 .dg .zh .zz{font-size:3.6mm;letter-spacing:0}
