@@ -769,8 +769,10 @@ function sheetsA(ls,ans){const res=[];if(!ls.length)return res;
   const cols=[[]];const put=it=>{if(cols[cols.length-1].length+it.length>ROWS)cols.push([]);const col=cols[cols.length-1];col.push(...it);if(col.length<ROWS&&!it[0].lab)col.push(null);};
   for(const x of ls){
     if(multi)put([{lab:titleParts(x.t)[0]||x.t}]);
+    const seen={};   /* 同一課兩個生字用同一個語詞（遊、戲→遊戲），只出一題，兩個字都空 */
     for(const c of x.c){if(c.k!=="s")continue;
-      if(c.p){const w=[...c.p[0]],z=c.p[1].split(".");put(w.map((ch,i)=>({ch,z:z[i],t:ch===c.c})));}
+      if(c.p){if(seen[c.p[0]]){seen[c.p[0]].forEach(o=>{if(o.ch===c.c)o.t=true;});continue;}
+        const w=[...c.p[0]],z=c.p[1].split("."),it=w.map((ch,i)=>({ch,z:z[i],t:ch===c.c}));seen[c.p[0]]=it;put(it);}
       else put([{ch:c.c,z:c.z,t:true}]);}}
   const [no,ti]=titleParts(ls[0].t),last=titleParts(ls[ls.length-1].t)[0];
   const head=multi?`<span>${G[ls[0].g-1]}上 ${esc((no||"").replace(/課$/,""))}～${esc((last||"").replace(/^第/,""))}</span>`:`<span>${G[ls[0].g-1]}上 ${esc(no)}</span><span>${esc(ti)}</span>`;
