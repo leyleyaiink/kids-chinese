@@ -190,12 +190,12 @@ footer.src a{color:var(--green)}
 @media print{
   @page{margin:0}
   body{background:#fff}
-  header.top,.bar,.pr-ctl,.note,footer.src,.noprint,.ann,.fbwrap,.ed-side{display:none!important}
+  header.top,.bar,.pr-ctl,.pr-tip,.note,footer.src,.noprint,.ann,.fbwrap,.ed-side,.sumrow,.sk-note{display:none!important}
   .ed{display:block!important}.gh{visibility:hidden!important}.ed-ws .cell.poly .zy::after{display:none!important}.ed-ws .cell{outline:none!important}.ed-ws .cell{background:none!important}.ed-ws .zy.hl{background:none!important}
   main{padding:0}
   .wrap{padding:0;max-width:none}
   .pages{gap:0;overflow:visible;padding:0;display:block}
-  .scale{transform:none!important;height:auto!important}
+  .scale{transform:none!important;height:auto!important;width:auto!important}   /* 螢幕預覽時設的寬度不能帶到列印，否則整份會被縮小 */
   .sheet{box-shadow:none;break-after:page;page-break-after:always;margin:0}
 }
 
