@@ -869,7 +869,7 @@ const SB=(()=>{
     function stop(){if(!g)return;const a=ac(),s=src;g.gain.setTargetAtTime(0,a.currentTime,.03);setTimeout(()=>{try{s.stop()}catch(_){}},200);src=g=f=last=null;}
     return {start,move,stop};})();
   let E=null; // DOM refs of the mounted panel
-  let list=[],idx=0,ch="",strokes=[],done=0,miss=0,missHere=0,busy=false,penSeen=false,hintStroke=-1,mode="prac",live=null,ol=null,tour=false,animToken=0,S=400,ctx=null;
+  let list=[],idx=0,ch="",strokes=[],done=0,miss=0,peek=false,missHere=0,busy=false,penSeen=false,hintStroke=-1,mode="prac",live=null,ol=null,tour=false,animToken=0,S=400,ctx=null;
   const K=()=>S/256;
   function sizeCanvas(){if(!E)return;const w=E.board.clientWidth-28;const top=E.board.getBoundingClientRect().top;
     const h=window.innerHeight-Math.max(top,120)-24;S=Math.max(260,Math.min(w,Math.max(h,340),640));const D=window.devicePixelRatio||1;
@@ -922,23 +922,24 @@ const SB=(()=>{
     else setMsg(`再試一次！第 ${k+1} 畫寫在橘色這裡。`,"warn");
     if(mode==="test"){if(missHere>=3){flashRed(user).then(()=>flashHint(k));}else{setMsg(best>=0?`筆順錯了！想一想，第 ${k+1} 畫應該先寫哪一筆？`:`再想想，第 ${k+1} 畫要寫在哪裡？`,"bad");flashRed(user).then(()=>draw());}return;}
     flashRed(user).then(()=>flashHint(k));}
-  function finish(){const st=miss===0?3:miss<=2?2:1;BEST[ch]=Math.max(BEST[ch]||0,st);saveBest();
-    const t=STAT[ch]||{n:0,m:0,s:0};t.n++;t.m+=miss;t.s=miss?0:t.s+1;STAT[ch]=t;saveStat();renderStrip();
+  function finish(){const st=peek?1:miss===0?3:miss<=2?2:1;   /* 測驗模式看過答案最多一顆星 */
+   BEST[ch]=Math.max(BEST[ch]||0,st);saveBest();
+    const t=STAT[ch]||{n:0,m:0,s:0};t.n++;t.m+=miss+(peek?1:0);t.s=(miss||peek)?0:t.s+1;STAT[ch]=t;saveStat();renderStrip();
     E.stars.textContent="★".repeat(st)+"☆".repeat(3-st);
-    setMsg(miss===0?`太棒了！「${ch}」的筆順全部正確！按「下一個字」繼續。`:`寫完了！錯了 ${miss} 次，再寫一次會更好。`,"good");}
+    setMsg(peek?`寫完了！這次有看答案，下次試試不看答案寫寫看。`:miss===0?`太棒了！「${ch}」的筆順全部正確！按「下一個字」繼續。`:`寫完了！錯了 ${miss} 次，再寫一次會更好。`,"good");}
   function renderStrip(){if(!E)return;E.strip.innerHTML="";list.forEach((x,i)=>{const b=document.createElement("button");b.type="button";b.textContent=x.c;b.className=(x.k==="r"?"r":"")+(weak(x.c)?" weak":"");
       b.title=(x.k==="r"?"認讀字":"生字")+(weak(x.c)?`・常錯的字（寫錯過 ${STAT[x.c].m} 次）`:"");if(i===idx)b.setAttribute("aria-current","true");
       if(BEST[x.c]){const s=document.createElement("span");s.className="st";s.textContent="★".repeat(BEST[x.c]);b.appendChild(s);}
       b.onclick=()=>pick(i);E.strip.appendChild(b);});
     let n=0;list.forEach(x=>{if(BEST[x.c]===3)n++;});E.score.textContent=`三顆星 ${n} / ${list.length} 字`;}
-  function pick(i,quiet){idx=i;const x=list[i];ch=x.c;strokes=SDATA[ch];ol=outlines(ch);if(ol&&ol.length!==strokes.length)ol=null;done=0;miss=0;missHere=0;hintStroke=-1;animToken++;busy=false;
+  function pick(i,quiet){idx=i;const x=list[i];ch=x.c;strokes=SDATA[ch];ol=outlines(ch);if(ol&&ol.length!==strokes.length)ol=null;done=0;miss=0;peek=false;missHere=0;hintStroke=-1;animToken++;busy=false;
     E.big.textContent=ch;E.zy.textContent=x.z||"";E.stars.textContent="";strokeStart=ch;
     [...E.strip.children].forEach((b,j)=>b.toggleAttribute("aria-current",j===i));
     const cb=E.strip.children[i];if(cb&&cb.scrollIntoView)cb.scrollIntoView({block:"nearest",inline:"nearest"});
     updInfo();draw();
     if(quiet)return;if(mode==="prac"&&E.auto.checked)setTimeout(()=>{if(E&&ch===x.c)playAll();},250);else setMsg(mode==="test"?"測驗開始！照筆順寫出「"+ch+"」。":"從第 1 畫開始寫。");}
   function setMode(m){mode=m;E.mP.setAttribute("aria-pressed",m==="prac");E.mT.setAttribute("aria-pressed",m==="test");
-    if(tour)setTour(false);E.tour.hidden=E.play.hidden=E.hint.hidden=E.ghostRow.hidden=E.autoRow.hidden=(m==="test");
+    if(tour)setTour(false);E.ans.hidden=(m!=="test");E.tour.hidden=E.play.hidden=E.hint.hidden=E.ghostRow.hidden=E.autoRow.hidden=(m==="test");
     E.note.textContent=m==="test"?"測驗模式：不先播放、沒有提示，寫錯 3 次才會出現提示。":"播放模式：先看正確筆順，寫錯會馬上提示。";pick(idx);}
   let drawing=false,pid=null;
   const toLocal=e=>{const r=E.cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*256,(e.clientY-r.top)/r.height*256];};
@@ -960,7 +961,7 @@ const SB=(()=>{
         <div class="seg" role="group" aria-label="模式"><button type="button" data-m="prac" aria-pressed="true">播放模式</button><button type="button" data-m="test" aria-pressed="false">測驗模式</button></div>
         <div class="sk-info"><div class="bg"></div><div class="zz"></div><div class="ct">第 <b class="cur">1</b> 畫<br>共 <b class="tot">1</b> 畫</div></div>
         <div class="sk-msg" role="status" aria-live="polite"></div>
-        <div class="sk-btns"><button class="btn p wide" data-a="tour" type="button">整課連續播放</button><button class="btn wide" data-a="play" type="button">這個字再播放一次</button><button class="btn wide" data-a="hint" type="button">提示下一畫</button><button class="btn" data-a="prev" type="button">上一字</button><button class="btn" data-a="redo" type="button">重寫</button><button class="btn" data-a="next" type="button">下一字</button></div>
+        <div class="sk-btns"><button class="btn p wide" data-a="tour" type="button">整課連續播放</button><button class="btn wide" data-a="play" type="button">這個字再播放一次</button><button class="btn wide" data-a="hint" type="button">提示下一畫</button><button class="btn wide" data-a="ans" type="button">看正確筆順</button><button class="btn" data-a="prev" type="button">上一字</button><button class="btn" data-a="redo" type="button">重寫</button><button class="btn" data-a="next" type="button">下一字</button></div>
         <label class="ghostRow" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="ghost" checked> 顯示淡淡的字（描紅）</label>
         <label class="autoRow" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="auto" checked> 換字時先自動播放筆順</label>
         <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="snd" ${SND?"checked":""}> 音效（寫錯提示音、寫完整個字的音效）</label>
@@ -973,10 +974,11 @@ const SB=(()=>{
       m.appendChild(wrap);const q=s=>wrap.querySelector(s);
       E={strip:q(".sk-strip"),board:q(".sk-board"),cv:q("canvas"),big:q(".bg"),zy:q(".zz"),cur:q(".cur"),tot:q(".tot"),msg:q(".sk-msg"),stars:q(".sk-stars"),
          note:q(".note"),score:q(".score"),ghost:q(".ghost"),auto:q(".auto"),ghostRow:q(".ghostRow"),autoRow:q(".autoRow"),
-         play:q('[data-a="play"]'),tour:q('[data-a="tour"]'),hint:q('[data-a="hint"]'),mP:q('[data-m="prac"]'),mT:q('[data-m="test"]')};
+         play:q('[data-a="play"]'),tour:q('[data-a="tour"]'),ans:q('[data-a="ans"]'),hint:q('[data-a="hint"]'),mP:q('[data-m="prac"]'),mT:q('[data-m="test"]')};
       ctx=E.cv.getContext("2d");bindCanvas();
       q('[data-a="play"]').onclick=()=>{setTour(false);playAll();};q('[data-a="tour"]').onclick=()=>playLesson();
-      q('[data-a="redo"]').onclick=()=>{animToken++;busy=false;done=0;miss=0;missHere=0;hintStroke=-1;E.stars.textContent="";draw();updInfo();setMsg("重新開始，從第 1 畫寫起。");};
+      q('[data-a="ans"]').onclick=()=>{peek=true;E.stars.textContent="";playAll("這是正確筆順，看完再從第 1 畫寫一次。");};
+      q('[data-a="redo"]').onclick=()=>{animToken++;busy=false;done=0;miss=0;peek=false;missHere=0;hintStroke=-1;E.stars.textContent="";draw();updInfo();setMsg("重新開始，從第 1 畫寫起。");};
       q('[data-a="hint"]').onclick=()=>{if(done<strokes.length){missHere=2;flashHint(done);setMsg(`第 ${done+1} 畫在橘色這裡，從圓點開始寫。`,"warn");}};
       q('[data-a="next"]').onclick=()=>{if(idx<list.length-1)pick(idx+1);};
       q('[data-a="prev"]').onclick=()=>{if(idx>0)pick(idx-1);};
