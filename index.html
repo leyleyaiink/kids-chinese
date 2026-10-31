@@ -513,6 +513,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sumrow .sum{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;color:var(--ink)}
 .sumrow .mini,.mini.done{background:var(--ink);color:#fff;border-color:var(--ink)}
 .pr-tip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--ink);margin:-4px 0 10px}
+.sk-strip button.weak{background:#fbe7e4;border-color:#e8a59c}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -581,7 +582,7 @@ function homos(x,g){if(!HX)buildHX();const out=[],has=new Set([x.c]);const add=y
   const s=(HOMO[x.z]||[]);s.filter(y=>y.g<=g).sort((a,b)=>b.g-a.g).forEach(add);(HX[x.z]||[]).filter(y=>y.g<=g).forEach(add);s.filter(y=>y.g>g).sort((a,b)=>a.g-b.g).forEach(add);(HX[x.z]||[]).forEach(add);return out;}
 // state
 let grade=2,sel=new Set(),view="list";
-try{const s=JSON.parse(localStorage.getItem("szs-state")||"null");if(s){grade=s.g||2;sel=new Set(s.s||[]);}   // 打開網站一律從生字總覽開始（網址 #stroke 等例外），年級、課次照上次}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("szs-state")||"null");if(s){grade=s.g||2;sel=new Set(s.s||[]);/* 打開網站一律從生字總覽開始（網址 #stroke 等例外），年級、課次照上次 */}}catch(e){}
 function save(){try{localStorage.setItem("szs-state",JSON.stringify({g:grade,s:[...sel],v:view}))}catch(e){}}
 const key=ls=>ls.g+"-"+ls.l;
 function gLessons(){return L.filter(x=>x.g===grade);}
@@ -799,6 +800,10 @@ function outlines(c){if(c in SOL)return SOL[c];const r=SOLRAW[c];
 let strokeStart=null;
 const SB=(()=>{
   let BEST={};try{BEST=JSON.parse(localStorage.getItem("bishun-best")||"{}")||{}}catch(e){BEST={}}
+  // 每個字的練習紀錄（只存在這台裝置）：n 練習次數、m 總共寫錯幾次、s 連續全對幾次
+  let STAT={};try{STAT=JSON.parse(localStorage.getItem("bishun-stat")||"{}")||{}}catch(e){STAT={}}
+  const saveStat=()=>{try{localStorage.setItem("bishun-stat",JSON.stringify(STAT))}catch(e){}};
+  const weak=c=>{const t=STAT[c];return !!t&&t.m>0&&t.s<2;};   // 寫錯過、而且還沒連續全對兩次
   const saveBest=()=>{try{localStorage.setItem("bishun-best",JSON.stringify(BEST))}catch(e){}};
   const len=p=>{let L=0;for(let i=1;i<p.length;i++)L+=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);return L};
   function resample(p,n){if(p.length===1)return Array(n).fill(p[0]);const L=len(p),out=[p[0]];let step=L/(n-1),acc=0,i=1,prev=p[0];
@@ -885,11 +890,12 @@ const SB=(()=>{
     else setMsg(`再試一次！第 ${k+1} 畫寫在橘色這裡。`,"warn");
     if(mode==="test"){if(missHere>=3){flashRed(user).then(()=>flashHint(k));}else{setMsg(best>=0?`筆順錯了！想一想，第 ${k+1} 畫應該先寫哪一筆？`:`再想想，第 ${k+1} 畫要寫在哪裡？`,"bad");flashRed(user).then(()=>draw());}return;}
     flashRed(user).then(()=>flashHint(k));}
-  function finish(){const st=miss===0?3:miss<=2?2:1;BEST[ch]=Math.max(BEST[ch]||0,st);saveBest();renderStrip();
+  function finish(){const st=miss===0?3:miss<=2?2:1;BEST[ch]=Math.max(BEST[ch]||0,st);saveBest();
+    const t=STAT[ch]||{n:0,m:0,s:0};t.n++;t.m+=miss;t.s=miss?0:t.s+1;STAT[ch]=t;saveStat();renderStrip();
     E.stars.textContent="★".repeat(st)+"☆".repeat(3-st);
     setMsg(miss===0?`太棒了！「${ch}」的筆順全部正確！按「下一個字」繼續。`:`寫完了！錯了 ${miss} 次，再寫一次會更好。`,"good");}
-  function renderStrip(){if(!E)return;E.strip.innerHTML="";list.forEach((x,i)=>{const b=document.createElement("button");b.type="button";b.textContent=x.c;if(x.k==="r")b.className="r";
-      b.title=x.k==="r"?"認讀字":"生字";if(i===idx)b.setAttribute("aria-current","true");
+  function renderStrip(){if(!E)return;E.strip.innerHTML="";list.forEach((x,i)=>{const b=document.createElement("button");b.type="button";b.textContent=x.c;b.className=(x.k==="r"?"r":"")+(weak(x.c)?" weak":"");
+      b.title=(x.k==="r"?"認讀字":"生字")+(weak(x.c)?`・常錯的字（寫錯過 ${STAT[x.c].m} 次）`:"");if(i===idx)b.setAttribute("aria-current","true");
       if(BEST[x.c]){const s=document.createElement("span");s.className="st";s.textContent="★".repeat(BEST[x.c]);b.appendChild(s);}
       b.onclick=()=>pick(i);E.strip.appendChild(b);});
     let n=0;list.forEach(x=>{if(BEST[x.c]===3)n++;});E.score.textContent=`三顆星 ${n} / ${list.length} 字`;}
@@ -913,6 +919,7 @@ const SB=(()=>{
     cv.addEventListener("pointercancel",()=>{pen.stop();drawing=false;live=null;draw();});}
   window.addEventListener("resize",()=>{if(E)sizeCanvas();});
   return {
+    weak,misses:c=>(STAT[c]&&STAT[c].m)||0,clearStat(){STAT={};saveStat();},
     stop(){animToken++;busy=false;E=null;},
     mount(m,chars){list=chars;
       const wrap=el("div","sk");
@@ -950,14 +957,23 @@ const SB=(()=>{
     }
   };
 })();
+let WEAKONLY=false;
 function renderStroke(m,ls){
   const incR=(()=>{try{return localStorage.getItem("szs-skr")!=="0"}catch(e){return true}})();
   const top=el("div","row");top.style.margin="14px 0 10px";
-  top.innerHTML=`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="skR" ${incR?"checked":""}> 包含認讀字</label>`;
+  const seen=new Set(),all=[],missing=[];
+  ls.forEach(x=>x.c.forEach(c=>{if(c.k==="r"&&!incR)return;if(seen.has(c.c))return;seen.add(c.c);(SDATA[c.c]?all:missing).push({c:c.c,z:c.z,k:c.k});}));
+  const nWeak=all.filter(x=>SB.weak(x.c)).length;
+  top.innerHTML=`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="skR" ${incR?"checked":""}> 包含認讀字</label>
+    <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="skW" ${WEAKONLY?"checked":""}> 只練常錯的字（${nWeak}）</label>
+    <button class="mini" id="skClr" type="button">清除練習紀錄</button>`;
   m.appendChild(top);
   $("skR").onchange=e=>{try{localStorage.setItem("szs-skr",e.target.checked?"1":"0")}catch(_){}render();};
-  const seen=new Set(),chars=[],missing=[];
-  ls.forEach(x=>x.c.forEach(c=>{if(c.k==="r"&&!incR)return;if(seen.has(c.c))return;seen.add(c.c);(SDATA[c.c]?chars:missing).push({c:c.c,z:c.z,k:c.k});}));
+  $("skW").onchange=e=>{WEAKONLY=e.target.checked;render();};
+  $("skClr").onclick=()=>{if(confirm("要清除這台裝置上所有的筆順練習紀錄（常錯的字）嗎？星星會保留。")){SB.clearStat();WEAKONLY=false;render();}};
+  // 只練常錯的字：寫錯最多次的排前面
+  const chars=WEAKONLY?all.filter(x=>SB.weak(x.c)).sort((a,b)=>SB.misses(b.c)-SB.misses(a.c)):all;
+  if(WEAKONLY&&!chars.length){m.appendChild(el("div","empty","這幾課還沒有常錯的字。練習時寫錯過、而且還沒連續寫對兩次的字，會出現在這裡。"));return;}
   if(!chars.length){m.appendChild(el("div","empty",grade>2?"三～六年級的筆順資料還在整理中，目前提供一、二年級（共 512 字）。":"這個範圍沒有可以練習的字。"));return;}
   SB.mount(m,chars);
   if(missing.length)m.appendChild(el("div","sk-note",`以下字的筆順資料整理中：${missing.map(x=>x.c).join("、")}`));
