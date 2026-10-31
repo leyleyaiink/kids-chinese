@@ -897,7 +897,7 @@ const SB=(()=>{
     function stop(){if(!g)return;const a=ac(),s=src;g.gain.setTargetAtTime(0,a.currentTime,.03);setTimeout(()=>{try{s.stop()}catch(_){}},200);src=g=f=last=null;}
     return {start,move,stop};})();
   let E=null; // DOM refs of the mounted panel
-  let list=[],idx=0,ch="",strokes=[],done=0,miss=0,peek=false,missHere=0,busy=false,penSeen=false,hintStroke=-1,mode="prac",live=null,ol=null,tour=false,animToken=0,S=400,ctx=null;
+  let list=[],idx=0,ch="",strokes=[],done=0,miss=0,peek=false,missHere=0,busy=false,penSeen=0,hintStroke=-1,mode="prac",live=null,ol=null,tour=false,animToken=0,S=400,ctx=null;
   const K=()=>S/256;
   function sizeCanvas(){if(!E)return;const w=E.board.clientWidth-28;const top=E.board.getBoundingClientRect().top;
     const h=window.innerHeight-Math.max(top,120)-24;S=Math.max(260,Math.min(w,Math.max(h,340),640));const D=window.devicePixelRatio||1;
@@ -954,7 +954,8 @@ const SB=(()=>{
    BEST[ch]=Math.max(BEST[ch]||0,st);saveBest();
     const t=STAT[ch]||{n:0,m:0,s:0};t.n++;t.m+=miss+(peek?1:0);t.s=(miss||peek)?0:t.s+1;STAT[ch]=t;saveStat();renderStrip();
     E.stars.textContent="★".repeat(st)+"☆".repeat(3-st);
-    setMsg(peek?`寫完了！這次有看答案，下次試試不看答案寫寫看。`:miss===0?`太棒了！「${ch}」的筆順全部正確！按「下一個字」繼續。`:`寫完了！錯了 ${miss} 次，再寫一次會更好。`,"good");}
+    const nx=idx<list.length-1?"點一下寫字格，換下一個字。":"這是最後一個字了，點一下寫字格可以再寫一次。";
+    setMsg((peek?`寫完了！這次有看答案，下次試試不看答案寫寫看。`:miss===0?`太棒了！「${ch}」的筆順全部正確！`:`寫完了！錯了 ${miss} 次，再寫一次會更好。`)+nx,"good");}
   function renderStrip(){if(!E)return;E.strip.innerHTML="";list.forEach((x,i)=>{const b=document.createElement("button");b.type="button";b.textContent=x.c;b.className=(x.k==="r"?"r":"")+(weak(x.c)?" weak":"");
       b.title=(x.k==="r"?"認讀字":"生字")+(weak(x.c)?`・常錯的字（寫錯過 ${STAT[x.c].m} 次）`:"");if(i===idx)b.setAttribute("aria-current","true");
       if(BEST[x.c]){const s=document.createElement("span");s.className="st";s.textContent="★".repeat(BEST[x.c]);b.appendChild(s);}
@@ -972,9 +973,9 @@ const SB=(()=>{
   let drawing=false,pid=null;
   const toLocal=e=>{const r=E.cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*256,(e.clientY-r.top)/r.height*256];};
   function bindCanvas(){const cv=E.cv;
-    cv.addEventListener("pointerdown",e=>{if(SND)ac();if(e.pointerType==="pen")penSeen=true;if(penSeen&&e.pointerType==="touch")return;
-      if(busy||tour){setTour(false);stopAnim();return;}if(done>=strokes.length)return;drawing=true;pid=e.pointerId;cv.setPointerCapture(e.pointerId);live=[toLocal(e)];pen.start(live[0]);draw();e.preventDefault();});
-    cv.addEventListener("pointermove",e=>{if(!drawing||e.pointerId!==pid)return;const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const ev of evs)live.push(toLocal(ev));pen.move(live[live.length-1]);draw();});
+    cv.addEventListener("pointerdown",e=>{if(SND)ac();if(e.pointerType==="pen")penSeen=performance.now();if(e.pointerType==="touch"&&penSeen&&performance.now()-penSeen<1500)return;   /* 用觸控筆時忽略手掌；停筆 1.5 秒後手指又能寫 */
+      if(busy||tour){setTour(false);stopAnim();return;}if(done>=strokes.length){if(idx<list.length-1)pick(idx+1);else pick(idx);return;}   /* 寫完了：點一下換下一個字 */drawing=true;pid=e.pointerId;cv.setPointerCapture(e.pointerId);live=[toLocal(e)];pen.start(live[0]);draw();e.preventDefault();});
+    cv.addEventListener("pointermove",e=>{if(!drawing||e.pointerId!==pid)return;if(e.pointerType==="pen")penSeen=performance.now();const ce=e.getCoalescedEvents?e.getCoalescedEvents():[];const evs=ce&&ce.length?ce:[e];for(const ev of evs)live.push(toLocal(ev));pen.move(live[live.length-1]);draw();});
     cv.addEventListener("pointerup",e=>{if(!drawing||e.pointerId!==pid)return;drawing=false;pen.stop();const user=live;live=null;
       if(!user||len(user)<4&&strokes[done].length>1){draw();return;}judge(user.length>1?user:[user[0],user[0]]);});
     cv.addEventListener("pointercancel",()=>{pen.stop();drawing=false;live=null;draw();});}
