@@ -428,6 +428,9 @@ footer.src{margin-top:24px;padding-top:22px;padding-bottom:calc(28px + env(safe-
 .gh{opacity:.22}
 .ed-main .pages{min-height:300px}
 @media (max-width:980px){.ed{grid-template-columns:minmax(0,1fr)}.ed-side{position:static;max-height:none}}
+/* 手機、平板：稿紙預覽放最上面，接著 ①～④，⑤ 儲存放最後 */
+@media (max-width:980px){.ed{display:flex;flex-direction:column}.ed-side{display:contents}.ed-main{order:0;width:100%}.ed-p1{order:1}.ed-p2{order:2}.ed-p3{order:3}.ed-p4{order:4}.ed-p5{order:5}}
+.ed-stale{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 
 .fsh{display:flex;align-items:center;gap:10px;margin:6px 0 14px}
 .fsh .no{font-family:var(--mono);font-size:11px;font-weight:500;background:var(--k-red);color:#fff;border-radius:999px;padding:5px 10px;min-width:30px;text-align:center}
@@ -501,7 +504,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .pr-row .lab i{background:#fbe94e;color:var(--ink)}
 .pr-row .tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;flex:1;max-width:820px}
 .pr-ans{display:flex;gap:8px;align-items:center;font-size:15px;white-space:nowrap}
-@media (max-width:820px){.pr-row{flex-wrap:wrap}.pr-row .tabs{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}}
+@media (max-width:820px){.pr-row{flex-wrap:wrap}.pr-row .tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row!important;width:100%;max-width:none}.pr-row .tab{font-size:14px!important;padding:0 .4em!important;height:40px}}
 /* 年級、課次摺疊後的摘要列 */
 .sumrow{display:none;align-items:center;gap:10px;flex-wrap:nowrap}
 .bar.min .sumrow{display:flex}
@@ -531,6 +534,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sbody .sc .z{font-size:.36em;margin-left:.08em;line-height:1.05}
 .seg.ed-ty{display:grid;grid-template-columns:1fr 1fr!important;grid-auto-flow:row!important;border-radius:16px;overflow:hidden}
 .seg.ed-ty button{border-radius:0!important}
+@media (max-width:600px){.fv-bar{gap:6px}.fv-bar .fv-t{font-size:14px;white-space:nowrap}.fv-bar .btn{padding:0 .9em;font-size:14px;height:38px;min-height:38px}}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -1213,7 +1217,7 @@ function renderEdit(m,ls){
   const lsName=ls.length?`${VN[VER].replace("版","")} ${G[ls[0].g-1]}上 ${ls.map(x=>titleParts(x.t)[0].replace("第","").replace("課","")).join("、")}課`:"";
   w.innerHTML=`
   <div class="ed-side">
-    <div class="panel">
+    <div class="panel ed-p1">
       <h3>① 選題型和公版（依上方勾選的課次）</h3>
       <div class="seg ed-ty" role="group" aria-label="題型"><button type="button" data-ty="A">生字</button><button type="button" data-ty="C">多音字</button><button type="button" data-ty="D">同音字</button><button type="button" data-ty="S">照樣造句</button></div>
       <div class="ed-tpl">${TY==="S"?`
@@ -1226,7 +1230,7 @@ function renderEdit(m,ls){
       </div>
       <div class="sk-note">${ls.length?`目前範圍：${esc(lsName)}，共 ${ls.reduce((a,x)=>a+x.c.filter(c=>c.k==="s").length,0)} 個生字。`:"先在上方選課次，就能產生公版。"}</div>
     </div>
-    <div class="panel">
+    <div class="panel ed-p2">
       <h3>② 編輯內容</h3>
       <label class="ed-f">標題<input type="text" id="edTitle" maxlength="30"></label>
       ${TY==="A"?`<label class="ed-f">題型說明<input type="text" id="edKind" maxlength="20"></label>`:""}
@@ -1236,7 +1240,7 @@ function renderEdit(m,ls){
       <div class="sk-note">同一行的字算一組，一組最多 5 個字。語詞可以寫成「字:語詞」，沒寫就自動帶入。</div>`:`<label class="ed-f">內容<textarea id="edText" rows="12" placeholder="${esc(HINT_S)}"></textarea></label>
       <div class="sk-note">「# 照樣寫短語」「# 照樣造句」是大題標題，會自動編號。例句把要換的字用（　）框起來，空白題會自動照例句產生，括號大小跟例句的字數一樣（多留一格）：照樣寫短語加 2 行、照樣造句加 1 行；要自己指定，就在下一行打「＝3」（＝0 不加）。「**」開頭是粗體；結尾是「造句：」的行，後面留一整行給孩子寫。</div>`}
     </div>
-    ${TY!=="A"?"":`<div class="panel">
+    ${TY!=="A"?"":`<div class="panel ed-p3">
       <h3>③ 點預覽裡的字來調整</h3>
       <div class="seg" role="group" aria-label="點字功能"><button type="button" data-pick="mode">切換空格</button><button type="button" data-pick="read">改讀音</button></div>
       <div class="sk-note" id="edPickNote"></div>
@@ -1250,14 +1254,14 @@ function renderEdit(m,ls){
         <button class="mini" data-bulk="s2" type="button">只空生字的注音</button>
       </div>
     </div>`}
-    <div class="panel">
+    <div class="panel ed-p4">
       <h3>④ 匯出</h3>
       ${TY==="S"?`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="edZy"> 國字旁邊加注音</label>`:TY==="A"?`<label class="ed-f ed-row">格子大小<select id="edSize"><option value="L">低年級（2 公分）</option><option value="M">中、高年級（1.5 公分）</option></select></label>`
         :`<label class="ed-f ed-row">年級程度<select id="edSize"><option value="L">低年級（造詞有注音格）</option><option value="M">中、高年級</option></select></label>`}
       ${TY==="S"?"":`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="edAns"> 附解答頁</label>`}
       <button class="btn p" id="edPrint" type="button">列印／存成 PDF</button>
     </div>
-    <div class="panel">
+    <div class="panel ed-p5">
       <h3>⑤ 儲存我的練習卷</h3>
       <label class="ed-f">練習卷名稱<input type="text" id="edName" maxlength="30" placeholder="例如：二上第一課 聽寫"></label>
       <div class="ed-2"><button class="btn" id="edSaveAs" type="button">存在這台裝置</button><button class="btn" id="edDown" type="button">下載成檔案</button></div>
@@ -1282,8 +1286,10 @@ function renderEdit(m,ls){
     if(TY!=="A"){ED["src"+TY]=e.target.value;sync();return;}
     const parts=e.target.value.split(/[\s　]+/).filter(Boolean);const old=ED.items;
     const used=new Set();ED.items=parts.map((p,i)=>{let o=(old[i]&&old[i].t===p&&!used.has(old[i]))?old[i]:old.find(x=>x.t===p&&!used.has(x));if(o){used.add(o);return o;}return mkItem(p);});sync();},300);};
+  const scopeKey=VER+"|"+ls.map(key).join(",");
   w.querySelectorAll("[data-tpl]").forEach(b=>b.onclick=()=>{const k=b.dataset.tpl;
     if(k!=="blank"&&!ls.length){alertMsg("請先在上方選課次。");return;}
+    ED.from=k==="blank"?"":scopeKey;ED.tpl=k;
     if(TY==="S"){ED.srcS="";ED.title=ls.length?`${lsName} 照樣造句`:"照樣造句";q("#edTitle").value=ED.title;q("#edText").value="";sync();return;}
     if(TY!=="A"){const nm=TY==="C"?"多音字練習":"同音字練習";
       ED["src"+TY]=k==="blank"?"":TY==="C"?[...new Set(ls.flatMap(x=>x.c.filter(c=>c.o.length).map(c=>c.c)))].join("\n"):homoGroups(ls).groups.map(g=>g.m.map(y=>y.c).join(" ")).join("\n");
@@ -1321,6 +1327,9 @@ function renderEdit(m,ls){
     else{const rs=ZYT[ch]||[];if(rs.length<2){alertMsg(`「${ch}」只有一個讀音。`);return;}const cur=itemZ(it,j);const k=rs.indexOf(cur);it.r[j]=rs[(k+1)%rs.length];alertMsg(`「${ch}」改成 ${it.r[j]}（共 ${rs.length} 個讀音：${rs.join("、")}）`);}
     sync();});
   function drawSheets(){const P=q("#edPages");P.innerHTML="";
+    // 用公版做的練習卷，課次換了就提醒（不自動覆蓋，免得改過的內容不見）
+    if(ED.from&&ED.from!==scopeKey&&ls.length&&TY!=="S"){const n=el("div","note ed-stale",`目前的練習卷是「${esc(ED.title||"")}」，跟上面選的課次不一樣。<button class="mini done" type="button">換成目前課次的公版</button>`);
+      n.querySelector("button").onclick=()=>{const b=w.querySelector(`[data-tpl="${ED.tpl}"]`)||w.querySelector('[data-tpl]:not([data-tpl="blank"])');if(b)b.click();};P.appendChild(n);}
     if(TY==="S"){const out=sheetsS(ED.srcS||"",ED.title,ED.zyS!==false);
       if(!out.length){P.appendChild(el("div","empty","在左邊打題目，右邊就會排成直書練習卷。"));return;}
       out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);P.appendChild(sc);});fit();return;}
