@@ -528,7 +528,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sbody p{margin:0 0 0 1mm}
 .sbody .st{font-weight:700;font-size:6.2mm;letter-spacing:.2em;margin-left:3mm;font-family:var(--ui)}
 .sbody .sb{font-weight:700}
-.sbody .wl{min-height:100%;border-left:1px dashed #9db5d8;margin-left:2mm}
+.sbody .wl{min-height:100%;border-left:1px dashed #9db5d8;margin-left:2mm;padding-left:3.8em}   /* 造句後面留兩行空白給孩子寫（一行＝行高 1.9em） */
+.wsS.zy .sbody .wl{padding-left:4.4em}   /* 有注音時行高 2.2em */
 .sbody .bk{white-space:nowrap}
 .sbody .sc{display:inline-flex;writing-mode:horizontal-tb;align-items:center;vertical-align:middle;line-height:1}
 .sbody .sc .z{font-size:.36em;margin-left:.08em;line-height:1.05}
@@ -1259,8 +1260,10 @@ function sheetsS(src,title,zy){const res=[];let n=0;
   const page=()=>{const s=sheet("land");const S=el("div","wsS"+(zy?" zy":""));
     S.appendChild(el("div","hd",`<span>${esc(title||"")}</span><small>姓名：＿＿＿＿＿</small>`));const b=el("div","sbody");S.appendChild(b);s.appendChild(S);host.appendChild(s);res.push(s);return b;};
   let b=page();
-  for(const h of paras){b.insertAdjacentHTML("beforeend",h);   // 放不下就換下一頁（直書往左排，超出就是 scrollWidth 變大）
-    if(b.scrollWidth>b.clientWidth+1&&b.children.length>1){b.lastElementChild.remove();b=page();b.insertAdjacentHTML("beforeend",h);}}
+  // 句型和後面的「造句：」綁在一起，不會被拆到兩頁
+  const blocks=[];for(let i=0;i<paras.length;i++){if(paras[i].startsWith('<p class="sb"')&&(paras[i+1]||"").startsWith('<p class="wl"')){blocks.push(paras[i]+paras[i+1]);i++;}else blocks.push(paras[i]);}
+  for(const h of blocks){const n0=b.children.length;b.insertAdjacentHTML("beforeend",h);   // 放不下就換下一頁（直書往左排，超出就是 scrollWidth 變大）
+    if(b.scrollWidth>b.clientWidth+1&&n0>0){while(b.children.length>n0)b.lastElementChild.remove();b=page();b.insertAdjacentHTML("beforeend",h);}}
   res.forEach(s=>s.remove());host.remove();return res;}
 function parseHomo(src){return src.split("\n").map(t=>t.trim().split(/[\s　]+/).filter(Boolean)).filter(t=>t.length).map(t=>{
   const m=t.map(x=>{const [c,w=""]=x.split(/[:：]/);return extraMember([...c][0],w);}).filter(y=>isHan(y.c)).slice(0,5);return {z:m.length?m[0].z:"",m};}).filter(g=>g.m.length);}
