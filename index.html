@@ -1166,7 +1166,7 @@ if(!EDM||!Array.isArray(EDM.items))EDM=edDefault();
 if(EDM.type==="S")EDM.type="A";
 try{EDS=JSON.parse(localStorage.getItem("szs-eds")||"null");}catch(e){}
 // 第一次打開先放 2 個範例（一般例句，不是課本內容），使用者可以直接改或複製
-const EX_P="（微風）（陣陣）\n（紅紅）的（蘋果）",EX_Q="（小鳥）在（樹上）（唱歌）。\n自從……就……";
+const EX_P="（微風）（陣陣）\n（紅紅）的（蘋果）",EX_Q="自從……就……\n如果……";
 if(!EDS||!Array.isArray(EDS.items))EDS={...edDefault(),type:"S",title:"照樣造句",srcP:EX_P,srcQ:EX_Q};
 ED=EDM;
 function edSave(){try{localStorage.setItem(ED.type==="S"?"szs-eds":EDKEY,JSON.stringify(ED));}catch(e){}}
@@ -1258,7 +1258,7 @@ function renderEdit(m,ls){
       <div class="sk-note">只寫字，讀音和語詞會自動帶入。也可以自己寫：字 讀音:語詞 讀音:語詞。</div>`:TY==="D"?`<label class="ed-f">內容（一行一組）<textarea id="edText" rows="7" placeholder="例如：&#10;作 做 坐 座&#10;象:大象 像:好像 向:方向"></textarea></label>
       <div class="sk-note">同一行的字算一組，一組最多 5 個字。語詞可以寫成「字:語詞」，沒寫就自動帶入。</div>`:`<label class="ed-f">照樣寫短語練習（一行一個例句）<textarea id="edTextP" rows="5" placeholder="例如：&#10;（微風）（陣陣）&#10;（紅紅）的（蘋果）"></textarea></label>
       <div class="sk-note">把要換的字用（　）框起來，每個例句後面會自動加 2 行空白題，括號大小跟例句的字數一樣（多留一格）。</div>
-      <label class="ed-f">造句練習（一行一題）<textarea id="edTextQ" rows="5" placeholder="例如：&#10;（紙上）（畫了）（一條）又（一條）的（線）。&#10;自從……"></textarea></label>
+      <label class="ed-f">造句練習（一行一題）<textarea id="edTextQ" rows="5" placeholder="例如：&#10;自從……就……&#10;如果……"></textarea></label>
       <div class="sk-note">有（　）的例句，後面加 1 行空白題；沒有括號的句型（例如「自從……」），會印成粗體，後面留一整行「造句：」給孩子寫。下一行打「＝3」可以自己指定空白題行數。</div>`}
     </div>
     <div class="panel ed-p2">
