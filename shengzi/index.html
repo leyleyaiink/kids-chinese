@@ -106,6 +106,14 @@ main{padding-block:18px 40px}
 .prog i{display:block;height:100%;background:var(--green)}
 .stat{display:flex;justify-content:space-between;font-size:.95rem;color:var(--muted)}
 .stat b{color:var(--ink)}
+/* full view for 列印練習卷・自編生字練習 */
+.fv-bar{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.fv-bar .fv-t{flex:1;font-weight:700;text-align:center}
+body.fullv header.top,body.fullv .bar,body.fullv footer.src{display:none}
+body.fullv main.wrap{max-width:none}
+body.fullv main{padding-top:0}
+body.fullv .fv-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:25;background:var(--paper);padding-block:10px;border-bottom:1px solid var(--line)}
+body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 /* print setup */
 .pr-ctl{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .note{font-size:.9rem;color:var(--muted);background:var(--amber-soft);border:1px solid #f6c3a8;border-radius:10px;padding:8px 12px;line-height:1.5}
@@ -116,7 +124,7 @@ main{padding-block:18px 40px}
 .scale{transform-origin:top center}
 /* worksheet A: vertical 看注音寫國字 */
 .wsA{display:flex;flex-direction:row-reverse;height:100%;gap:0}
-.wsA .hd{width:30mm;flex:none;border:1.2px solid #3155a2;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:4mm 3mm;gap:2.5mm;writing-mode:vertical-rl;font-size:5.4mm;letter-spacing:.12em;overflow:hidden}
+.wsA .hd{min-width:30mm;flex:none;border:1.2px solid #3155a2;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding:4mm 3mm;gap:2.5mm;writing-mode:vertical-rl;font-size:5.4mm;letter-spacing:.12em}
 .wsA .hd small{font-size:3.8mm;color:#534545}
 .wsA .cols{display:flex;flex-direction:row-reverse;flex:1;border:1.2px solid #3155a2;border-right:0}
 .wsA .col{display:flex;flex-direction:column;flex:1}
@@ -532,9 +540,16 @@ function renderBar(){
 }
 $("selAll").onclick=()=>{gLessons().forEach(x=>sel.add(key(x)));save();renderBar();render();};
 $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
-["list","stroke","print","edit"].forEach(v=>$("t-"+v).onclick=()=>{clearQ();view=v;save();renderBar();render();});
-function render(){const m=$("main");m.innerHTML="";if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
+["list","stroke","print","edit"].forEach(v=>$("t-"+v).onclick=()=>{clearQ();view=v;FULL=true;save();renderBar();render();});
+// 列印練習卷・自編生字練習：點開就是全螢幕，上方固定「返回選課次」和「列印」
+let FULL=true;
+function fvBar(){const b=el("div","fv-bar noprint");
+  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回選課次":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"列印練習卷":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
+  b.querySelector('[data-fv="print"]').onclick=()=>{try{window.print();}catch(e){}};
+  b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
+function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
   if(!ls.length){m.appendChild(el("div","empty","請在上方點選要複習的課次，可以一次選很多課。"));return;}
+  if(view==="print"||view==="edit"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());}
   if(view==="list")renderList(m,ls);else if(view==="stroke")renderStroke(m,ls);else if(view==="edit")renderEdit(m,ls);else if(view==="card")renderCards(m,ls);else renderPrint(m,ls);}
 function titleParts(t){const m=t.split("：");return m.length>1?[m[0],m[1]]:["",t];}
 // ---------- list ----------
@@ -604,13 +619,11 @@ let PT="A",PA=false;
 function renderPrint(m,ls){
   const ctl=el("div","pr-ctl");
   ctl.innerHTML=`<div class="seg" role="group" aria-label="練習卷種類"><button type="button" data-t="A">生字練習表</button><button type="button" data-t="B">部首測驗表</button><button type="button" data-t="C">多音字練習表</button></div>
-   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>
-   <button class="btn p" id="doPrint" type="button">列印／存成 PDF</button>`;
+   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>`;
   m.appendChild(ctl);
   ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.t===PT);b.onclick=()=>{PT=b.dataset.t;render();};});
   $("pa").onchange=e=>{PA=e.target.checked;render();};
   const nt=el("div","note","按「列印／存成 PDF」後，印表機選「另存為 PDF」就能存檔。如果按了沒有反應（例如在 Claude 的預覽視窗裡），請改用部署後的網址開啟這個頁面再列印。");m.appendChild(nt);
-  $("doPrint").onclick=()=>{try{window.print();}catch(e){}};
   const pages=el("div","pages");m.appendChild(pages);
   $("pagesize").textContent=PT==="A"?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
   const out=[];
