@@ -135,7 +135,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .wsA .zy{flex:1;display:grid;place-items:center;font-size:4.6mm;border-left:1px dashed #73a6e0}
 .wsA .zy.hl{background:#eaf1fb}
 /* 固定格子大小（教育部作業簿規格），字跟著格子放大縮小 */
-.sheet.land:has(.wsA.fix){display:flex;align-items:center;justify-content:center}
+.sheet.land:has(.wsA.fix),.sheet.port:has(.wsA.fix){display:flex;align-items:center;justify-content:center}
 .wsA.fix{height:auto}
 .wsA.fix .cols,.wsA.fix .col{flex:none}
 .wsA.fix .col{width:calc(var(--g) + var(--z))}
@@ -561,9 +561,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 footer .fsh .no{background:#96d6d4!important;color:var(--ink)!important}
 footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .wsA .cell .lab{flex:1;display:grid;place-items:center;writing-mode:vertical-rl;font-size:calc(var(--g)*.22);letter-spacing:.12em;color:#3155a2;background:#eef3fb;font-weight:700}
-.rotp{width:max-content}
-@media print{.rotp{width:210mm;height:297mm;position:relative;overflow:hidden;break-after:page;page-break-after:always}
-  .rotp .sheet{position:absolute;top:0;left:210mm;transform-origin:0 0;transform:rotate(90deg);break-after:auto;page-break-after:auto}}
 .wsC .pb.w3{grid-column:1/-1}
 .ed-now{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink);background:#fff8cf;border-radius:10px;padding:6px 10px}
 .ed-now span{flex:1;min-width:10em}
@@ -573,8 +570,6 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .ed-tpl .btn[aria-pressed="true"]{background:var(--ink)!important;color:#fff!important;border-color:var(--ink)!important}
 .ed-tpl .btn{border-width:1.5px}
 .ed-tpl .ed-clear{grid-column:1/-1;justify-self:start}
-.pr-ord{flex:none}
-@media (max-width:820px){.pr-ord{width:100%}}
 /* 匯出視窗 */
 .dlg-bg{position:fixed;inset:0;background:rgba(83,69,69,.35);z-index:100;display:grid;place-items:center;padding:16px}
 .dlg{background:#fff;border-radius:18px;padding:18px 20px;width:min(420px,100%);display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
@@ -765,16 +760,13 @@ function drawCard(){const c=$("fc");if(!c||!FC)return;c.innerHTML="";const st=$(
 }
 // ---------- print ----------
 // 上面四個按鈕切換要看的練習卷；按「列印／存成 PDF」才跳出視窗，勾選要匯出哪些（可以多種合併成一份）
-let PT="A",PTS=new Set(["A","B","C","D"]),PA=false,PORD="type",COMBO=false;
+let PT="A",PTS=new Set(["A","B","C","D"]),PA=false,COMBO=false;   /* 合併時一律依種類排（同一種的課接著排，最省紙） */
 function exportDialog(){const ls=chosen();
   const bg=el("div","dlg-bg"),d=el("div","dlg");bg.appendChild(d);
   d.innerHTML=`<h3>要匯出哪些練習卷？</h3><div class="dlg-sub">${esc($("sumTxt").textContent)}</div>
     <div class="dlg-list">${[["A","公版生字練習表"],["B","部首測驗表"],["C","多音字練習表"],["D","同音字練習表"]].map(([t,n])=>`<label><input type="checkbox" data-c="${t}"${(COMBO?PTS.has(t):t===PT)?" checked":""}> ${n}</label>`).join("")}</div>
     <label class="dlg-ans"><input type="checkbox" id="dlgAns"${PA?" checked":""}> 附解答頁</label>
-    ${ls.length>1?`<div class="dlg-sub">好幾課、好幾種時怎麼排：</div><div class="seg" role="group" aria-label="排列方式"><button type="button" data-o="type">依種類排（省紙）</button><button type="button" data-o="lesson">依課次排（一課一組）</button></div>`:""}
     <div class="dlg-btns"><button class="btn" type="button" data-x="no">取消</button><button class="btn p" type="button" data-x="go">匯出</button></div>`;
-  const setO=o=>{PORD=o;d.querySelectorAll("[data-o]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.o===o));};setO(PORD);
-  d.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>setO(b.dataset.o));
   const close=()=>bg.remove();bg.onclick=e=>{if(e.target===bg)close();};d.querySelector('[data-x="no"]').onclick=close;
   d.querySelector('[data-x="go"]').onclick=()=>{const sel=[...d.querySelectorAll("[data-c]")].filter(x=>x.checked).map(x=>x.dataset.c);
     if(!sel.length){alert("請至少勾選一種練習卷。");return;}
@@ -792,20 +784,16 @@ function renderPrint(m,ls){
     tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
   const nt=el("div","note",INAPP?INAPP_MSG:"按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 在列印畫面按右上角分享鍵，選「儲存到檔案」。");m.appendChild(nt);
   const pages=el("div","pages");m.appendChild(pages);
-  const mk={A:sheetsA,B:sheetsB,C:sheetsC,D:sheetsD},NAME={A:"生字",B:"部首",C:"多音字",D:"同音字"},out=[],none=[];
+  const TS0=COMBO?["A","B","C","D"].filter(t=>PTS.has(t)):[PT],portA=TS0.includes("A")&&TS0.some(t=>t!=="A");   /* 跟直式的合併時，生字表也排成直式，整份同一個方向 */
+  const mk={A:(l,a)=>sheetsA(l,a,portA),B:sheetsB,C:sheetsC,D:sheetsD},NAME={A:"生字",B:"部首",C:"多音字",D:"同音字"},out=[],none=[];
   const TS=COMBO?["A","B","C","D"].filter(t=>PTS.has(t)):[PT];
-  if(COMBO&&PORD==="lesson"&&ls.length>1&&TS.length>1){   /* 依課次：每課一組（生字→部首→多音字→同音字），解答全部放在最後 */
-    const ans=[],got=new Set();
-    for(const x of ls)for(const t of TS){const a=mk[t]([x],false);if(a.length){got.add(t);out.push(...a);if(PA)ans.push(...mk[t]([x],true));}}
-    TS.forEach(t=>{if(!got.has(t))none.push(NAME[t]);});out.push(...ans);
-  }else for(const t of TS){const a=mk[t](ls,false);if(!a.length){none.push(NAME[t]);continue;}
+  for(const t of TS){const a=mk[t](ls,false);if(!a.length){none.push(NAME[t]);continue;}
     out.push(...a);if(PA)out.push(...mk[t](ls,true));}
   if(none.length)pages.appendChild(el("div","sk-note",`這個範圍沒有${none.join("、")}題目。`));
   if(!out.length){$("pagesize").textContent="@page{size:A4 portrait;margin:0}";return;}
-  // 橫式、直式混在一起時，整份用直式紙列印，橫式的頁面轉 90 度放進去，一次存成一個 PDF
-  const hasLand=out.some(x=>x.classList.contains("land")),hasPort=out.some(x=>x.classList.contains("port")),mix=hasLand&&hasPort;
-  $("pagesize").textContent=hasLand&&!mix?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
-  out.forEach(s=>{const sc=el("div","scale");if(mix&&s.classList.contains("land")){const r=el("div","rotp");r.appendChild(s);sc.appendChild(r);}else sc.appendChild(s);pages.appendChild(sc);});
+  const hasLand=out.some(x=>x.classList.contains("land"));
+  $("pagesize").textContent=hasLand?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
+  out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});
   fit();
 }
 function fit(){const pages=document.querySelector(".pages");if(!pages)return;const W=pages.clientWidth;pages.querySelectorAll(".scale").forEach(sc=>{const s=sc.firstChild;const w=s.offsetWidth,h=s.offsetHeight;const k=Math.min(1,(W-8)/w);sc.style.transform=`scale(${k})`;sc.style.height=(h*k)+"px";sc.style.width=w+"px";});}
@@ -813,11 +801,11 @@ window.addEventListener("resize",fit);
 function sheet(cls){return el("div","sheet "+cls);}
 // A: vertical grid, 7 columns x 8 rows, each lesson starts a new sheet
 // 教育部作業簿規格：低年級國字格 2×2 公分、注音格 0.8 公分；中、高年級 1.5×1.5 公分。A4 橫式放得下的排數、行數
-const GRID={L:{g:20,z:8,rows:9,cols:8},M:{g:15,z:6,rows:12,cols:11}};
+const GRID={L:{g:20,z:8,rows:9,cols:8,prows:13,pcols:5},M:{g:15,z:6,rows:12,cols:11,prows:18,pcols:7}};   /* prows/pcols：直式紙（跟部首、多音字合併列印時）放得下的排數、行數 */
 function gridVars(A,sz){A.classList.add("fix");A.style.setProperty("--g",sz.g+"mm");A.style.setProperty("--z",sz.z+"mm");A.style.setProperty("--rows",sz.rows);}
 // 選好幾課時接著排、不換頁，每課開頭放一格「第幾課」標籤，節省紙張；只選一課時跟以前一樣
-function sheetsA(ls,ans){const res=[];if(!ls.length)return res;
-  const sz=GRID[ls[0].g<=2?"L":"M"],ROWS=sz.rows,COLS=sz.cols,multi=ls.length>1;
+function sheetsA(ls,ans,port){const res=[];if(!ls.length)return res;
+  const sz0=GRID[ls[0].g<=2?"L":"M"],sz={...sz0,rows:port?sz0.prows:sz0.rows},ROWS=sz.rows,COLS=port?sz0.pcols:sz0.cols,multi=ls.length>1;
   const cols=[[]];const put=it=>{if(cols[cols.length-1].length+it.length>ROWS)cols.push([]);const col=cols[cols.length-1];col.push(...it);if(col.length<ROWS&&!it[0].lab)col.push(null);};
   for(const x of ls){
     if(multi)put([{lab:titleParts(x.t)[0]||x.t}]);
@@ -828,7 +816,7 @@ function sheetsA(ls,ans){const res=[];if(!ls.length)return res;
       else put([{ch:c.c,z:c.z,t:true}]);}}
   const [no,ti]=titleParts(ls[0].t),last=titleParts(ls[ls.length-1].t)[0];
   const head=multi?`<span>${G[ls[0].g-1]}上 ${esc((no||"").replace(/課$/,""))}～${esc((last||"").replace(/^第/,""))}</span>`:`<span>${G[ls[0].g-1]}上 ${esc(no)}</span><span>${esc(ti)}</span>`;
-  for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA");gridVars(A,sz);
+  for(let p=0;p<cols.length;p+=COLS){const s=sheet(port?"port":"land");const A=el("div","wsA");gridVars(A,sz);
     A.appendChild(el("div","hd",`${head}<small>${ans?"解答":"看注音寫國字"}</small><small>姓名：＿＿＿＿＿</small>`));
     const cs=el("div","cols");
     for(let k=0;k<COLS;k++){const col=cols[p+k]||[];const ce=el("div","col");
