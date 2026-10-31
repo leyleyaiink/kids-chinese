@@ -508,7 +508,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sumrow{display:none;align-items:center;gap:10px;flex-wrap:nowrap}
 .bar.min .sumrow{display:flex}
 .bar.min .scope{display:none}
-.sumrow .lab{flex:none}
+.sumrow .lab{flex:none;min-width:0!important}   /* 手機版的 .lab 是整行寬，摘要列要讓出位置給文字和「展開」 */
 .sumrow .lab i{background:#fbe94e;color:var(--ink)}
 .sumrow .sum{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;color:var(--ink)}
 .sumrow .mini,.mini.done{background:var(--ink);color:#fff;border-color:var(--ink)}
