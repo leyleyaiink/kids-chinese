@@ -106,7 +106,7 @@ main{padding-block:18px 40px}
 .prog i{display:block;height:100%;background:var(--green)}
 .stat{display:flex;justify-content:space-between;font-size:.95rem;color:var(--muted)}
 .stat b{color:var(--ink)}
-/* full view for 列印練習卷・自編生字練習 */
+/* full view for 匯出練習卷・自編生字練習 */
 .fv-bar{display:flex;gap:10px;align-items:center;margin-bottom:14px}
 .fv-bar .fv-t{flex:1;font-weight:700;text-align:center}
 body.fullv header.top,body.fullv .bar,body.fullv footer.src{display:none}
@@ -134,6 +134,15 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .wsA .ch.tz{border:0}
 .wsA .zy{flex:1;display:grid;place-items:center;font-size:4.6mm;border-left:1px dashed #73a6e0}
 .wsA .zy.hl{background:#eaf1fb}
+/* 固定格子大小（教育部作業簿規格），字跟著格子放大縮小 */
+.sheet.land:has(.wsA.fix){display:flex;align-items:center;justify-content:center}
+.wsA.fix{height:auto}
+.wsA.fix .cols,.wsA.fix .col{flex:none}
+.wsA.fix .col{width:calc(var(--g) + var(--z))}
+.wsA.fix .cell{flex:none;height:var(--g);overflow:hidden}
+.wsA.fix .ch{flex:1;min-width:0;font-size:calc(var(--g)*.7);line-height:1}
+.wsA.fix .zy{flex:none;width:var(--z);font-size:calc(var(--z)*.56);line-height:1}
+.wsA.fix .sep{font-size:calc(var(--g)*.25)}
 .wsA .sep{flex:1;display:grid;place-items:center;font-size:5mm;color:#8a7a79}
 /* worksheet B: radical quiz */
 .ttl{font-size:6mm;margin:0 0 4mm;display:flex;justify-content:space-between;align-items:baseline}
@@ -486,9 +495,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
     <div class="row sub"><span class="lab"></span><button class="mini" id="selAll" type="button">全選</button><button class="mini" id="selNone" type="button">清除</button><span class="selcnt" id="selCnt"></span></div>
   </div>
   <div class="row fnrow"><span class="lab"><i>3</i>選功能</span><div class="tabs" role="tablist">
-    <button class="tab f1" role="tab" id="t-list" aria-selected="true" type="button"><span class="tf">生字</span><span class="ts">生字</span></button>
-    <button class="tab f2" role="tab" id="t-stroke" aria-selected="false" type="button"><span class="tf">筆順</span><span class="ts">筆順</span></button>
-    <button class="tab f4" role="tab" id="t-print" aria-selected="false" type="button"><span class="tf">列印練習卷</span><span class="ts">列印練習卷</span></button>
+    <button class="tab f1" role="tab" id="t-list" aria-selected="true" type="button"><span class="tf">生字總覽</span><span class="ts">生字總覽</span></button>
+    <button class="tab f2" role="tab" id="t-stroke" aria-selected="false" type="button"><span class="tf">筆順練習</span><span class="ts">筆順練習</span></button>
+    <button class="tab f4" role="tab" id="t-print" aria-selected="false" type="button"><span class="tf">匯出練習卷</span><span class="ts">匯出練習卷</span></button>
     <button class="tab f6" role="tab" id="t-edit" aria-selected="false" type="button"><span class="tf">自編生字練習</span><span class="ts">自編生字練習</span></button>
   </div></div>
 </div></div>
@@ -541,10 +550,10 @@ function renderBar(){
 $("selAll").onclick=()=>{gLessons().forEach(x=>sel.add(key(x)));save();renderBar();render();};
 $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
 ["list","stroke","print","edit"].forEach(v=>$("t-"+v).onclick=()=>{clearQ();view=v;FULL=true;save();renderBar();render();});
-// 列印練習卷・自編生字練習：點開就是全螢幕，上方固定「返回選課次」和「列印」
+// 匯出練習卷・自編生字練習：點開就是全螢幕，上方固定「返回選課次」和「列印」
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
-  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回選課次":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"列印練習卷":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
+  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回選課次":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
   b.querySelector('[data-fv="print"]').onclick=()=>{try{window.print();}catch(e){}};
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
 function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
@@ -639,13 +648,16 @@ function fit(){const pages=document.querySelector(".pages");if(!pages)return;con
 window.addEventListener("resize",fit);
 function sheet(cls){return el("div","sheet "+cls);}
 // A: vertical grid, 7 columns x 8 rows, each lesson starts a new sheet
-function sheetsA(ls,ans){const res=[];const ROWS=8,COLS=7;
-  for(const x of ls){const items=[];
+// 教育部作業簿規格：低年級國字格 2×2 公分、注音格 0.8 公分；中、高年級 1.5×1.5 公分。A4 橫式放得下的排數、行數
+const GRID={L:{g:20,z:8,rows:9,cols:8},M:{g:15,z:6,rows:12,cols:11}};
+function gridVars(A,sz){A.classList.add("fix");A.style.setProperty("--g",sz.g+"mm");A.style.setProperty("--z",sz.z+"mm");A.style.setProperty("--rows",sz.rows);}
+function sheetsA(ls,ans){const res=[];
+  for(const x of ls){const sz=GRID[x.g<=2?"L":"M"],ROWS=sz.rows,COLS=sz.cols;const items=[];
     for(const c of x.c){if(c.k!=="s")continue;
       if(c.p){const w=[...c.p[0]],z=c.p[1].split(".");items.push(w.map((ch,i)=>({ch,z:z[i],t:ch===c.c})));}
       else items.push([{ch:c.c,z:c.z,t:true}]);}
     const cols=[[]];for(const it of items){if(cols[cols.length-1].length+it.length>ROWS)cols.push([]);const col=cols[cols.length-1];col.push(...it);if(col.length<ROWS)col.push(null);}
-    for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA");const [no,ti]=titleParts(x.t);
+    for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA");gridVars(A,sz);const [no,ti]=titleParts(x.t);
       A.appendChild(el("div","hd",`<span>${G[x.g-1]}上 ${esc(no)}</span><span>${esc(ti)}</span><small>${ans?"解答":"看注音寫國字"}</small><small>姓名：＿＿＿＿＿</small>`));
       const cs=el("div","cols");
       for(let k=0;k<COLS;k++){const col=cols[p+k]||[];const ce=el("div","col");
@@ -982,7 +994,8 @@ function autoRead(chars){ // chars: array of single chars -> readings
 // doc model
 let ED=null,EDPICK="mode",EDSEL=null;
 const EDKEY="szs-ed",EDLIST="szs-ed-list";
-function edDefault(){return {title:"我的練習卷",kind:"自編練習",rows:8,ans:true,items:[]};}
+function edDefault(){return {title:"我的練習卷",kind:"自編練習",size:grade>2?"M":"L",ans:true,items:[]};}
+const edSize=()=>ED.size||(ED.rows>=10?"M":"L");
 try{ED=JSON.parse(localStorage.getItem(EDKEY)||"null");}catch(e){}
 if(!ED||!Array.isArray(ED.items))ED=edDefault();
 function edSave(){try{localStorage.setItem(EDKEY,JSON.stringify(ED));}catch(e){}}
@@ -1044,7 +1057,7 @@ function renderEdit(m,ls){
     </div>
     <div class="panel">
       <h3>④ 匯出</h3>
-      <label class="ed-f ed-row">每排格數<select id="edRows">${[6,7,8,9,10].map(n=>`<option value="${n}">${n} 格</option>`).join("")}</select></label>
+      <label class="ed-f ed-row">格子大小<select id="edSize"><option value="L">低年級（2 公分）</option><option value="M">中、高年級（1.5 公分）</option></select></label>
       <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="edAns"> 附解答頁</label>
       <button class="btn p" id="edPrint" type="button">列印／存成 PDF</button>
     </div>
@@ -1060,12 +1073,12 @@ function renderEdit(m,ls){
   <div class="ed-main"><div class="pages" id="edPages"></div></div>`;
   m.appendChild(w);
   const q=s=>w.querySelector(s);
-  q("#edTitle").value=ED.title;q("#edKind").value=ED.kind;q("#edRows").value=String(ED.rows);q("#edAns").checked=!!ED.ans;
+  q("#edTitle").value=ED.title;q("#edKind").value=ED.kind;q("#edSize").value=edSize();q("#edAns").checked=!!ED.ans;
   q("#edText").value=ED.items.map(it=>it.t).join("\n");
   const sync=()=>{edSave();drawSheets();};
   q("#edTitle").oninput=e=>{ED.title=e.target.value;sync();};
   q("#edKind").oninput=e=>{ED.kind=e.target.value;sync();};
-  q("#edRows").onchange=e=>{ED.rows=+e.target.value;sync();};
+  q("#edSize").onchange=e=>{ED.size=e.target.value;sync();};
   q("#edAns").onchange=e=>{ED.ans=e.target.checked;sync();};
   let tm;q("#edText").oninput=e=>{clearTimeout(tm);tm=setTimeout(()=>{
     const parts=e.target.value.split(/[\s　]+/).filter(Boolean);const old=ED.items;
@@ -1110,14 +1123,14 @@ function renderEdit(m,ls){
     out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);P.appendChild(sc);});fit();}
   drawSheets();
 }
-function edSheets(ans){const res=[];const ROWS=ED.rows||8;const COLS=Math.max(4,Math.round(ROWS*0.9));
+function edSheets(ans){const res=[];const sz=GRID[edSize()],ROWS=sz.rows,COLS=sz.cols;
   const cols=[[]];
   ED.items.forEach((it,i)=>{const ch=[...it.t];const cells=ch.map((c,j)=>({c,z:isHan(c)?itemZ(it,j):"",m:isHan(c)?it.m[j]:0,i,j,poly:(ZYT[c]||[]).length>1}));
     if(cols[cols.length-1].length&&cols[cols.length-1].length+cells.length>ROWS)cols.push([]);
     let col=cols[cols.length-1];
     for(const x of cells){if(col.length>=ROWS){cols.push([]);col=cols[cols.length-1];}col.push(x);}
     if(col.length<ROWS)col.push(null);});
-  for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA ed-ws"+(ans?" ans":""));A.style.setProperty("--rows",ROWS);
+  for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA ed-ws"+(ans?" ans":""));gridVars(A,sz);
     A.appendChild(el("div","hd",`<span>${esc(ED.title||"")}</span><small>${esc(ans?"解答":ED.kind||"")}</small><small>姓名：＿＿＿＿＿</small>`));
     const cs=el("div","cols");
     for(let k=0;k<COLS;k++){const col=cols[p+k]||[];const ce=el("div","col");
