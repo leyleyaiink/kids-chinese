@@ -512,6 +512,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sumrow .lab i{background:#fbe94e;color:var(--ink)}
 .sumrow .sum{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;color:var(--ink)}
 .sumrow .mini,.mini.done{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pr-tip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--ink);margin:-4px 0 10px}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -680,11 +681,13 @@ function drawCard(){const c=$("fc");if(!c||!FC)return;c.innerHTML="";const st=$(
 let PT="A",PA=false;
 function renderPrint(m,ls){
   const ctl=el("div","pr-ctl row fnrow pr-row");
-  ctl.innerHTML=`<span class="lab"><i>4</i>選練習卷</span><div class="tabs" role="group" aria-label="練習卷種類">${[["A","生字練習表"],["B","部首測驗表"],["C","多音字練習表"],["D","同音字練習表"]].map(([t,n])=>`<button class="tab" type="button" data-t="${t}"><span class="tf">${n}</span><span class="ts">${n}</span></button>`).join("")}</div>
+  ctl.innerHTML=`<span class="lab"><i>4</i>選練習卷</span><div class="tabs" role="group" aria-label="練習卷種類">${[["A","公版生字練習表"],["B","部首測驗表"],["C","多音字練習表"],["D","同音字練習表"]].map(([t,n])=>`<button class="tab" type="button" data-t="${t}"><span class="tf">${n}</span><span class="ts">${n}</span></button>`).join("")}</div>
    <label class="pr-ans"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>`;
   m.appendChild(ctl);
   ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===PT);b.onclick=()=>{PT=b.dataset.t;render();};});
   $("pa").onchange=e=>{PA=e.target.checked;render();};
+  if(PT==="A"){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
+    tip.querySelector("button").onclick=()=>{view="edit";save();renderBar();render();scrollTo(0,0);};m.appendChild(tip);}
   const nt=el("div","note",INAPP?INAPP_MSG:"按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 在列印畫面按右上角分享鍵，選「儲存到檔案」。");m.appendChild(nt);
   const pages=el("div","pages");m.appendChild(pages);
   $("pagesize").textContent=PT==="A"?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
