@@ -559,6 +559,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 /* 頁尾兩個標題用不同點綴色：資料來源＝薄荷、Ashley 是誰＝粉 */
 footer .fsh .no{background:#96d6d4!important;color:var(--ink)!important}
 footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
+.wsA .cell .lab{flex:1;display:grid;place-items:center;writing-mode:vertical-rl;font-size:calc(var(--g)*.22);letter-spacing:.12em;color:#3155a2;background:#eef3fb;font-weight:700}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -761,23 +762,29 @@ function sheet(cls){return el("div","sheet "+cls);}
 // 教育部作業簿規格：低年級國字格 2×2 公分、注音格 0.8 公分；中、高年級 1.5×1.5 公分。A4 橫式放得下的排數、行數
 const GRID={L:{g:20,z:8,rows:9,cols:8},M:{g:15,z:6,rows:12,cols:11}};
 function gridVars(A,sz){A.classList.add("fix");A.style.setProperty("--g",sz.g+"mm");A.style.setProperty("--z",sz.z+"mm");A.style.setProperty("--rows",sz.rows);}
-function sheetsA(ls,ans){const res=[];
-  for(const x of ls){const sz=GRID[x.g<=2?"L":"M"],ROWS=sz.rows,COLS=sz.cols;const items=[];
+// 選好幾課時接著排、不換頁，每課開頭放一格「第幾課」標籤，節省紙張；只選一課時跟以前一樣
+function sheetsA(ls,ans){const res=[];if(!ls.length)return res;
+  const sz=GRID[ls[0].g<=2?"L":"M"],ROWS=sz.rows,COLS=sz.cols,multi=ls.length>1;
+  const cols=[[]];const put=it=>{if(cols[cols.length-1].length+it.length>ROWS)cols.push([]);const col=cols[cols.length-1];col.push(...it);if(col.length<ROWS&&!it[0].lab)col.push(null);};
+  for(const x of ls){
+    if(multi)put([{lab:titleParts(x.t)[0]||x.t}]);
     for(const c of x.c){if(c.k!=="s")continue;
-      if(c.p){const w=[...c.p[0]],z=c.p[1].split(".");items.push(w.map((ch,i)=>({ch,z:z[i],t:ch===c.c})));}
-      else items.push([{ch:c.c,z:c.z,t:true}]);}
-    const cols=[[]];for(const it of items){if(cols[cols.length-1].length+it.length>ROWS)cols.push([]);const col=cols[cols.length-1];col.push(...it);if(col.length<ROWS)col.push(null);}
-    for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA");gridVars(A,sz);const [no,ti]=titleParts(x.t);
-      A.appendChild(el("div","hd",`<span>${G[x.g-1]}上 ${esc(no)}</span><span>${esc(ti)}</span><small>${ans?"解答":"看注音寫國字"}</small><small>姓名：＿＿＿＿＿</small>`));
-      const cs=el("div","cols");
-      for(let k=0;k<COLS;k++){const col=cols[p+k]||[];const ce=el("div","col");
-        for(let r=0;r<ROWS;r++){const it=col[r];const cell=el("div","cell");
-          if(it===undefined)cell.innerHTML='<div class="ch tz"></div><div class="zy"></div>';
-          else if(it===null)cell.innerHTML='<div class="sep">○</div>';
-          else cell.innerHTML=`<div class="ch tz">${(!it.t||ans)?esc(it.ch):""}</div><div class="zy${it.t?" hl":""}">${zv(it.z)}</div>`;
-          ce.appendChild(cell);}
-        cs.appendChild(ce);}
-      A.appendChild(cs);s.appendChild(A);if(ans)s.appendChild(el("div","ansflag","解答"));res.push(s);}}
+      if(c.p){const w=[...c.p[0]],z=c.p[1].split(".");put(w.map((ch,i)=>({ch,z:z[i],t:ch===c.c})));}
+      else put([{ch:c.c,z:c.z,t:true}]);}}
+  const [no,ti]=titleParts(ls[0].t),last=titleParts(ls[ls.length-1].t)[0];
+  const head=multi?`<span>${G[ls[0].g-1]}上 ${esc((no||"").replace(/課$/,""))}～${esc((last||"").replace(/^第/,""))}</span>`:`<span>${G[ls[0].g-1]}上 ${esc(no)}</span><span>${esc(ti)}</span>`;
+  for(let p=0;p<cols.length;p+=COLS){const s=sheet("land");const A=el("div","wsA");gridVars(A,sz);
+    A.appendChild(el("div","hd",`${head}<small>${ans?"解答":"看注音寫國字"}</small><small>姓名：＿＿＿＿＿</small>`));
+    const cs=el("div","cols");
+    for(let k=0;k<COLS;k++){const col=cols[p+k]||[];const ce=el("div","col");
+      for(let r=0;r<ROWS;r++){const it=col[r];const cell=el("div","cell");
+        if(it===undefined)cell.innerHTML='<div class="ch tz"></div><div class="zy"></div>';
+        else if(it===null)cell.innerHTML='<div class="sep">○</div>';
+        else if(it.lab)cell.innerHTML=`<div class="lab">${esc(it.lab)}</div>`;
+        else cell.innerHTML=`<div class="ch tz">${(!it.t||ans)?esc(it.ch):""}</div><div class="zy${it.t?" hl":""}">${zv(it.z)}</div>`;
+        ce.appendChild(cell);}
+      cs.appendChild(ce);}
+    A.appendChild(cs);s.appendChild(A);if(ans)s.appendChild(el("div","ansflag","解答"));res.push(s);}
   return res;}
 // B: radical quiz 5 x 4 per sheet
 function sheetsB(ls,ans){const res=[];
