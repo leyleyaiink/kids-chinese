@@ -607,7 +607,7 @@ $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
 // 匯出練習卷・自編生字練習：點開就是全螢幕，上方固定「返回選課次」和「列印」
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
-  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回選課次":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
+  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
   b.querySelector('[data-fv="print"]').onclick=doPrint;
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
 function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
