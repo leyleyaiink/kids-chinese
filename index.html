@@ -156,7 +156,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .rb .wr{height:22mm;display:grid;place-items:center;font-size:14mm;color:#d5392f}
 /* worksheet C: polyphone */
 .wsC{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm 8mm;justify-items:start;align-items:start}
-.pb{display:flex;flex-direction:column;align-items:flex-start;gap:2mm}
+.pb{display:flex;flex-direction:column;align-items:center;gap:2mm}
 .pb .hz{display:flex}
 .pb .hz .tz{width:30mm;height:30mm;display:grid;place-items:center;font-size:23mm;border-color:#3155a2;border-width:1.2px}
 .pb .rd{display:flex;gap:3mm;justify-content:flex-start}
@@ -604,7 +604,7 @@ $("selDone").onclick=()=>{SCOPE_OPEN=false;renderScope();scrollTo(0,0);};
 $("selAll").onclick=()=>{gLessons().forEach(x=>sel.add(key(x)));save();renderBar();render();};
 $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
 ["list","stroke","print","edit"].forEach(v=>$("t-"+v).onclick=()=>{clearQ();view=v;FULL=true;SCOPE_OPEN=false;save();renderBar();render();});
-// 匯出練習卷・自編生字練習：點開就是全螢幕，上方固定「返回選課次」和「列印」
+// 匯出練習卷・自編生字練習：點開就是全螢幕，上方固定「返回」和「列印」
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
   b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
