@@ -158,14 +158,14 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .wsC{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm 8mm;justify-items:start;align-items:start}
 .pb{display:flex;flex-direction:column;align-items:center;gap:2mm}
 .pb .hz{display:flex}
-.pb .hz .tz{width:30mm;height:30mm;display:grid;place-items:center;font-size:23mm;border-color:#3155a2;border-width:1.2px}
+.pb .hz .tz{width:26mm;height:26mm;display:grid;place-items:center;font-size:19mm;border-color:#3155a2;border-width:1.2px}
 .pb .rd{display:flex;gap:3mm;justify-content:flex-start}
 .pb .rc{width:30mm;border:1.2px solid #3155a2;display:flex;flex-direction:column}
 .pb .rc .lb{height:7mm;display:grid;place-items:center;font-size:4.2mm;letter-spacing:.5em;border-bottom:1px solid #3155a2}
-.pb .rc .zyb{height:16mm;display:grid;place-items:center;font-size:6mm;color:#d5392f;border-bottom:1px solid #3155a2}
-.pb .rc .wc{display:flex;height:17mm;border-bottom:1px solid #3155a2}
+.pb .rc .zyb{height:13mm;display:grid;place-items:center;font-size:6mm;color:#d5392f;border-bottom:1px solid #3155a2}
+.pb .rc .wc{display:flex;height:15mm;border-bottom:1px solid #3155a2}
 .pb .rc .wc:last-child{border-bottom:0}
-.pb .rc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:11mm;color:#d5392f}
+.pb .rc .wc .tz{flex:1;border:0;display:grid;place-items:center;font-size:10mm;color:#d5392f}
 .pb .rc .wc .zy{width:8mm;border-left:1px solid #3155a2;display:grid;place-items:center;font-size:3.6mm;color:#d5392f}
 /* worksheet D: 同音不同字 */
 .wsD{display:flex;flex-direction:column;gap:6mm}
@@ -565,6 +565,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .rotp{width:max-content}
 @media print{.rotp{width:210mm;height:297mm;position:relative;overflow:hidden;break-after:page;page-break-after:always}
   .rotp .sheet{position:absolute;top:0;left:210mm;transform-origin:0 0;transform:rotate(90deg);break-after:auto;page-break-after:auto}}
+.wsC .pb.w3{grid-column:1/-1}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -810,11 +811,17 @@ function sheetsB(ls,ans){const res=[];
 // C: polyphone, 2 per row, 3 rows per sheet
 // 多音字練習表：items=[{c, low(要不要注音格), reads:[[讀音,[語詞…]],…]}]
 function polySheets(items,ans,name,sub){const res=[];
-  for(let p=0;p<items.length;p+=6){const s=sheet("port");
+  // 一頁 3 排：讀音 1～2 個的字兩個並排一排，3 個以上的字自己佔一整排
+  const pg=[];let cur=[],rows=0,half=false;
+  for(const c of items){const w=c.reads.length>=3;
+    if(w){if(half){rows++;half=false;}if(rows>=3){pg.push(cur);cur=[];rows=0;}cur.push(c);rows++;}
+    else if(!half){if(rows>=3){pg.push(cur);cur=[];rows=0;}cur.push(c);half=true;}else{cur.push(c);half=false;rows++;}}
+  if(cur.length)pg.push(cur);
+  for(const grp of pg){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${esc(name)}${ans?"（解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
     const C=el("div","wsC");
-    for(const c of items.slice(p,p+6)){
-      const b=el("div","pb");b.appendChild(el("div","hz",`<div class="tz">${esc(c.c)}</div>`));
+    for(const c of grp){
+      const b=el("div","pb"+(c.reads.length>=3?" w3":""));b.appendChild(el("div","hz",`<div class="tz">${esc(c.c)}</div>`));
       const rd=el("div","rd");
       for(const [z,ws] of c.reads)rd.appendChild(el("div","rc",`<div class="lb">讀音</div><div class="zyb">${ans?zv(z):""}</div>`+wordCells(pickW(ws),c.c,z,ans,c.low)));
       b.appendChild(rd);C.appendChild(b);}
@@ -1211,6 +1218,9 @@ function autoRead(chars){ // chars: array of single chars -> readings
     i++;}
   return out;
 }
+// 內容框裡的「【第一課】」是課次分隔，練習卷上變成一格標籤
+const LAB_RE=/^【(.+)】$/;
+const labItem=t=>({t,lab:t.match(LAB_RE)[1],m:[],r:[],a:[]});
 // doc model
 let ED=null,EDPICK="mode",EDSEL=null;
 const EDKEY="szs-ed",EDLIST="szs-ed-list";
@@ -1233,19 +1243,20 @@ function setDoc(d){if(d.type==="S")EDS=d;else EDM=d;ED=d;}
 function mkItem(text,modes,reads){const ch=[...text];const ar=autoRead(ch);return {t:text,m:ch.map((_,j)=>modes&&modes[j]!=null?modes[j]:0),r:ch.map((_,j)=>reads&&reads[j]?reads[j]:null),a:ar};}
 function itemZ(it,j){return it.r[j]||it.a[j]||"";}
 function refreshAuto(it){it.a=autoRead([...it.t]);}
-ED.items.forEach(it=>{if(!it.a)refreshAuto(it);});
+ED.items.forEach(it=>{if(it.t&&LAB_RE.test(it.t)){Object.assign(it,labItem(it.t));return;}if(!it.a)refreshAuto(it);});
 // templates from selected lessons
 function tplFrom(ls,kind){
-  const items=[];
-  ls.forEach(x=>x.c.forEach(c=>{if(c.k!=="s")return;
+  const items=[];let from=0;
+  ls.forEach(x=>{if(ls.length>1){items.push(labItem(`【${titleParts(x.t)[0]||x.t}】`));from=items.length;}
+    x.c.forEach(c=>{if(c.k!=="s")return;
     let w=c.c,z=null;
     if(c.p){w=c.p[0];z=c.p[1].split(".");}else if(c.w&&c.w[0])w=c.w[0];
     const ch=[...w];if(!z||z.length!==ch.length)z=null;
     const mv=kind==="han"?1:kind==="zy"?2:3;
-    let it=items.find(x=>x.t===w);
+    let it=items.slice(from).find(x=>x.t===w);   /* 同一課的同一個語詞只出一題 */
     if(!it){it=mkItem(w,null,z);items.push(it);}
     ch.forEach((x2,j)=>{if(x2===c.c)it.m[j]=mv;});
-    if(!ch.includes(c.c))it.m=it.m.map(()=>mv);}));
+    if(!ch.includes(c.c))it.m=it.m.map(()=>mv);});});
   return items;
 }
 const MODE_NAME=["都顯示","國字空格","注音空格","都空白"];
@@ -1332,7 +1343,7 @@ function renderEdit(m,ls){
         <button class="btn" data-tpl="zy" type="button">看國字寫注音</button>
         <button class="btn" data-tpl="all" type="button">國字注音都空白</button>`:`
         <button class="btn" data-tpl="pub" type="button">${TY==="C"?"這幾課的多音字":"這幾課的同音字"}</button>`}
-        <button class="btn" data-tpl="blank" type="button">空白新卷</button>
+        <button class="btn" data-tpl="blank" type="button">清空，自己出題</button>
       </div>
       <div class="sk-note">${ls.length?`目前範圍：${esc(lsName)}，共 ${ls.reduce((a,x)=>a+x.c.filter(c=>c.k==="s").length,0)} 個生字。`:"先在上方選課次，就能產生公版。"}</div>
     </div>
@@ -1383,7 +1394,7 @@ function renderEdit(m,ls){
   else q("#edText").oninput=e=>{clearTimeout(tm);tm=setTimeout(()=>{
     if(TY!=="A"){ED["src"+TY]=e.target.value;sync();return;}
     const parts=e.target.value.split(/[\s　]+/).filter(Boolean);const old=ED.items;
-    const used=new Set();ED.items=parts.map((p,i)=>{let o=(old[i]&&old[i].t===p&&!used.has(old[i]))?old[i]:old.find(x=>x.t===p&&!used.has(x));if(o){used.add(o);return o;}return mkItem(p);});sync();},300);};
+    const used=new Set();ED.items=parts.map((p,i)=>{if(LAB_RE.test(p))return labItem(p);let o=(old[i]&&old[i].t===p&&!used.has(old[i]))?old[i]:old.find(x=>x.t===p&&!used.has(x));if(o){used.add(o);return o;}return mkItem(p);});sync();},300);};
   const scopeKey=VER+"|"+ls.map(key).join(",");
   w.querySelectorAll("[data-tpl]").forEach(b=>b.onclick=()=>{const k=b.dataset.tpl;
     if(k!=="blank"&&!ls.length){alertMsg("請先在上方選課次。");return;}
@@ -1401,7 +1412,7 @@ function renderEdit(m,ls){
   w.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>setPick(b.dataset.pick));if(TY==="A")setPick(EDPICK);
   const lessonSet=new Set();ls.forEach(x=>x.c.forEach(c=>{if(c.k==="s")lessonSet.add(c.c);}));
   w.querySelectorAll("[data-bulk]").forEach(b=>b.onclick=()=>{const v=b.dataset.bulk;
-    ED.items.forEach(it=>{[...it.t].forEach((ch,j)=>{if(!isHan(ch))return;
+    ED.items.forEach(it=>{if(it.lab)return;[...it.t].forEach((ch,j)=>{if(!isHan(ch))return;
       if(v[0]==="s"){it.m[j]=lessonSet.has(ch)?+v[1]:0;}else it.m[j]=+v;});});sync();});
   function alertMsg(t){const n=q("#edPickNote")||q(".ed-side .sk-note");if(n)n.textContent=t;}
   // saves
@@ -1429,9 +1440,10 @@ function renderEdit(m,ls){
       if(!out.length){P.appendChild(el("div","empty","在左邊打題目，右邊就會排成直書練習卷。"));return;}
       out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);P.appendChild(sc);});fit();return;}
     if(TY!=="A"){const low=edSize()==="L",mk=a=>TY==="C"?polySheets(parsePoly(ED.srcC||"",low),a,ED.title||"",""):homoSheets(parseHomo(ED.srcD||""),low,a,ED.title||"","");
-      const out=mk(false);if(!out.length){P.appendChild(el("div","empty",TY==="C"?"選「這幾課的多音字」，或在左邊一行打一個字。":"選「這幾課的同音字」，或在左邊一行打一組同音字。"));return;}
+      const out=mk(false);if(!out.length){const nm=TY==="C"?"多音字":"同音字",fromHere=ED["from"+TY]===scopeKey&&ED["tpl"+TY]==="pub";
+        P.appendChild(el("div","empty",fromHere?`目前選的課次沒有${nm}。可以在上面多選幾課，或自己在左邊輸入。`:TY==="C"?"選「這幾課的多音字」，或在左邊一行打一個字。":"選「這幾課的同音字」，或在左邊一行打一組同音字。"));return;}
       if(ED.ans)out.push(...mk(true));out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);P.appendChild(sc);});fit();return;}
-    if(!ED.items.length){P.appendChild(el("div","empty","選一個公版，或在左邊輸入文字，就會出現練習卷。"));return;}
+    if(!ED.items.length){P.appendChild(el("div","empty",ED.tplA==="blank"?"已清空。在左邊「內容」框打字（每行或空格分開一題），右邊就會出現練習卷。":"選一個公版，或在左邊「內容」框輸入文字，就會出現練習卷。"));return;}
     const out=edSheets(false);if(ED.ans)out.push(...edSheets(true));
     out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);P.appendChild(sc);});fit();}
   // 每次進來都跟著目前的版本、年級、課次：範圍不一樣就自動換成同一種公版（自編照樣造句不受課次影響）
@@ -1440,7 +1452,9 @@ function renderEdit(m,ls){
 }
 function edSheets(ans){const res=[];const sz=GRID[edSize()],ROWS=sz.rows,COLS=sz.cols;
   const cols=[[]];
-  ED.items.forEach((it,i)=>{const ch=[...it.t];const cells=ch.map((c,j)=>({c,z:isHan(c)?itemZ(it,j):"",m:isHan(c)?it.m[j]:0,i,j,poly:(ZYT[c]||[]).length>1}));
+  ED.items.forEach((it,i)=>{
+    if(it.lab){if(cols[cols.length-1].length>=ROWS)cols.push([]);cols[cols.length-1].push({lab:it.lab});return;}
+    const ch=[...it.t];const cells=ch.map((c,j)=>({c,z:isHan(c)?itemZ(it,j):"",m:isHan(c)?it.m[j]:0,i,j,poly:(ZYT[c]||[]).length>1}));
     if(cols[cols.length-1].length&&cols[cols.length-1].length+cells.length>ROWS)cols.push([]);
     let col=cols[cols.length-1];
     for(const x of cells){if(col.length>=ROWS){cols.push([]);col=cols[cols.length-1];}col.push(x);}
@@ -1452,6 +1466,7 @@ function edSheets(ans){const res=[];const sz=GRID[edSize()],ROWS=sz.rows,COLS=sz
       for(let r=0;r<ROWS;r++){const x=col[r];const cell=el("div","cell");
         if(x===undefined)cell.innerHTML='<div class="ch tz"></div><div class="zy"></div>';
         else if(x===null)cell.innerHTML='<div class="sep">○</div>';
+        else if(x.lab)cell.innerHTML=`<div class="lab">${esc(x.lab)}</div>`;
         else{const showH=ans||x.m===0||x.m===2,showZ=ans||x.m===0||x.m===1;
           cell.dataset.i=x.i;cell.dataset.j=x.j;cell.className="cell m"+x.m+(x.poly?" poly":"");
           cell.innerHTML=`<div class="ch tz">${showH?esc(x.c):`<span class="gh">${esc(x.c)}</span>`}</div><div class="zy${x.m&&!ans?" hl":""}">${x.z?(showZ?zv(x.z):`<span class="gh">${zv(x.z)}</span>`):""}</div>`;}
