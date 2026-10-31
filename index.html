@@ -869,7 +869,7 @@ const SB=(()=>{
     if(missHere>=(mode==="test"?3:2))hintStroke=i;draw();}
   function flashRed(user){return new Promise(res=>{draw(()=>{ctx.strokeStyle="rgba(213,57,47,.8)";ctx.lineWidth=12*K()/1.2;ctx.lineCap="round";path(user);ctx.stroke();});setTimeout(res,450);});}
   function judge(user){const k=done;const s=score(user,strokes[k]);
-    if(s.ok){done++;missHere=0;hintStroke=-1;draw();updInfo();if(done>=strokes.length){sfx.done();finish();}else{sfx.ok();setMsg(`很好！第 ${k+1} 畫寫對了。接著寫第 ${k+2} 畫。`,"good");}return;}
+    if(s.ok){done++;missHere=0;hintStroke=-1;draw();updInfo();if(done>=strokes.length){sfx.done();finish();}else{setMsg(`很好！第 ${k+1} 畫寫對了。接著寫第 ${k+2} 畫。`,"good");}return;}
     miss++;missHere++;sfx.bad();let best=-1,bv=1e9;
     for(let j=k+1;j<strokes.length;j++){const t=score(user,strokes[j]);if(t.ok&&t.f<bv){bv=t.f;best=j;}}
     if(best>=0)setMsg(`筆順不對喔！你寫的是第 ${best+1} 畫，現在要先寫第 ${k+1} 畫。看橘色的提示。`,"bad");
@@ -916,7 +916,7 @@ const SB=(()=>{
         <div class="sk-btns"><button class="btn p wide" data-a="tour" type="button">整課連續播放</button><button class="btn wide" data-a="play" type="button">這個字再播放一次</button><button class="btn" data-a="redo" type="button">重寫</button><button class="btn" data-a="hint" type="button">提示下一畫</button><button class="btn" data-a="prev" type="button">上一字</button><button class="btn" data-a="next" type="button">下一字</button></div>
         <label class="ghostRow" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="ghost" checked> 顯示淡淡的字（描紅）</label>
         <label class="autoRow" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="auto" checked> 換字時先自動播放筆順</label>
-        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="snd" ${SND?"checked":""}> 音效（寫字沙沙聲、寫對寫錯提示音）</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="snd" ${SND?"checked":""}> 音效（寫字沙沙聲、寫錯提示音、寫完整個字的音效）</label>
         <div class="sk-stars" aria-live="polite"></div>
         <div class="sk-note note"></div>
         <div class="sk-note score"></div>
