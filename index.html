@@ -771,9 +771,21 @@ const SB=(()=>{
   function tone(f,t0,d,type="sine",vol=.18,f2){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,a.currentTime+t0);
     if(f2)o.frequency.exponentialRampToValueAtTime(f2,a.currentTime+t0+d);g.gain.setValueAtTime(0,a.currentTime+t0);g.gain.linearRampToValueAtTime(vol,a.currentTime+t0+.012);
     g.gain.exponentialRampToValueAtTime(.0008,a.currentTime+t0+d);o.connect(g);g.connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05);}
-  const sfx={ok(){if(!SND)return;tone(1318.5,0,.16,"sine",.16);tone(1975.5,.06,.22,"sine",.11);},
-    bad(){if(!SND)return;tone(330,0,.18,"triangle",.22,262);tone(262,.17,.26,"triangle",.2,196);},
-    done(){if(!SND)return;[1046.5,1318.5,1568,2093].forEach((f,i)=>tone(f,i*.09,.32,"sine",.14));tone(2637,.38,.5,"sine",.07);}};
+  // 低頻、小聲的柔和音：寫對「咚」一聲、寫錯低沉一聲、寫完四個音往上
+  const sfx={ok(){if(!SND)return;tone(523.3,0,.18,"sine",.12);tone(784,.05,.22,"sine",.06);},
+    bad(){if(!SND)return;tone(220,0,.2,"sine",.13,196);tone(175,.16,.26,"sine",.11,147);},
+    done(){if(!SND)return;[392,523.3,659.3,784].forEach((f,i)=>tone(f,i*.1,.34,"sine",.1));tone(1046.5,.42,.5,"sine",.05);}};
+  // 鉛筆寫字聲：濾過的雜訊，筆動得越快聲音越明顯，停筆就安靜
+  const pen=(()=>{let src=null,g=null,f=null,buf=null,last=null;
+    function start(p){const a=SND&&ac();if(!a)return;stop();
+      if(!buf){buf=a.createBuffer(1,a.sampleRate,a.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;}
+      src=a.createBufferSource();src.buffer=buf;src.loop=true;f=a.createBiquadFilter();f.type="bandpass";f.frequency.value=1400;f.Q.value=.7;
+      const lp=a.createBiquadFilter();lp.type="lowpass";lp.frequency.value=2600;g=a.createGain();g.gain.value=0;
+      src.connect(f);f.connect(lp);lp.connect(g);g.connect(a.destination);src.start();last={p,t:performance.now()};}
+    function move(p){if(!g||!last)return;const now=performance.now(),dt=Math.max(8,now-last.t),v=Math.hypot(p[0]-last.p[0],p[1]-last.p[1])/dt;last={p,t:now};
+      const a=ac(),t=a.currentTime;g.gain.setTargetAtTime(Math.min(.09,v*.12),t,.03);f.frequency.setTargetAtTime(1100+Math.min(900,v*1500),t,.05);}
+    function stop(){if(!g)return;const a=ac(),s=src;g.gain.setTargetAtTime(0,a.currentTime,.03);setTimeout(()=>{try{s.stop()}catch(_){}},200);src=g=f=last=null;}
+    return {start,move,stop};})();
   let E=null; // DOM refs of the mounted panel
   let list=[],idx=0,ch="",strokes=[],done=0,miss=0,missHere=0,busy=false,penSeen=false,hintStroke=-1,mode="prac",live=null,ol=null,tour=false,animToken=0,S=400,ctx=null;
   const K=()=>S/256;
@@ -849,11 +861,11 @@ const SB=(()=>{
   const toLocal=e=>{const r=E.cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*256,(e.clientY-r.top)/r.height*256];};
   function bindCanvas(){const cv=E.cv;
     cv.addEventListener("pointerdown",e=>{if(SND)ac();if(e.pointerType==="pen")penSeen=true;if(penSeen&&e.pointerType==="touch")return;
-      if(busy||tour){setTour(false);stopAnim();return;}if(done>=strokes.length)return;drawing=true;pid=e.pointerId;cv.setPointerCapture(e.pointerId);live=[toLocal(e)];draw();e.preventDefault();});
-    cv.addEventListener("pointermove",e=>{if(!drawing||e.pointerId!==pid)return;const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const ev of evs)live.push(toLocal(ev));draw();});
-    cv.addEventListener("pointerup",e=>{if(!drawing||e.pointerId!==pid)return;drawing=false;const user=live;live=null;
+      if(busy||tour){setTour(false);stopAnim();return;}if(done>=strokes.length)return;drawing=true;pid=e.pointerId;cv.setPointerCapture(e.pointerId);live=[toLocal(e)];pen.start(live[0]);draw();e.preventDefault();});
+    cv.addEventListener("pointermove",e=>{if(!drawing||e.pointerId!==pid)return;const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];for(const ev of evs)live.push(toLocal(ev));pen.move(live[live.length-1]);draw();});
+    cv.addEventListener("pointerup",e=>{if(!drawing||e.pointerId!==pid)return;drawing=false;pen.stop();const user=live;live=null;
       if(!user||len(user)<4&&strokes[done].length>1){draw();return;}judge(user.length>1?user:[user[0],user[0]]);});
-    cv.addEventListener("pointercancel",()=>{drawing=false;live=null;draw();});}
+    cv.addEventListener("pointercancel",()=>{pen.stop();drawing=false;live=null;draw();});}
   window.addEventListener("resize",()=>{if(E)sizeCanvas();});
   return {
     stop(){animToken++;busy=false;E=null;},
@@ -867,7 +879,7 @@ const SB=(()=>{
         <div class="sk-btns"><button class="btn p wide" data-a="tour" type="button">整課連續播放</button><button class="btn wide" data-a="play" type="button">這個字再播放一次</button><button class="btn" data-a="redo" type="button">重寫</button><button class="btn" data-a="hint" type="button">提示下一畫</button><button class="btn" data-a="prev" type="button">上一字</button><button class="btn" data-a="next" type="button">下一字</button></div>
         <label class="ghostRow" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="ghost" checked> 顯示淡淡的字（描紅）</label>
         <label class="autoRow" style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="auto" checked> 換字時先自動播放筆順</label>
-        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="snd" ${SND?"checked":""}> 音效（寫對叮一聲、寫錯提示音）</label>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" class="snd" ${SND?"checked":""}> 音效（寫字沙沙聲、寫對寫錯提示音）</label>
         <div class="sk-stars" aria-live="polite"></div>
         <div class="sk-note note"></div>
         <div class="sk-note score"></div>
