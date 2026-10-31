@@ -574,6 +574,8 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .ed-tpl .btn[aria-pressed="true"]{background:var(--ink)!important;color:#fff!important;border-color:var(--ink)!important}
 .ed-tpl .btn{border-width:1.5px}
 .ed-tpl .ed-clear{grid-column:1/-1;justify-self:start}
+.pr-ord{flex:none}
+@media (max-width:820px){.pr-ord{width:100%}}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -751,22 +753,29 @@ function drawCard(){const c=$("fc");if(!c||!FC)return;c.innerHTML="";const st=$(
   }else{const b=el("button","btn p","看答案");b.type="button";b.onclick=()=>{FC.flip=true;drawCard();};c.appendChild(el("div","btns")).appendChild(b);}
 }
 // ---------- print ----------
-let PTS=new Set(["A"]),PA=false;   /* 可以複選，合併成一份列印 */
+let PTS=new Set(["A"]),PA=false,PORD="lesson";   /* 可以複選，合併成一份列印 */
 function renderPrint(m,ls){
   const ctl=el("div","pr-ctl row fnrow pr-row");
   ctl.innerHTML=`<span class="lab"><i>4</i>選練習卷<small class="pr-multi">可複選</small></span><div class="tabs" role="group" aria-label="練習卷種類">${[["A","公版生字練習表"],["B","部首測驗表"],["C","多音字練習表"],["D","同音字練習表"]].map(([t,n])=>`<button class="tab" type="button" data-t="${t}"><span class="tf">${n}</span><span class="ts">${n}</span></button>`).join("")}</div>
-   <label class="pr-ans"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>`;
+   <label class="pr-ans"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>
+   ${ls.length>1&&PTS.size>1?`<div class="seg pr-ord" role="group" aria-label="排列方式"><button type="button" data-o="lesson" aria-pressed="${PORD==="lesson"}">依課次排</button><button type="button" data-o="type" aria-pressed="${PORD==="type"}">依種類排（省紙）</button></div>`:""}`;
   m.appendChild(ctl);
   ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-selected",PTS.has(b.dataset.t));
     b.onclick=()=>{const t=b.dataset.t;if(PTS.has(t)){if(PTS.size>1)PTS.delete(t);}else PTS.add(t);render();};});
   $("pa").onchange=e=>{PA=e.target.checked;render();};
+  ctl.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{PORD=b.dataset.o;render();});
   if(PTS.has("A")){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
     tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
   const nt=el("div","note",INAPP?INAPP_MSG:"按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 在列印畫面按右上角分享鍵，選「儲存到檔案」。");m.appendChild(nt);
   const pages=el("div","pages");m.appendChild(pages);
   // 選的種類依序排：生字練習表（橫式）、部首、多音字、同音字（直式）；附解答頁接在各自後面
   const mk={A:sheetsA,B:sheetsB,C:sheetsC,D:sheetsD},NAME={B:"部首",C:"多音字",D:"同音字"},out=[],none=[];
-  for(const t of ["A","B","C","D"]){if(!PTS.has(t))continue;const a=mk[t](ls,false);if(!a.length){none.push(NAME[t]||"生字");continue;}
+  const TS=["A","B","C","D"].filter(t=>PTS.has(t));
+  if(PORD==="lesson"&&ls.length>1&&TS.length>1){   /* 依課次：每課一組（生字→部首→多音字→同音字），解答全部放在最後 */
+    const ans=[],got=new Set();
+    for(const x of ls)for(const t of TS){const a=mk[t]([x],false);if(a.length){got.add(t);out.push(...a);if(PA)ans.push(...mk[t]([x],true));}}
+    TS.forEach(t=>{if(!got.has(t))none.push(NAME[t]||"生字");});out.push(...ans);
+  }else for(const t of TS){const a=mk[t](ls,false);if(!a.length){none.push(NAME[t]||"生字");continue;}
     out.push(...a);if(PA)out.push(...mk[t](ls,true));}
   if(none.length)pages.appendChild(el("div","sk-note",`這個範圍沒有${none.join("、")}題目。`));
   if(!out.length){$("pagesize").textContent="@page{size:A4 portrait;margin:0}";return;}
@@ -836,7 +845,7 @@ function polySheets(items,ans,name,sub){const res=[];
     s.appendChild(C);res.push(s);}
   return res;}
 function sheetsC(ls,ans){const all=[];ls.forEach(x=>x.c.forEach(c=>{if(c.o.length)all.push({c:c.c,low:x.g<=2,reads:[[c.z,c.w.slice(0,1)],...c.o.slice(0,2)]});}));
-  return polySheets(all,ans,"多音字練習",`${G[ls[0].g-1]}上`);}
+  return polySheets(all,ans,"多音字練習",`${G[ls[0].g-1]}上`+(ls.length===1?" "+(titleParts(ls[0].t)[0]||ls[0].t):""));}
 // 造詞格：國字＋注音（注音格只有低年級，跟教育部作業簿規格一樣）。解答頁填上語詞和注音
 const pickW=ws=>(ws||[]).find(w=>[...w].length===2)||(ws||[])[0]||"";
 function wordZ(w,c,z){const ch=[...w];const rd=typeof autoRead==="function"?autoRead(ch):[];return ch.map((x,i)=>x===c?z:(rd[i]||(ZYT[x]||[])[0]||""));}
@@ -874,7 +883,7 @@ function homoSheets(groups,low,ans,name,sub){const res=[];if(!groups.length)retu
       D.appendChild(r);}
     s.appendChild(D);res.push(s);}
   return res;}
-function sheetsD(ls,ans){const {g,groups}=homoGroups(ls);return homoSheets(groups,g<=2,ans,"同音不同字練習",`${G[g-1]}上`);}
+function sheetsD(ls,ans){const {g,groups}=homoGroups(ls);return homoSheets(groups,g<=2,ans,"同音不同字練習",`${G[g-1]}上`+(ls.length===1?" "+(titleParts(ls[0].t)[0]||ls[0].t):""));}
 // ================= 筆順練習 (stroke order) =================
 const SDATA={};
 function addTracks(raw){for(const e of raw.split("|")){if(!e)continue;const i=e.indexOf(":");SDATA[e.slice(0,i)]=e.slice(i+1).split(",").map(s=>{const p=[];for(let k=0;k<s.length;k+=4)p.push([parseInt(s.slice(k,k+2),36),parseInt(s.slice(k+2,k+4),36)]);return p;});}}
