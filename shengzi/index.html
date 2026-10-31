@@ -480,6 +480,12 @@ footer.src{margin-top:24px;padding-top:22px;padding-bottom:calc(28px + env(safe-
 .homo .hm{display:inline-block;white-space:nowrap;margin-right:.9em}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* 匯出練習卷：選練習卷種類，跟「選功能」同一種按鈕 */
+.pr-row{gap:14px;padding:4px 0 6px}
+.pr-row .lab i{background:#fbe94e;color:var(--ink)}
+.pr-row .tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;flex:1;max-width:640px}
+.pr-ans{display:flex;gap:8px;align-items:center;font-size:15px;white-space:nowrap}
+@media (max-width:820px){.pr-row{flex-wrap:wrap}.pr-row .tabs{grid-template-columns:repeat(3,minmax(0,1fr));width:100%}}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的免費學習資源</span><span class="dot">｜</span><span>國小國語生字・注音・部首・筆順</span></div>
@@ -626,11 +632,11 @@ function drawCard(){const c=$("fc");if(!c||!FC)return;c.innerHTML="";const st=$(
 // ---------- print ----------
 let PT="A",PA=false;
 function renderPrint(m,ls){
-  const ctl=el("div","pr-ctl");
-  ctl.innerHTML=`<div class="seg" role="group" aria-label="練習卷種類"><button type="button" data-t="A">生字練習表</button><button type="button" data-t="B">部首測驗表</button><button type="button" data-t="C">多音字練習表</button></div>
-   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>`;
+  const ctl=el("div","pr-ctl row fnrow pr-row");
+  ctl.innerHTML=`<span class="lab"><i>4</i>選練習卷</span><div class="tabs" role="group" aria-label="練習卷種類">${[["A","生字練習表"],["B","部首測驗表"],["C","多音字練習表"]].map(([t,n])=>`<button class="tab" type="button" data-t="${t}"><span class="tf">${n}</span><span class="ts">${n}</span></button>`).join("")}</div>
+   <label class="pr-ans"><input type="checkbox" id="pa"${PA?" checked":""}> 附解答頁</label>`;
   m.appendChild(ctl);
-  ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.t===PT);b.onclick=()=>{PT=b.dataset.t;render();};});
+  ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-selected",b.dataset.t===PT);b.onclick=()=>{PT=b.dataset.t;render();};});
   $("pa").onchange=e=>{PA=e.target.checked;render();};
   const nt=el("div","note","按「列印／存成 PDF」後，印表機選「另存為 PDF」就能存檔。如果按了沒有反應（例如在 Claude 的預覽視窗裡），請改用部署後的網址開啟這個頁面再列印。");m.appendChild(nt);
   const pages=el("div","pages");m.appendChild(pages);
