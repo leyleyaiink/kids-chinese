@@ -1076,8 +1076,11 @@ function renderFb(m){
 // ================= 查字 =================
 let Q="";
 const IDX={};L.forEach(ls=>ls.c.forEach(c=>{(IDX[c.c]=IDX[c.c]||[]).push({ls,c});}));
-const RAD={};Object.values(IDX).forEach(a=>{const c=a[0].c;(RAD[c.b]=RAD[c.b]||[]).push(c);});
-const ZYI={};Object.values(IDX).forEach(a=>{a.forEach(({c})=>{[c.z,...c.o.map(o=>o[0])].forEach(z=>{const k=z.replace(/[ˊˇˋ˙]/g,"");(ZYI[k]=ZYI[k]||[]);if(!ZYI[k].some(y=>y.c===c.c&&y.z===z))ZYI[k].push({c:c.c,z});});});});
+// 三個版本一起查：每個字在哪些版本、哪一課（目前選的版本排前面）
+const XIDX={};[VER,...Object.keys(LV).filter(v=>v!==VER)].forEach(v=>LV[v].forEach(ls=>ls.c.forEach(c=>{(XIDX[c.c]=XIDX[c.c]||[]).push({v,ls,c});})));
+// 部首、注音查詢也不分版本
+const RAD={};Object.values(XIDX).forEach(a=>{const c=a[0].c;(RAD[c.b]=RAD[c.b]||[]).push(c);});
+const ZYI={};Object.values(XIDX).forEach(a=>{a.forEach(({c})=>{[c.z,...c.o.map(o=>o[0])].forEach(z=>{const k=z.replace(/[ˊˇˋ˙]/g,"");(ZYI[k]=ZYI[k]||[]);if(!ZYI[k].some(y=>y.c===c.c&&y.z===z))ZYI[k].push({c:c.c,z});});});});
 function clearQ(){Q="";$("srch").value="";$("srchX").hidden=true;}
 function goStroke(e){grade=e.ls.g;sel=new Set([key(e.ls)]);strokeStart=e.c.c;clearQ();view="stroke";save();renderBar();render();window.scrollTo(0,0);}
 function charBtns(list){return `<div class="sr-list">${list.map(x=>`<button type="button" data-q="${esc(x.c)}"><b>${esc(x.c)}</b><small>${esc(x.z||"")}</small></button>`).join("")}</div>`;}
@@ -1090,9 +1093,9 @@ function renderSearch(m){
     m.appendChild(s);bindQ(m);return;}
   if(!han.length){m.appendChild(el("div","empty","請輸入要查的國字，或注音（例如：ㄏㄨ）。"));return;}
   [...new Set(han)].slice(0,12).forEach((ch,ix)=>{
-    const s=el("section","sr-sec");const hits=IDX[ch];
+    const s=el("section","sr-sec");const all=XIDX[ch]||[],here=!!IDX[ch],hits=IDX[ch]||(all.length?all:null);
     s.appendChild(head(String(ix+1).padStart(2,"0"),`查「${esc(ch)}」`,"CHARACTER"));
-    if(!hits){s.insertAdjacentHTML("beforeend",`<div class="sr-none">「${esc(ch)}」不在一～六年級課本的生字、認讀字裡。<br>可以到教育部 <a href="https://pedia.cloud.edu.tw/Entry/Detail/?title=${encodeURIComponent(ch)}" target="_blank" rel="noopener">教育百科</a> 查部首、注音與筆順。</div>`);m.appendChild(s);return;}
+    if(!hits){s.insertAdjacentHTML("beforeend",`<div class="sr-none">「${esc(ch)}」不在南一、康軒、翰林一～六年級課本的生字、認讀字裡。<br>可以到教育部 <a href="https://pedia.cloud.edu.tw/Entry/Detail/?title=${encodeURIComponent(ch)}" target="_blank" rel="noopener">教育百科</a> 查部首、注音與筆順。</div>`);m.appendChild(s);return;}
     const c=hits[0].c;
     const card=el("article","cc"+(hits.every(h=>h.c.k==="r")?" r":""));
     card.appendChild(el("div","big",`<div class="tz">${esc(c.c)}</div><div class="zc">${zv(c.z)}</div>`));
@@ -1104,8 +1107,9 @@ function renderSearch(m){
     if(zs.length>1)mt.appendChild(el("div","poly",`<span class="k">課本讀音</span>${zs.map(z=>`<b>${esc(z)}</b>`).join("、")}`));
     const os2=os.filter(o=>!zs.includes(o[0]));if(os2.length)mt.appendChild(el("div","poly",`<span class="k">其他讀音</span>`+os2.map(o=>`<b>${esc(o[0])}</b> ${esc(o[1].join("、"))}`).join("；")));
     const hm=homos(c,hits[0].ls.g);if(hm.length)mt.appendChild(el("div","homo",`<span class="k">同音字</span>`+hm.map(y=>`<span class="hm"><b>${esc(y.c)}</b>${y.w?`（${esc(y.w)}）`:""}</span>`).join("")));
-    mt.appendChild(el("div","sr-where",`<span class="k">出現在</span>`+hits.map(h=>`<span>${G[h.ls.g-1]}上・${esc(h.ls.t)}・${h.c.k==="r"?"認讀字":"生字"}（${esc(h.c.z)}）</span>`).join("")));
-    if(SDATA[ch]){const bs=el("button","bs","練筆順");bs.type="button";bs.onclick=()=>goStroke(hits.find(h=>SDATA[h.c.c])||hits[0]);mt.appendChild(bs);}
+    mt.appendChild(el("div","sr-where",`<span class="k">出現在</span>`+all.map(h=>`<span>${VN[h.v]}・${G[h.ls.g-1]}上・${esc(h.ls.t)}・${h.c.k==="r"?"認讀字":"生字"}（${esc(h.c.z)}）</span>`).join("")));
+    if(!here)mt.appendChild(el("div","sk-note",`目前選的是${VN[VER]}；這個字在${[...new Set(all.map(h=>VN[h.v]))].join("、")}的課本裡。`));
+    if(SDATA[ch]&&here){const bs=el("button","bs","練筆順");bs.type="button";bs.onclick=()=>goStroke(hits.find(h=>SDATA[h.c.c])||hits[0]);mt.appendChild(bs);}
     card.appendChild(mt);s.appendChild(card);
     const same=(RAD[c.b]||[]).filter(x=>x.c!==ch);
     if(same.length){s.insertAdjacentHTML("beforeend",`<p class="sk-note" style="margin:14px 0 8px">部首也是「${esc(c.b)}」的課本生字（${same.length} 個）：</p>`+charBtns(same.slice(0,40)));}
