@@ -569,6 +569,11 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .ed-now{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink);background:#fff8cf;border-radius:10px;padding:6px 10px}
 .ed-now span{flex:1;min-width:10em}
 .panel.flash{box-shadow:0 0 0 3px #fbe94e}
+/* 公版按鈕：目前套用的那個深咖啡底白字；清空改成小按鈕 */
+.ed-tpl-lab{font-size:12px;color:var(--muted);margin:6px 0 -2px}
+.ed-tpl .btn[aria-pressed="true"]{background:var(--ink)!important;color:#fff!important;border-color:var(--ink)!important}
+.ed-tpl .btn{border-width:1.5px}
+.ed-tpl .ed-clear{grid-column:1/-1;justify-self:start}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span><a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a> 設計的</span><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span></div>
@@ -1338,8 +1343,9 @@ function renderEdit(m,ls){
       <div class="sk-note">有（　）的例句，後面加 1 行空白題；沒有括號的句型（例如「自從……」），會印成粗體，後面留一整行「造句：」給孩子寫。下一行打「＝3」可以自己指定空白題行數。</div>`}
     </div>
     <div class="panel ed-p2">
-      <h3>${TY==="S"?"② 重新開始":"② 選題型和公版（依上方勾選的課次）"}</h3>
+      <h3>${TY==="S"?"② 重新開始":"② 選題型、套用公版"}</h3>
       ${TY==="S"?"":`<div class="seg ed-ty" role="group" aria-label="題型"><button type="button" data-ty="A">生字</button><button type="button" data-ty="C">多音字</button><button type="button" data-ty="D">同音字</button></div>`}
+      ${TY==="S"?"":`<div class="ed-tpl-lab">公版（依上方選的課次）</div>`}
       <div class="ed-tpl">${TY==="S"?`
         <button class="btn" data-tpl="example" type="button">放入範例</button>
 `:TY==="A"?`
@@ -1347,7 +1353,7 @@ function renderEdit(m,ls){
         <button class="btn" data-tpl="zy" type="button">看國字寫注音</button>
         <button class="btn" data-tpl="all" type="button">國字注音都空白</button>`:`
         <button class="btn" data-tpl="pub" type="button">${TY==="C"?"這幾課的多音字":"這幾課的同音字"}</button>`}
-        <button class="btn" data-tpl="blank" type="button">清空，自己出題</button>
+        <button class="mini ed-clear" data-tpl="blank" type="button">清空，自己出題</button>
       </div>
       <div class="sk-note">${ls.length?`目前範圍：${esc(lsName)}，共 ${ls.reduce((a,x)=>a+x.c.filter(c=>c.k==="s").length,0)} 個生字。`:"先在上方選課次，就能產生公版。"}</div>
     </div>
@@ -1390,7 +1396,7 @@ function renderEdit(m,ls){
     const nm={A:"生字練習",C:"多音字練習",D:"同音字練習",S:"照樣造句"};if(/((生字|多音字|同音字)練習|照樣造句)$/.test(ED.title))ED.title=ED.title.replace(/((生字|多音字|同音字)練習|照樣造句)$/,nm[ED.type]);edSave();render();};});
   // 告訴使用者目前內容是哪一份公版，按鈕直接跳到「② 選題型和公版」
   const KN={han:"看注音寫國字",zy:"看國字寫注音",all:"國字注音都空白",pub:TY==="C"?"多音字":"同音字",blank:"自己出題"};
-  const showNow=()=>{const n=q("#edNow");if(!n)return;const k=ED["tpl"+TY];n.textContent=!k?"還沒有套用公版。":k==="blank"?"目前是自己出題。":`目前內容：${lsName}的公版（${KN[k]||""}）。`;};
+  const showNow=()=>{w.querySelectorAll(".ed-tpl [data-tpl]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tpl!=="blank"&&ED["tpl"+TY]===b.dataset.tpl));const n=q("#edNow");if(!n)return;const k=ED["tpl"+TY];n.textContent=!k?"還沒有套用公版。":k==="blank"?"目前是自己出題。":`目前內容：${lsName}的公版（${KN[k]||""}）。`;};
   if(q("#edGoTpl"))q("#edGoTpl").onclick=()=>{const p=q(".ed-p2");p.scrollIntoView({behavior:"smooth",block:"center"});p.classList.add("flash");setTimeout(()=>p.classList.remove("flash"),1200);};
   const sync=()=>{edSave();drawSheets();showNow();};
   q("#edTitle").oninput=e=>{ED.title=e.target.value;sync();};
