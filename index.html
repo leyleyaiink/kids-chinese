@@ -663,6 +663,14 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .sr-list button small.zc{font-size:11px;line-height:1.05;display:flex;align-items:center}
 .allr .rd1{display:inline-block;margin:0 10px 2px 0}
 .allr .tb{font-style:normal;font-size:11px;color:#fff;background:var(--ink);border-radius:6px;padding:0 5px;margin-left:3px}
+/* 滑鼠移過按鈕：輕輕浮起來（只在有滑鼠的裝置；手機觸控不受影響；系統設定「減少動態」就不動） */
+.chip,.tab,.btn,.mini,.seg button,.nm-chip,.clog-b{transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease}
+@media (hover:hover) and (pointer:fine){
+  .chip:hover,.tab:hover,.btn:hover,.mini:hover,.nm-chip:hover,.clog-b:hover{transform:translateY(-2px);box-shadow:0 3px 0 rgba(83,69,69,.18)}
+  .chip:active,.tab:active,.btn:active,.mini:active,.nm-chip:active{transform:translateY(0);box-shadow:none}
+  .seg button:hover:not([aria-pressed="true"]){background:#f6efec;box-shadow:inset 0 -3px 0 rgba(83,69,69,.15)}
+}
+@media (prefers-reduced-motion:reduce){.chip,.tab,.btn,.mini,.seg button,.nm-chip,.clog-b{transition:none}.chip:hover,.tab:hover,.btn:hover,.mini:hover,.nm-chip:hover,.clog-b:hover{transform:none}}
 </style>
 <style id="pagesize">@page{size:A4 landscape;margin:0}</style>
 <div class="ann"><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span><span class="by">by <a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a></span></div>
@@ -720,7 +728,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 22:11<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 22:12<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
