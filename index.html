@@ -590,6 +590,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sbody .sc .z{font-size:.36em;margin-left:.08em;line-height:1.05}
 .seg.ed-ty{display:grid;grid-template-columns:repeat(4,1fr)!important;grid-auto-flow:row!important;border-radius:16px;overflow:hidden}
 .seg.ed-ty button{border-radius:0!important}
+.ed-side .seg.ed-ty{grid-template-columns:repeat(2,1fr)!important}.seg.ed-ty button{white-space:nowrap;padding:8px 6px}   /* 側欄窄：題型兩排兩顆，字不擠 */
 @media (max-width:600px){.fv-bar{gap:6px}.fv-bar .fv-t{font-size:14px;white-space:nowrap}.fv-bar .btn{padding:0 .9em;font-size:14px;height:38px;min-height:38px}}
 /* 選功能 5 個按鈕：電腦一排；手機上面 3 個、下面 2 個 */
 .fnrow .tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important;max-width:1200px}
@@ -705,7 +706,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:34<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:44<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1746,9 +1747,10 @@ function renderEdit(m,ls){
   const lsName=ls.length?`${VN[VER].replace("版","")} ${G[ls[0].g-1]}上 ${ls.map(x=>titleParts(x.t)[0].replace("第","").replace("課","")).join("、")}課`:"";
   w.innerHTML=`
   <div class="ed-side">
+    ${TY==="S"?"":`<div class="panel ed-p0"><h3>選題型</h3><div class="seg ed-ty" role="group" aria-label="題型"><button type="button" data-ty="A">生字語詞</button><button type="button" data-ty="N">筆順練習</button><button type="button" data-ty="C">多音字</button><button type="button" data-ty="D">同音字</button></div></div>`}
     <div class="panel ed-p1">
       <h3>① 編輯內容</h3>
-      ${TY==="S"?"":`<div class="ed-now"><span id="edNow"></span><button class="mini done" id="edGoTpl" type="button">換公版／題型</button></div>`}
+      ${TY==="S"?"":`<div class="ed-now"><span id="edNow"></span><button class="mini done" id="edGoTpl" type="button">換公版</button></div>`}
       <label class="ed-f">標題<input type="text" id="edTitle" maxlength="30"></label>
       ${TY==="A"?`<label class="ed-f">題型說明<input type="text" id="edKind" maxlength="20"></label>`:""}
       ${TY==="A"?`<label class="ed-f">內容（每行或空格分開一題）<textarea id="edText" rows="7" placeholder="例如：&#10;噴水 吃飯&#10;我跟媽媽向前游。"></textarea></label>
@@ -1760,8 +1762,7 @@ function renderEdit(m,ls){
       <div class="sk-note">有（　）的例句，後面加 1 行空白題；沒有括號的句型（例如「自從……」），會印成粗體，後面留一整行「造句：」給孩子寫。下一行打「＝3」可以自己指定空白題行數。</div>`}
     </div>
     <div class="panel ed-p2">
-      <h3>${TY==="S"?"② 重新開始":"② 選題型、套用公版"}</h3>
-      ${TY==="S"?"":`<div class="seg ed-ty" role="group" aria-label="題型"><button type="button" data-ty="A">生字語詞</button><button type="button" data-ty="N">筆順練習</button><button type="button" data-ty="C">多音字</button><button type="button" data-ty="D">同音字</button></div>`}
+      <h3>${TY==="S"?"② 重新開始":"② 套用公版"}</h3>
       ${TY==="S"?"":`<div class="ed-tpl-lab">公版（依上方選的課次）</div>`}
       <div class="ed-tpl">${TY==="S"?`
         <button class="btn" data-tpl="example" type="button">放入範例</button>
