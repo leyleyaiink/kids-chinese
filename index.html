@@ -53,6 +53,7 @@ main{padding-block:18px 40px}
 .zv{display:inline-flex;flex-direction:column;align-items:center;position:relative;line-height:1;font-family:var(--kai)}
 .zv i{font-style:normal;display:block}
 .zv .tn{position:absolute;right:-.62em;bottom:.05em;font-size:.8em}
+.zv.t{margin-right:.55em}   /* 聲調在注音右邊，整組往左挪，聲調才不會被格子切掉 */
 .zv .nt{display:block;font-size:.8em;line-height:.6}
 /* tian grid cell */
 .tz{position:relative;background:#fffdfb;border:1.5px solid var(--grid)}
@@ -635,7 +636,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span id="by">Ashley 設計規劃</span></div><span>最後更新：2026年11月1日 11:04<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span id="by">Ashley 設計規劃</span></div><span>最後更新：2026年11月1日 11:09<span id="views"></span></span></div>
   <details class="clog"><summary>更新紀錄</summary><ul><li class="cd">11/1</li><li>新增更新紀錄</li><li>PDF 自動命名</li><li class="cd">10/31</li><li>練習卷標題加上課次</li><li>查國字顯示所有讀音</li><li>多種練習卷一次匯出</li><li>自編練習標出第幾課</li><li>補齊三～六年級筆順</li><li>手機可按返回上一頁</li><li>生字練習表更省紙</li><li>筆順測驗可看答案</li><li>記住常寫錯的字</li><li>新增自編照樣造句</li><li>新增翰林版</li><li>新增留言勘誤表單</li><li>自編多音字、同音字</li><li>新增同音不同字練習</li><li>格子改用作業簿規格</li><li>筆順改楷書、可連續播放</li><li>新增康軒版</li><li>網站上線</li></ul></details>
 </footer>
 <script>
@@ -671,7 +672,7 @@ const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=nu
 const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
 // zhuyin vertical html
 function zv(z){if(!z)return"";let nt=false,tn="";if(z[0]==="˙"){nt=true;z=z.slice(1);}const last=z.slice(-1);if("ˊˇˋ".includes(last)){tn=last;z=z.slice(0,-1);}
-  return `<span class="zv">${nt?'<span class="nt">˙</span>':''}${[...z].map(s=>`<i>${s}</i>`).join("")}${tn?`<span class="tn">${tn}</span>`:''}</span>`;}
+  return `<span class="zv${tn?" t":""}">${nt?'<span class="nt">˙</span>':''}${[...z].map(s=>`<i>${s}</i>`).join("")}${tn?`<span class="tn">${tn}</span>`:''}</span>`;}
 // homophone index over 生字 (k=s) of all grades
 const HOMO={};L.forEach(ls=>ls.c.forEach(x=>{if(x.k!=="s")return;(HOMO[x.z]=HOMO[x.z]||[]);if(!HOMO[x.z].some(y=>y.c===x.c))HOMO[x.z].push({c:x.c,w:x.w[0]||"",g:ls.g});}));
 let HX=null;function buildHX(){HX={};if(typeof autoRead!=="function")return;const seen=new Set();L.forEach(ls=>ls.c.forEach(c=>{(c.w||[]).forEach(w=>{if(seen.has(w))return;seen.add(w);const ch=[...w];const rd=autoRead(ch);ch.forEach((x,i)=>{const z=rd[i];if(!z)return;if(!((ZYT[x]&&ZYT[x][0]===z)||LZ[x]===z))return;const a=(HX[z]=HX[z]||[]);const o=a.find(y=>y.c===x);const sc=(ww,gg)=>(ww.length===2?0:ww.length===3?10:20)+gg;if(!o)a.push({c:x,w,g:ls.g});else if(sc(w,ls.g)<sc(o.w,o.g)){o.w=w;o.g=ls.g;}});});}));}
