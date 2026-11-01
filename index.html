@@ -705,7 +705,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:29<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:34<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -779,7 +779,7 @@ function chosen(){const a=gLessons().filter(x=>sel.has(key(x)));return a.length?
 function renderBar(){
   const gs=$("grades");gs.innerHTML="";for(let g=1;g<=6;g++){const b=el("button");b.type="button";b.textContent=G[g-1]+"年級";b.setAttribute("aria-pressed",g===grade);b.onclick=()=>{grade=g;sel=new Set(gLessons().slice(0,1).map(key));save();renderBar();render();};gs.appendChild(b);}
   const lc=$("lessons");lc.innerHTML="";gLessons().forEach(x=>{const b=el("button","chip");b.type="button";const m=x.t.split("：");b.innerHTML=m.length>1?`<b>${esc(m[0].replace("第","").replace("課",""))}、</b>${esc(m[1])}`:esc(x.t);b.title=x.t;b.setAttribute("aria-pressed",sel.has(key(x)));b.onclick=()=>{sel.has(key(x))?sel.delete(key(x)):sel.add(key(x));save();renderBar();render();};lc.appendChild(b);});
-  $("g1note").hidden=grade!==1;
+  $("g1note").hidden=grade!==1;$("t-zy").hidden=grade!==1;   /* 注音專區只在一年級出現 */
   $("selCnt").textContent=sel.size?`已選 ${gLessons().filter(x=>sel.has(key(x))).length} 課`:"尚未選課";
   ["list","stroke","print","edit","sent","zy"].forEach(v=>$("t-"+v).setAttribute("aria-selected",!Q&&v===view));
   renderScope();
@@ -979,6 +979,8 @@ function renderPrint(m,ls){
   if(COMBO)m.appendChild(el("div","pr-tip",`下面是合併匯出的內容（${["A","B","C","D","E","F","G"].filter(t=>PTS.has(t)).map(t=>({A:"生字",B:"部首",C:"多音字",D:"同音字",E:"改錯字",F:"看圖注音",G:"筆順練習紙"})[t]).join("、")}）。點上面任一練習卷可以回到單一預覽。`));
   else if(PT==="A"){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
     tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
+  if(PT==="G"){const t=el("div","pr-tip",'這是依課本生字排好的公版筆順練習紙。要寫名字，或換成自己想練的字？<button class="mini done" type="button">到自編 → 筆順練習</button>');
+    t.querySelector("button").onclick=()=>{NAMEV="";go("edit");EDM.type="N";ED=EDM;render();};m.appendChild(t);}
   if(PT==="F"){const t=el("div","pr-tip",'注音大會考題型：看圖圈讀音、看圖寫注音，錯的選項用孩子容易搞混的符號和聲調。<button class="mini done" type="button">換一份題目</button>');t.querySelector("button").onclick=()=>{PSEED++;render();};m.appendChild(t);}
   if(PT==="E"||COMBO&&PTS.has("E")){const t=el("div","pr-tip",`${Object.keys(SENTS).length?`<label class="pr-ans"><input type="checkbox" id="fxring"${FXRING?" checked":""}> 句子題也先圈出錯字（簡單版）</label>　語詞題一律先圈出錯字；句子題預設不圈，讓孩子自己找。`:"目前是「語詞改錯」：錯字已經圈起來，把正確的字寫在括號裡。「句子改錯」版本建置中，敬請期待！"}`);
     const cb=t.querySelector("#fxring");if(cb)cb.onchange=e=>{FXRING=e.target.checked;render();};m.appendChild(t);}
