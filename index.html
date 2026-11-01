@@ -187,7 +187,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .rb .lb{height:7mm;display:grid;place-items:center;font-size:4.4mm;letter-spacing:.6em;border-bottom:1px solid #3155a2}
 .rb .wr{height:19mm;display:grid;place-items:center;font-size:14mm;color:#d5392f}
 /* worksheet C: polyphone */
-.wsC{display:grid;grid-template-columns:repeat(2,1fr);gap:6mm 8mm;justify-items:start;align-items:start}
+.wsC{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-flow:row dense;gap:6mm 6mm;justify-items:center;align-items:start}
 .pb{display:flex;flex-direction:column;align-items:center;gap:2mm}
 .pb .hz{display:flex}
 .pb .hz .tz{width:26mm;height:26mm;display:grid;place-items:center;font-size:19mm;border-color:#3155a2;border-width:1.2px}
@@ -633,7 +633,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 footer .fsh .no{background:#96d6d4!important;color:var(--ink)!important}
 footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .wsA .cell .lab{flex:1;display:grid;place-items:center;writing-mode:vertical-rl;font-size:calc(var(--g)*.22);letter-spacing:.12em;color:#3155a2;background:#eef3fb;font-weight:700}
-.wsC .pb.w3{grid-column:1/-1}
+.wsC .pb.w3{grid-column:span 2}
 .ed-now{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink);background:#fff8cf;border-radius:10px;padding:6px 10px}
 .ed-now span{flex:1;min-width:10em}
 .panel.flash{box-shadow:0 0 0 3px #fbe94e}
@@ -732,7 +732,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 23:48<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 00:12<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1091,11 +1091,12 @@ function sheetsB(ls,ans){const res=[];if(!ls.length)return res;const multi=ls.le
 // 練習卷標題的課次：一課「第一課」，好幾課「第一～三課」
 const lsRange=ls=>{if(!ls.length)return"";const a=titleParts(ls[0].t)[0]||ls[0].t;if(ls.length===1)return a;const b=titleParts(ls[ls.length-1].t)[0]||"";return a.replace(/課$/,"")+"～"+b.replace(/^第/,"");};
 function polySheets(items,ans,name,sub){const res=[];
-  // 一頁 3 排：讀音 1～2 個的字兩個並排一排，3 個以上的字自己佔一整排
-  const pg=[];let cur=[],rows=0,half=false;
-  for(const c of items){const w=c.reads.length>=3;
-    if(w){if(half){rows++;half=false;}if(rows>=3){pg.push(cur);cur=[];rows=0;}cur.push(c);rows++;}
-    else if(!half){if(rows>=3){pg.push(cur);cur=[];rows=0;}cur.push(c);half=true;}else{cur.push(c);half=false;rows++;}}
+  // 一頁 3 排、一排 3 個字（造詞格改正方形後變窄，省紙）；3 個讀音的字佔 2 格寬
+  const pg=[];let cur=[],rows=0,used=0;
+  for(const c of items){const w=c.reads.length>=3?2:1;
+    if(used+w>3){rows++;used=0;}
+    if(rows>=3){pg.push(cur);cur=[];rows=0;used=0;}
+    cur.push(c);used+=w;}
   if(cur.length)pg.push(cur);
   for(const grp of pg){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${esc(name)}${ans?"（解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
