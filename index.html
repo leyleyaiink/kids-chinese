@@ -552,6 +552,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .sk-btns{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 .sk-btns .wide{grid-column:1/-1!important}
 .fby{display:flex;flex-direction:column;gap:3px}
+.clog{margin-top:10px;font-size:13px;color:var(--muted)}.clog summary{cursor:pointer;color:var(--ink);font-weight:600;width:max-content}
+.clog ul{list-style:none;margin:8px 0 0;padding:10px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;max-height:260px;overflow:auto;line-height:1.7}
+.clog li{padding-left:1em;text-indent:-1em}.clog li:not(.cd)::before{content:"・"}.clog li.cd{padding:0;text-indent:0;margin-top:8px;color:var(--ink);font-weight:700}.clog li.cd:first-child{margin-top:0}
 .fby .cred{font-size:12px;color:var(--muted);line-height:1.6;letter-spacing:.04em}
 .who p{margin:.4em 0}.who ul{margin:.2em 0 .6em;padding-left:1.3em;line-height:1.8}
 /* 頁尾自我介紹 */
@@ -633,6 +636,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
   <div class="fbot"><div class="fby"><span id="by">Ashley 設計規劃</span></div><span>最後更新日期：2026年11月1日</span></div>
+  <details class="clog"><summary>更新紀錄</summary><ul><li class="cd">11/1</li><li>網頁上可以看更新紀錄</li><li>存成 PDF 時自動命名，例如「南G1_1-5生字部首多音字」</li><li>手機版練習卷按鈕放不下時自動換行</li><li class="cd">10/31</li><li>多音字、同音字練習卷標題加上課次範圍；自編多音字自動帶入例詞</li><li>查國字顯示所有讀音，可一鍵做成多音字練習卷</li><li>匯出練習卷可一次勾選多種，合併成一份 A4 PDF</li><li>自編練習：選好幾課時標出第幾課，並顯示目前套用的公版</li><li>補齊三～六年級筆順</li><li>手機、iPad 可用返回鍵回上一頁；iPad 寫字更順</li><li>公版生字練習表選多課時接著排，節省紙張</li><li>筆順測驗可以看正確筆順；記住常寫錯的字，可只練常錯的字</li><li>新增自編照樣造句（照樣寫短語、造句練習，直書稿紙）</li><li>新增翰林版；查國字可看三個版本各在第幾課</li><li>新增留言、勘誤、建議表單</li><li>自編練習加入多音字、同音字題型</li><li>新增同音不同字練習表</li><li>練習卷格子改用教育部作業簿規格</li><li>筆順改用楷書字形，可整課連續播放，加入書寫音效</li><li>新增康軒版</li><li>國語生字學習站上線</li></ul></details>
 </footer>
 <script>
 // 版本：網址 ?v=k 或上次選的，預設南一。換版本會重新載入頁面
