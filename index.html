@@ -542,6 +542,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media (max-width:820px){.fnrow .tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:row!important}.fnrow .tabs .tab{grid-column:span 2}.fnrow .tabs .tab:nth-child(n+4){grid-column:span 3}}
 .pr-row .tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media (max-width:820px){.pr-row .tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}.pr-row .tabs .tab{grid-column:auto!important}}
+/* 練習卷按鈕：放不下就換行，字不會擠在一起（任何螢幕寬度、放大字體都一樣） */
+.pr-row .tabs{display:flex!important;flex-wrap:wrap!important;overflow:visible!important}
+.pr-row .tabs .tab{flex:1 1 auto!important;min-width:max-content;white-space:nowrap;height:auto!important;min-height:38px;padding:4px .9em!important}
+.pr-row .tab .tf{display:inline!important}.pr-row .tab .ts{display:none!important}
 .brandA .tg{display:block;font-style:normal;font-size:13px;letter-spacing:.18em;color:var(--ink);margin-top:2px}
 .sr-where span{border-radius:10px!important;line-height:1.5}
 /* 筆順按鈕：上一字、重寫、下一字同一排（下一字在最右邊） */
