@@ -254,6 +254,10 @@ footer.src a{color:var(--green)}
   .pages{gap:0;overflow:visible;padding:0;display:block}
   .scale{transform:none!important;height:auto!important;width:auto!important}   /* 螢幕預覽時設的寬度不能帶到列印，否則整份會被縮小 */
   .sheet{box-shadow:none;break-after:page;page-break-after:always;margin:0}
+  /* 橫式練習卷（生字語詞、照樣造句）：一律用直式 A4 列印，把整張轉 90 度放進去，使用者不用自己選「橫向」（Safari 等瀏覽器不吃 @page 的方向） */
+  .scale:has(>.sheet.land){width:210mm!important;height:297mm!important;overflow:clip!important;contain:strict;position:relative;break-after:page;page-break-after:always}   /* contain：轉向前的 297mm 寬不能算進頁面寬，否則 Chrome 會把整頁縮小 */
+  html.safari .scale{zoom:.92}   /* Safari 列印會自己加白邊、不吃 @page 邊界 0，滿版 A4 會被擠成兩頁；Safari 才縮一點，一張剛好一頁 */
+  .scale>.sheet.land{position:absolute;top:0;left:0;transform-origin:top left;transform:translateX(210mm) rotate(90deg);break-after:auto;page-break-after:auto}
 }
 
 /* ---- 筆順練習 ---- */
@@ -672,7 +676,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 }
 @media (prefers-reduced-motion:reduce){.chip,.tab,.btn,.mini,.seg button,.nm-chip,.clog-b{transition:none}.chip:hover,.tab:hover,.btn:hover,.mini:hover,.nm-chip:hover,.clog-b:hover{transform:none}}
 </style>
-<style id="pagesize">@page{size:A4 landscape;margin:0}</style>
+<style id="pagesize">@page{size:A4 portrait;margin:0}</style>
 <div class="ann"><span>國小國語生字・注音・部首・筆順</span><span>免費學習網站</span><span class="by">by <a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley</a></span></div>
 <header class="top"><div class="wrap">
   <div class="brandA" id="home" role="link" tabindex="0" title="回首頁"><img src="data:image/webp;base64,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" alt="" width="44" height="44"><span><b>國語生字學習站</b><em class="tg">基本功打底練習</em><small>TIEN'S E-LEARNING</small></span></div>
@@ -728,7 +732,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 23:18<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 23:48<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -833,9 +837,10 @@ function fvBar(){const b=el("div","fv-bar noprint");
   if(view==="zy"&&(ZYSUB==="stroke"||ZYSUB==="sc")&&!ZYSHEET||(view==="name"||view==="edit"&&EDM&&EDM.type==="N")&&(NMODE!=="sheet"||!NAMEV))b.querySelector('[data-fv="print"]').style.visibility="hidden";
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
 /* 列印說明：依裝置顯示怎麼列印／存 PDF；橫式練習卷提醒 iPhone、Android 方向選「橫向」（手機不吃網頁設定的方向） */
+if(/^((?!chrome|crios|fxios|android|edg).)*safari/i.test(navigator.userAgent))document.documentElement.classList.add("safari");   /* 列印時 Safari 要縮一點 */
 const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1,ANDROID=/Android/.test(navigator.userAgent);
 function printTip(){const m=$("main");if(!m||m.querySelector(".ptip")||INAPP&&view==="print")return;const pg=m.querySelector(".pages");if(!pg)return;
-  const land=($("pagesize").textContent||"").includes("landscape"),dir=land?"<b>這份是橫式</b>，":"";
+  const land=false,dir="";   /* 橫式卷列印時會自動轉成直式，不用提醒選方向 */
   const t=INAPP?`在 LINE、Instagram、Facebook、Threads 裡開的網頁<b>不能列印、也存不了 PDF</b>。請按右上角「⋯」，選「用 Safari 開啟」或「用 Chrome 開啟」。`
    :IOS?`按「列印／存成 PDF」：${dir}${land?"「方向」請選<b>橫向</b>，字才不會變小。":""}有印表機直接按「列印」；<b>沒有印表機</b>：按上方的<b>分享鍵</b>（方框加箭頭），選「儲存到檔案」就是 PDF。`
    :ANDROID?`按「列印／存成 PDF」：${dir}${land?"「版面配置」請選<b>橫向</b>。":""}有印表機直接選印表機；<b>沒有印表機</b>：印表機選「<b>儲存為 PDF</b>」，再按下載鍵。`
@@ -1032,7 +1037,7 @@ function renderPrint(m,ls){
   if(none.length)pages.appendChild(el("div","sk-note",`這個範圍沒有${none.join("、")}題目。`));
   if(!out.length){$("pagesize").textContent="@page{size:A4 portrait;margin:0}";return;}
   const hasLand=out.some(x=>x.classList.contains("land"));
-  $("pagesize").textContent=hasLand?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
+  $("pagesize").textContent="@page{size:A4 portrait;margin:0}";   /* 一律直式列印，橫式卷列印時自動轉向 */
   out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});
   fit();
 }
@@ -1833,7 +1838,7 @@ function renderEdit(m,ls){
     const sg=tySeg(TY);sg.querySelectorAll("[data-ty]").forEach(b=>b.onclick=()=>{if(b.dataset.ty==="N")return;ED.type=b.dataset.ty;edSave();render();});m.appendChild(sg);
     if(!NAMEV&&ls.length){const seen=new Set();NAMEV=ls.flatMap(x=>x.c.filter(c=>c.k==="s").map(c=>c.c)).filter(c=>!seen.has(c)&&seen.add(c)).join("").slice(0,60);}   /* 先套用公版（課文生字），再自己改 */
     renderName(m);return;}
-  $("pagesize").textContent=TY==="A"||TY==="S"?"@page{size:A4 landscape;margin:0}":"@page{size:A4 portrait;margin:0}";
+  $("pagesize").textContent="@page{size:A4 portrait;margin:0}";   /* 一律直式列印；橫式練習卷列印時自動轉 90 度（app.tpl print CSS） */
   const w=el("div","ed");
   if(TY!=="S")m.appendChild(tySeg(TY));
   const lsName=ls.length?`${VN[VER].replace("版","")} ${G[ls[0].g-1]}上 ${ls.map(x=>titleParts(x.t)[0].replace("第","").replace("課","")).join("、")}課`:"";
