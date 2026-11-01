@@ -51,7 +51,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .nwc.nwl>div{display:grid;place-items:center;text-align:center;font-size:4.2mm;line-height:1.5;color:#5b3f8c}.nwc.nwl .w2{font-size:2.5mm;line-height:1.05}
 .nwk{display:flex;height:100%}.nwt{flex:1;position:relative;display:grid;place-items:center;border-right:1px dashed #6f8fd0}   /* 注音格用藍色虛線隔開，跟公版生字練習表一樣 */
 .nwt::before,.nwt::after{content:"";position:absolute;pointer-events:none}.nwt::before{left:0;right:0;top:50%;border-top:1px dashed #e8a09a}.nwt::after{top:0;bottom:0;left:50%;border-left:1px dashed #e8a09a}.nwt>*{position:relative;z-index:1}   /* 田字格用虛線框（背景圖形列印時預設不印） */
-.nwz{width:6mm;display:grid;place-items:center;font-size:3mm}.nwt svg{width:92%;height:92%}.nwbig{font-family:var(--kai);font-size:16.5mm;line-height:1;color:#3d2a63}.nwg{font-family:var(--kai);font-size:16.5mm;line-height:1;color:#e6cfcc}
+.nwz{width:6mm;display:grid;place-items:center;font-size:3mm}.nwt svg{width:92%;height:92%}.nwbig{font-family:var(--kai);font-size:13.5mm;line-height:1;color:#3d2a63}.nwg{font-family:var(--kai);font-size:13.5mm;line-height:1;color:#e6cfcc}
 .nws{display:flex;flex-direction:column;gap:.5mm}.nws i{display:block;width:7.4mm;height:7.4mm}.nws svg{width:100%;height:100%}.nwno{writing-mode:vertical-rl;font-size:3.4mm;color:#8a7a79}
 .nm-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.nm-chip{font-family:var(--kai);font-size:18px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:2px 8px;display:inline-flex;gap:4px;align-items:center;cursor:pointer}.nm-chip span{font-family:var(--sans,inherit);font-size:13px;color:var(--muted)}
 .nm{display:flex;flex-direction:column;gap:12px;margin:12px 0 16px}.nm-in{display:flex;gap:10px}.nm-in input{flex:1;max-width:360px;font-size:20px;padding:8px 14px;border:1px solid var(--line);border-radius:14px;font-family:var(--kai)}
@@ -720,7 +720,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:05<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:11<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1838,6 +1838,7 @@ function renderEdit(m,ls){
   <div class="ed-main"><div class="pages" id="edPages"></div></div>`;
   m.appendChild(w);
   const q=s=>w.querySelector(s);
+  if(/undefined/.test(ED.title||"")){ED.title=ED.title.replace(/\s*undefined/g,"").trim()||"我的練習卷";edSave();}   /* 舊版存下的標題可能有 undefined，自動拿掉 */
   q("#edTitle").value=ED.title;if(TY==="A")q("#edKind").value=ED.kind;if(TY==="S"){q("#edZy").checked=ED.zyS!==false;q("#edZy").onchange=e=>{ED.zyS=e.target.checked;sync();};}else{q("#edSize").value=edSize();q("#edAns").checked=!!ED.ans;}
   if(TY==="S"){q("#edTextP").value=ED.srcP||"";q("#edTextQ").value=ED.srcQ||"";
     if(lsName&&/照樣造句$/.test(ED.title)&&ED.title!==`${lsName} 照樣造句`){ED.title=`${lsName} 照樣造句`;q("#edTitle").value=ED.title;edSave();}}   /* 標題跟著選的課次 */else q("#edText").value=TY==="A"?ED.items.map(it=>it.t).join("\n"):(ED["src"+TY]||"");
