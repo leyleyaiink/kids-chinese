@@ -661,7 +661,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:50<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:52<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增改錯字練習</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -995,16 +995,16 @@ function wrongOf(c,z,g){if(!CHZ)buildCHZ();const man=[],sc={};
   const nc=CHC[c]&&CHC[c].n,same=x=>CHC[x]&&CHC[x].z===z&&CHC[x].g<=g&&(!nc||!CHC[x].n||Math.abs(CHC[x].n-nc)<=3);   /* 只同音的字：筆畫要接近（力 2 畫、麗 19 畫就不用） */
   const auto=Object.keys(sc).filter(x=>!man.includes(x)&&!FIX_NO.test(x)&&(rank(x)>=2||same(x))).sort((a,b)=>rank(b)-rank(a)||sc[b]-sc[a]);
   return [...man.filter(x=>!FIX_NO.test(x)),...auto];}
-/* 不出涉及身體隱私、性別議題的字詞（Ashley 要求） */
-const FIX_NO=/[胸乳屁臀裸吻性褲慾嫁娶妓淫]/;
-function fixItems(ls){if(!WSET)buildWSET();const g=Math.max(...ls.map(x=>x.g)),out=[],seen=new Set(),usedW=new Set();   /* usedW：同一個詞或句子只出一題 */
+/* 不出涉及身體隱私、性別議題、死亡暴力的字詞（Ashley 要求） */
+const FIX_NO=/[胸乳屁臀裸吻性褲慾嫁娶妓淫死殺血屍]/;   /* 也不出死亡、暴力的字詞（死於非命） */
+function fixItems(ls){if(!WSET)buildWSET();if(!CHZ)buildCHZ();const g=Math.max(...ls.map(x=>x.g)),out=[],seen=new Set(),usedW=new Set();   /* usedW：同一個詞或句子只出一題 */
   ls.forEach(x=>x.c.forEach(c=>{if(c.k!=="s"||seen.has(c.c))return;seen.add(c.c);
     /* 有原創句子就用句子（看得出上下文）；換字後前後兩字不能剛好是真的詞 */
     for(const [st,sz] of SENTS[c.c]||[]){const ch=[...st],i=ch.indexOf(c.c);if(i<0||FIX_NO.test(st)||usedW.has(st))continue;
       const bad=wrongOf(c.c,c.z,g).find(x=>{if(ch.includes(x))return false;const t=ch.slice();t[i]=x;
         for(let a=Math.max(0,i-3);a<=i;a++)for(let n=2;n<=4;n++){if(a+n<=i||a+n>t.length)continue;if(WSET.has(t.slice(a,a+n).join("")))return false;}return true;});
       if(bad){usedW.add(st);out.push({c:c.c,z:c.z,w:ch,i,bad,zs:sz?sz.split(" ").map(t=>t==="_"?"":t):null});return;}}
-    const ws=(c.w||[]).filter(w=>{const a=[...w],n=a.length;return n>=2&&n<=4&&a.filter(x=>x===c.c).length===1&&!/(.)\1/.test(w)&&!FIX_NO.test(w)&&!/^(男|女)[子人]$/.test(w);})   /* 疊字（哇哇）換一個就沒意義，不出 */.sort((a,b)=>([...a].length!==2)-([...b].length!==2));
+    const ws=(c.w||[]).filter(w=>{const a=[...w],n=a.length;return n>=2&&n<=4&&a.filter(x=>x===c.c).length===1&&!/(.)\1/.test(w)&&!FIX_NO.test(w)&&!/^(男|女)[子人]$/.test(w)&&a.every(x=>x===c.c||CHC[x]&&CHC[x].g<=g);})   /* 詞裡其他字都要是該年級以下學過的（陋室對小二太難） */   /* 疊字（哇哇）換一個就沒意義，不出 */.sort((a,b)=>([...a].length!==2)-([...b].length!==2));
     for(const w of ws){if(usedW.has(w))continue;const ch=[...w],i=ch.indexOf(c.c);
       const bad=wrongOf(c.c,c.z,g).find(x=>{if(ch.includes(x))return false;const t=ch.slice();t[i]=x;return !WSET.has(t.join(""));});
       if(bad){usedW.add(w);const pz=c.p&&c.p[0]===w&&c.p[1]?c.p[1].split("."):null;out.push({c:c.c,z:c.z,w:ch,i,bad,zs:null,pz});break;}}}));   /* pz：課本語詞的注音 */
