@@ -44,13 +44,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .nw{display:flex;flex-direction:row-reverse;border:1.2px solid #5b3f8c;width:max-content;margin:2mm auto 0}
 .nwc{width:24.5mm;border-left:1px solid #5b3f8c;display:flex;flex-direction:column}.nwc:last-child{border-left:0}.nwc.nwl{width:11mm;min-width:0}
 .nwc>div{border-bottom:1px solid #5b3f8c}.nwc>div:last-child{border-bottom:0}
-.nwc .w1,.nwc .w4{height:21mm}.nwc .w2{height:10mm;position:relative;font-size:4mm;background:linear-gradient(to top right,transparent calc(50% - .5px),#5b3f8c calc(50% - .5px),#5b3f8c calc(50% + .5px),transparent calc(50% + .5px))}.nwc .w2 .b{position:absolute;left:1.5mm;top:.6mm}.nwc .w2 .n{position:absolute;right:1.5mm;bottom:.4mm}   /* 部首／總筆畫用斜線分隔 */
+.nwc .w1,.nwc .w4{height:21mm}.nwc .w2{height:10mm;display:flex;align-items:center;justify-content:center;gap:1.2mm;font-size:5mm}.nwc .w2 .b{font-family:var(--kai)}.nwc .w2 .sl{color:#5b3f8c;font-size:4.4mm}   /* 部首／總筆畫 */
 .nwc .w3{height:98mm;display:flex;flex-direction:row-reverse;justify-content:center;gap:1.5mm;padding-top:2mm}.nwc .w5{height:102mm;display:flex;flex-direction:column}
 .nwc .w5 .nwk{flex:1;border-bottom:1px solid #b9a6d6}.nwc .w5 .nwk:last-child{border-bottom:0}
-.nwc.nwl>div{display:grid;place-items:center;text-align:center;font-size:4.2mm;line-height:1.5;color:#5b3f8c}.nwc.nwl .w2{font-size:2.4mm}.nwc.nwl .w2 .b{left:.6mm;top:.4mm}.nwc.nwl .w2 .n{right:.4mm;bottom:.3mm}
+.nwc.nwl>div{display:grid;place-items:center;text-align:center;font-size:4.2mm;line-height:1.5;color:#5b3f8c}.nwc.nwl .w2{font-size:2.5mm;line-height:1.05}
 .nwk{display:flex;height:100%}.nwt{flex:1;display:grid;place-items:center;border-right:1px solid #b9a6d6;background:linear-gradient(#e8a09a,#e8a09a) center/100% 1px no-repeat,linear-gradient(#e8a09a,#e8a09a) center/1px 100% no-repeat}
 .nwz{width:6mm;display:grid;place-items:center;font-size:3mm}.nwt svg{width:92%;height:92%}.nwbig{font-family:var(--kai);font-size:16.5mm;line-height:1;color:#3d2a63}.nwg{font-family:var(--kai);font-size:16.5mm;line-height:1;color:#e6cfcc}
 .nws{display:flex;flex-direction:column;gap:.5mm}.nws i{display:block;width:7.4mm;height:7.4mm}.nws svg{width:100%;height:100%}.nwno{writing-mode:vertical-rl;font-size:3.4mm;color:#8a7a79}
+.nm-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.nm-chip{font-family:var(--kai);font-size:18px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:2px 8px;display:inline-flex;gap:4px;align-items:center;cursor:pointer}.nm-chip span{font-family:var(--sans,inherit);font-size:13px;color:var(--muted)}
 .nm{display:flex;flex-direction:column;gap:12px;margin:12px 0 16px}.nm-in{display:flex;gap:10px}.nm-in input{flex:1;max-width:360px;font-size:20px;padding:8px 14px;border:1px solid var(--line);border-radius:14px;font-family:var(--kai)}
 .nmb{margin-bottom:6mm}.nmh{display:flex;align-items:center;gap:3mm;margin-bottom:2mm}.nmc{font-family:var(--kai);font-size:9mm}.nmz{font-size:4mm}.nmn{font-size:3.4mm;color:#8a7a79}
 .nmr{display:flex;flex-wrap:wrap;border-left:1px solid #3155a2;border-top:1px solid #3155a2;width:max-content;max-width:100%}
@@ -1435,6 +1436,9 @@ function renderName(m){
   box.querySelectorAll("[data-nm]").forEach(b=>b.onclick=()=>{NMODE=b.dataset.nm;render();});
   if(!NAMEV)return;
   const chars=[...NAMEV];
+  /* 產生後列出每個字，點一下就移除，只留想練的字 */
+  const chips=el("div","nm-chips");chips.innerHTML=`<span class="zy-note">點字可以移除：</span>${[...new Set(chars)].map(c=>`<button type="button" class="nm-chip" data-rm="${esc(c)}">${esc(c)}<span aria-hidden="true">×</span></button>`).join("")}`;
+  chips.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{NAMEV=[...NAMEV].filter(x=>x!==b.dataset.rm).join("");render();});box.appendChild(chips);
   if(chars.some(c=>!SDATA[c]&&!NFAIL.has(c))){if(!NBUSY){NBUSY=true;m.appendChild(el("div","empty","筆順資料下載中…"));ensureStroke(chars).then(()=>{NBUSY=false;if(view==="name")render();});}else m.appendChild(el("div","empty","筆順資料下載中…"));return;}
   const miss=chars.filter(c=>!SDATA[c]);
   if(miss.length)m.appendChild(el("div","sk-note",`這些字目前沒有筆順資料：${miss.map(esc).join("、")}，可以到 <a href="https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?ID2=2" target="_blank" rel="noopener">教育部筆順學習網</a> 查詢。練習紙上這個字會保留描紅和練習格。`));
@@ -1449,14 +1453,14 @@ function nameSheets(chars){const res=[];
   for(let p=0;p<chars.length;p+=7){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>筆順練習　${esc(NAMEV)}</span><small>日期：＿＿＿＿＿＿</small>`));
     const T=el("div","nw");
-    T.appendChild(el("div","nwc nwl",`<div class="w1">生<br>字</div><div class="w2"><span class="b">部首</span><span class="n">總筆畫</span></div><div class="w3">筆<br><br>順</div><div class="w4">描<br>紅</div><div class="w5">練<br><br>習</div>`));
+    T.appendChild(el("div","nwc nwl",`<div class="w1">生<br>字</div><div class="w2">部首<br>／<br>筆畫</div><div class="w3">筆<br><br>順</div><div class="w4">描<br>紅</div><div class="w5">練<br><br>習</div>`));
     for(const c of chars.slice(p,p+7)){const P=olPaths(c)||[],I=charInfo(c),z=I.z,n=I.n||P.length;
       const step=k=>`<i><svg viewBox="0 0 256 256">${P.slice(0,k).map(d=>`<path d="${d}" fill="#6f6260"/>`).join("")}<path d="${P[k]}" fill="#d5392f"/></svg></i>`;
       const half=P.length>12?Math.ceil(P.length/2):P.length,A=[],B=[];P.forEach((_,k)=>(k<half?A:B).push(step(k)));
       const full=P.length?`<svg viewBox="0 0 256 256">${P.map(d=>`<path d="${d}" fill="#e6cfcc"/>`).join("")}</svg>`:`<span class="nwg">${esc(c)}</span>`;
       const cell=(inner,zz)=>`<div class="nwk"><div class="nwt">${inner}</div><div class="nwz">${zz?zv(zz):""}</div></div>`;
       T.appendChild(el("div","nwc",`<div class="w1">${cell(`<span class="nwbig">${esc(c)}</span>`,z)}</div>
-        <div class="w2"><span class="b">${esc(I.b||"")}</span><span class="n">${n||""}</span></div>
+        <div class="w2"><span class="b">${esc(I.b||"")}</span><span class="sl">／</span><span class="n">${n||""}</span></div>
         <div class="w3">${P.length?`<div class="nws">${A.join("")}</div>${B.length?`<div class="nws">${B.join("")}</div>`:""}`:`<span class="nwno">此字暫無筆順資料</span>`}</div>
         <div class="w4">${cell(full,z)}</div>
         <div class="w5">${cell("","").repeat(5)}</div>`));}
