@@ -720,7 +720,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:30<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:31<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1480,14 +1480,14 @@ function renderName(m){
   if($("nmLs"))$("nmLs").onclick=()=>{const seen=new Set();$("nmIn").value=chosen().flatMap(x=>x.c.filter(c=>c.k==="s").map(c=>c.c)).filter(c=>!seen.has(c)&&seen.add(c)).join("");go_();};   /* 帶入課本生字（不含認讀字） */$("nmIn").onkeydown=e=>{if(e.key==="Enter")go_();};
   box.querySelectorAll("[data-nm]").forEach(b=>b.onclick=()=>{NMODE=b.dataset.nm;render();});
   if(!NAMEV)return;
-  const chars=[...NAMEV];
+  const chars=[...NAMEV].filter(c=>c.trim());
   /* 產生後列出每個字，點一下就移除，只留想練的字 */
-  const chips=el("div","nm-chips");chips.innerHTML=`<span class="zy-note">點字可以移除：</span>${[...new Set(chars)].map(c=>`<button type="button" class="nm-chip" data-rm="${esc(c)}">${esc(c)}<span aria-hidden="true">×</span></button>`).join("")}`;
-  chips.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{NAMEV=[...NAMEV].filter(x=>x!==b.dataset.rm).join("");render();});box.appendChild(chips);
+  const chips=el("div","nm-chips");chips.innerHTML=`<span class="zy-note">點字可以移除：</span>${chars.map((c,i)=>`<button type="button" class="nm-chip" data-rm="${i}">${esc(c)}<span aria-hidden="true">×</span></button>`).join("")}`;
+  chips.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{NAMEV=chars.filter((x,i)=>i!==+b.dataset.rm).join("");render();});box.appendChild(chips);
   if(chars.some(c=>!SDATA[c]&&!NFAIL.has(c))){if(!NBUSY){NBUSY=true;m.appendChild(el("div","empty","筆順資料下載中…"));ensureStroke(chars).then(()=>{NBUSY=false;if(view==="name"||view==="edit")render();});}else m.appendChild(el("div","empty","筆順資料下載中…"));return;}
-  const miss=chars.filter(c=>!SDATA[c]);
+  const miss=[...new Set(chars.filter(c=>!SDATA[c]))];
   if(miss.length)m.appendChild(el("div","sk-note",`這些字目前沒有筆順資料：${miss.map(esc).join("、")}，可以到 <a href="https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?ID2=2" target="_blank" rel="noopener">教育部筆順學習網</a> 查詢。練習紙上這個字會保留描紅和練習格。`));
-  const ok=[...new Set(chars.filter(c=>SDATA[c]))],all=[...new Set(chars)];
+  const ok=[...new Set(chars.filter(c=>SDATA[c]))],all=chars;   /* 練習紙照打的順序，重複打就印兩次（可以排滿一張） */
   if(NMODE==="write"){if(!ok.length)return;SB.mount(m,ok.map(c=>({c,z:(ZYT[c]||[])[0]||"",k:"s"})));return;}
   const pages=el("div","pages zoomable");m.appendChild(pages);$("pagesize").textContent="@page{size:A4 portrait;margin:0}";
   nameSheets(all).forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
