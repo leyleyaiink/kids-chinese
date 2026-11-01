@@ -49,7 +49,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .nwc .w3{height:98mm;display:flex;flex-direction:row-reverse;justify-content:center;gap:1.5mm;padding-top:2mm}.nwc .w5{height:102mm;display:flex;flex-direction:column}
 .nwc .w5 .nwk{flex:1;border-bottom:1px solid #b9a6d6}.nwc .w5 .nwk:last-child{border-bottom:0}
 .nwc.nwl>div{display:grid;place-items:center;text-align:center;font-size:4.2mm;line-height:1.5;color:#5b3f8c}.nwc.nwl .w2{font-size:2.5mm;line-height:1.05}
-.nwk{display:flex;height:100%}.nwt{flex:1;position:relative;display:grid;place-items:center;border-right:1px solid #b9a6d6}
+.nwk{display:flex;height:100%}.nwt{flex:1;position:relative;display:grid;place-items:center;border-right:1px dashed #6f8fd0}   /* 注音格用藍色虛線隔開，跟公版生字練習表一樣 */
 .nwt::before,.nwt::after{content:"";position:absolute;pointer-events:none}.nwt::before{left:0;right:0;top:50%;border-top:1px dashed #e8a09a}.nwt::after{top:0;bottom:0;left:50%;border-left:1px dashed #e8a09a}.nwt>*{position:relative;z-index:1}   /* 田字格用虛線框（背景圖形列印時預設不印） */
 .nwz{width:6mm;display:grid;place-items:center;font-size:3mm}.nwt svg{width:92%;height:92%}.nwbig{font-family:var(--kai);font-size:16.5mm;line-height:1;color:#3d2a63}.nwg{font-family:var(--kai);font-size:16.5mm;line-height:1;color:#e6cfcc}
 .nws{display:flex;flex-direction:column;gap:.5mm}.nws i{display:block;width:7.4mm;height:7.4mm}.nws svg{width:100%;height:100%}.nwno{writing-mode:vertical-rl;font-size:3.4mm;color:#8a7a79}
@@ -213,7 +213,8 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .po{padding:1mm 1.6mm 1mm .6mm;border-radius:3mm;min-width:7.5mm;display:flex;justify-content:center}.po .zv.t{margin-right:0}   /* 選項裡不往左挪，有輕聲、沒輕聲的才會對齊 */.po.ring{outline:1.3px solid #d5392f;color:#d5392f}
 .pzc{display:flex;flex-direction:column;gap:1mm;align-items:flex-start}
 .pwr{display:flex;flex-direction:column;gap:1.5mm;margin-top:1mm}
-.pbx{width:14mm;height:13mm;border:1px solid #3155a2;display:grid;place-items:center;font-size:4.2mm;color:#d5392f}
+.pbx{width:12mm;height:19mm;border:1px solid #3155a2;display:grid;place-items:center;font-size:4.6mm;color:#d5392f}   /* 注音直著寫，格子要夠高 */
+.pc .pim.sm{width:15mm;height:15mm;margin:1mm 0}
 .fx-tip{font-size:3.8mm;margin:-1mm 0 4mm;color:#534545}
 .fxv{display:flex;flex-direction:row-reverse;justify-content:flex-start;gap:3mm;margin-bottom:5mm;border-bottom:1px dashed #c9bfbd}
 .fxv:last-child{border-bottom:0}
@@ -719,9 +720,9 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:01<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:05<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
-  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
+  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
 <script>
 // 版本：網址 ?v=k 或上次選的，預設南一。換版本會重新載入頁面
@@ -818,8 +819,8 @@ window.addEventListener("popstate",e=>{const v=(e.state&&e.state.v)||location.ha
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
   b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":view==="sent"?"自編照樣造句":view==="zy"?"注音專區":view==="name"?"名字或生字練習":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
-  b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():view==="zy"?doPrint(ZYSUB==="dict"?dictName():"看圖注音練習"+(PAZ?"_含解答":"")):view==="name"||view==="edit"&&EDM&&EDM.type==="N"?doPrint("筆順練習_"+NAMEV):doPrint();
-  if(view==="zy"&&(ZYSUB==="stroke"||ZYSUB==="sc")||(view==="name"||view==="edit"&&EDM&&EDM.type==="N")&&(NMODE!=="sheet"||!NAMEV))b.querySelector('[data-fv="print"]').style.visibility="hidden";
+  b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():view==="zy"?doPrint(ZYSUB==="dict"?dictName():ZYSUB==="pic"?"看圖注音練習"+(PAZ?"_含解答":""):"注音筆順練習紙"):view==="name"||view==="edit"&&EDM&&EDM.type==="N"?doPrint("筆順練習_"+NAMEV):doPrint();
+  if(view==="zy"&&(ZYSUB==="stroke"||ZYSUB==="sc")&&!ZYSHEET||(view==="name"||view==="edit"&&EDM&&EDM.type==="N")&&(NMODE!=="sheet"||!NAMEV))b.querySelector('[data-fv="print"]').style.visibility="hidden";
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
 function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
   if(view==="zy"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());renderZy(m);return;}   /* 注音專區不用選課次 */
@@ -844,7 +845,7 @@ function zyShouce(m){const v=SCV||VER;
   ls.querySelectorAll("[data-scl]").forEach(b=>b.onclick=()=>{SCL=+b.dataset.scl;render();});m.appendChild(ls);$("scall").onchange=e=>{SCALL=e.target.checked;render();};
   const sym=SCALL?L.slice(0,SCL+1).join(""):L[SCL];
   m.appendChild(el("div","zy-note",`${VN[v]}首冊第${"一二三四五六七八九十"[SCL]}課${SCALL?"（含前面各課）":""}：${[...sym].join("　")}`));
-  SB.mount(m,[...sym].filter(c=>SDATA[c]).map(c=>({c,z:"",k:"s"})));}
+  zyMount(m,sym,`首冊注音筆順練習紙　${VN[v]}第${"一二三四五六七八九十"[SCL]}課${SCALL?"（含前面各課）":""}`);}
 function renderZy(m){
   const sg=el("div","row zy-sub");
   sg.innerHTML=`<div class="seg" role="group" aria-label="注音專區">${[["sc","首冊注音"],["stroke","注音符號筆順"],["pic","看圖注音練習卷"],["dict","語詞聽寫"]].map(([k,n])=>`<button type="button" data-zs="${k}" aria-pressed="${ZYSUB===k}">${n}</button>`).join("")}</div>`;
@@ -896,11 +897,11 @@ function zyDict(m){const ls=chosen();
   [...dictSheets(its,false),...(PAZ?dictSheets(its,true):[])].forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
 /* 聽寫卷：每題依字數畫注音格（直書），一頁 5 欄；解答版是家長念讀稿（語詞＋注音） */
 function dictSheets(its,ans){const res=[],ls=chosen(),sub=`${G[ls[0].g-1]}上 ${lsRange(ls)}`;
-  for(let p=0;p<its.length;p+=20){const s=sheet("port");
+  for(let p=0;p<its.length;p+=15){const s=sheet("port");   /* 一頁 15 題（格子變大） */
     s.appendChild(el("div","ttl",`<span>語詞聽寫${ans?"（家長念讀稿・解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
     s.appendChild(el("div","fx-tip",ans?"請照順序念語詞（每題念兩次），孩子寫出注音後對答案。標「三三」的是三聲＋三聲的語詞：念起來第一個字像二聲，寫的時候兩個都是三聲，請特別檢查。":"仔細聽，把語詞的注音寫在格子裡。"));
     const g=el("div","dgrid");
-    its.slice(p,p+20).forEach((it,k)=>g.appendChild(el("div","dcell",`<div class="pno">${p+k+1}</div>${ans?`<div class="dwd">${esc(it.w)}${isTT(it.z)?'<span class="dtt3">三三</span>':""}</div>`:""}<div class="pwr">${it.z.map(z=>`<span class="pbx">${ans?zv(z):""}</span>`).join("")}</div>`)));
+    its.slice(p,p+15).forEach((it,k)=>g.appendChild(el("div","dcell",`<div class="pno">${p+k+1}</div>${ans?`<div class="dwd">${esc(it.w)}${isTT(it.z)?'<span class="dtt3">三三</span>':""}</div>`:""}<div class="pwr">${it.z.map(z=>`<span class="pbx">${ans?zv(z):""}</span>`).join("")}</div>`)));
     s.appendChild(g);res.push(s);}
   return res;}
 // ---------- list ----------
@@ -1204,7 +1205,7 @@ function sheetsF(ls,ans){const rnd=prng(PSEED*7919+13),pool=PICS.slice();
   const T=el("div","pgrid");A.forEach(({it,o},k)=>T.appendChild(el("div","pc",`<div class="pno">${k+1}</div><div class="pim">${picSvg(it)}</div><div class="pop">${o.map(z=>`<span class="po${ans&&z.join(" ")===it.z.join(" ")?" ring":""}">${zcol(z)}</span>`).join("")}</div>`)));
   s.appendChild(T);
   s.appendChild(el("div","pq","二、看圖寫注音。"));
-  const U=el("div","pgrid");B.forEach((it,k)=>U.appendChild(el("div","pc",`<div class="pno">${k+1}</div><div class="pim">${picSvg(it)}</div><div class="pwr">${it.z.map(z=>`<span class="pbx">${ans?zv(z):""}</span>`).join("")}</div>`)));
+  const U=el("div","pgrid");B.forEach((it,k)=>U.appendChild(el("div","pc",`<div class="pno">${k+1}</div><div class="pim sm">${picSvg(it)}</div><div class="pwr">${it.z.map(z=>`<span class="pbx">${ans?zv(z):""}</span>`).join("")}</div>`)));
   s.appendChild(U);return [s];}
 /* G: 生字筆順練習（直書，照新北市生字簿版面），用選好課次的生字（不含認讀字），沒有解答頁 */
 function sheetsG(ls,ans){if(ans)return [];const seen=new Set(),cs=[];ls.forEach(x=>x.c.forEach(c=>{if(c.k==="s"&&!seen.has(c.c)){seen.add(c.c);cs.push(c.c);}}));
@@ -1397,12 +1398,21 @@ let WEAKONLY=false;
 // 注音符號筆順：聲符 21 個、介符 3 個、韻符 13 個（教育部順序）
 const ZY_SETS={"聲符":"ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ","介符":"ㄧㄨㄩ","韻符":"ㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ"};
 let SKMODE="hz",ZYSET="全部";   /* hz 國字、zy 注音符號 */
+/* 注音也能印筆順練習紙（跟生字一樣的直書版面） */
+let ZYSHEET=false;
+function zyMount(m,syms,title){const sg=el("div","seg");sg.setAttribute("role","group");sg.style.margin="4px 0 10px";
+  sg.innerHTML=[[false,"線上照筆順寫"],[true,"印筆順練習紙"]].map(([k,n])=>`<button type="button" data-zsh="${k}" aria-pressed="${ZYSHEET===k}">${n}</button>`).join("");
+  sg.querySelectorAll("[data-zsh]").forEach(b=>b.onclick=()=>{ZYSHEET=b.dataset.zsh==="true";render();});m.appendChild(sg);
+  const ok=[...syms].filter(c=>SDATA[c]);
+  if(!ZYSHEET){SB.mount(m,ok.map(c=>({c,z:"",k:"s"})));return;}
+  const pages=el("div","pages");m.appendChild(pages);$("pagesize").textContent="@page{size:A4 portrait;margin:0}";
+  nameSheets(ok,title).forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
 function zyStroke(m,back){const top=el("div","row");top.style.margin="10px 0";
   top.innerHTML=`${back?'<button class="mini" id="skBack" type="button">返回</button>':""}<div class="seg" role="group" aria-label="注音符號">${["全部","聲符","介符","韻符"].map(k=>`<button type="button" data-zys="${k}" aria-pressed="${ZYSET===k}">${k}</button>`).join("")}</div>`;
   m.appendChild(top);if(back)$("skBack").onclick=()=>goBack();
   top.querySelectorAll("[data-zys]").forEach(b=>b.onclick=()=>{ZYSET=b.dataset.zys;render();});
   const s=ZYSET==="全部"?Object.values(ZY_SETS).join(""):ZY_SETS[ZYSET];
-  SB.mount(m,[...s].filter(c=>SDATA[c]).map(c=>({c,z:"",k:"s"})));}
+  zyMount(m,s,`注音符號筆順練習紙　${ZYSET==="全部"?"全部":ZYSET}`);}
 function renderStroke(m,ls){
   const incR=(()=>{try{return localStorage.getItem("szs-skr")!=="0"}catch(e){return true}})();
   /* 注音符號筆順在「注音專區」，這裡只練國字 */
@@ -1490,7 +1500,7 @@ function nameSheets(chars,title){const res=[];title=title||"筆順練習　"+NAM
       const full=P.length?`<svg viewBox="0 0 256 256">${P.map(d=>`<path d="${d}" fill="#e6cfcc"/>`).join("")}</svg>`:`<span class="nwg">${esc(c)}</span>`;
       const cell=(inner,zz)=>`<div class="nwk"><div class="nwt">${inner}</div><div class="nwz">${zz?zv(zz):""}</div></div>`;
       T.appendChild(el("div","nwc",`<div class="w1">${cell(`<span class="nwbig">${esc(c)}</span>`,z)}</div>
-        <div class="w2"><span class="b">${esc(I.b||"")}</span><span class="sl">／</span><span class="n">${n||""}</span></div>
+        <div class="w2">${I.b?`<span class="b">${esc(I.b)}</span><span class="sl">／</span>`:""}<span class="n">${n||""}</span></div>
         <div class="w3">${P.length?`<div class="nws">${A.join("")}</div>${B.length?`<div class="nws">${B.join("")}</div>`:""}`:`<span class="nwno">此字暫無筆順資料</span>`}</div>
         <div class="w4">${cell(full,z)}</div>
         <div class="w5">${cell("","").repeat(5)}</div>`));}
