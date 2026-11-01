@@ -661,7 +661,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:39<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:41<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增改錯字練習</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -850,8 +850,8 @@ function renderPrint(m,ls){
   if(COMBO)m.appendChild(el("div","pr-tip",`下面是合併匯出的內容（${["A","B","C","D","E"].filter(t=>PTS.has(t)).map(t=>({A:"生字",B:"部首",C:"多音字",D:"同音字",E:"改錯字"})[t]).join("、")}）。點上面任一練習卷可以回到單一預覽。`));
   else if(PT==="A"){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
     tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
-  if(PT==="E"||COMBO&&PTS.has("E")){const t=el("div","pr-tip",`<label class="pr-ans"><input type="checkbox" id="fxring"${FXRING?" checked":""}> 改錯字先圈出錯字（簡單版）</label>　預設不圈，讓孩子自己找出錯字；解答頁一律圈出。${Object.keys(SENTS).length?"":"「句子改錯」版本建置中，敬請期待！"}`);
-    t.querySelector("#fxring").onchange=e=>{FXRING=e.target.checked;render();};m.appendChild(t);}
+  if(PT==="E"||COMBO&&PTS.has("E")){const t=el("div","pr-tip",`${Object.keys(SENTS).length?`<label class="pr-ans"><input type="checkbox" id="fxring"${FXRING?" checked":""}> 句子題也先圈出錯字（簡單版）</label>　語詞題一律先圈出錯字；句子題預設不圈，讓孩子自己找。`:"目前是「語詞改錯」：錯字已經圈起來，把正確的字寫在括號裡。「句子改錯」版本建置中，敬請期待！"}`);
+    const cb=t.querySelector("#fxring");if(cb)cb.onchange=e=>{FXRING=e.target.checked;render();};m.appendChild(t);}
   if(INAPP)m.appendChild(copyRow("在 Instagram、Facebook、LINE 裡開的網頁不能列印。請複製網址，貼到 Safari 或 Chrome 打開，再按「列印／存成 PDF」。"));
   else{m.appendChild(el("div","note","按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 可以直接選印表機，或在列印畫面按分享鍵，選「儲存到檔案」。"));
     if(MOBILE)m.appendChild(copyRow("家裡印表機接電腦？用 LINE 把網址傳給自己，到電腦打開再列印。"));}
@@ -947,7 +947,7 @@ function wordCells(w,c,z,ans,low){const ch=[...w].slice(0,2),zs=ans&&w?wordZ(w,c
 // D: 同音不同字。字只從「該年級以下（含）課本教過的生字、認讀字」挑，不會出現太難的字
 let CHZ=null;
 let CHC=null;
-function buildCHZ(){const first={};L.forEach(ls=>ls.c.forEach(c=>{const o=first[c.c];if(!o||ls.g<o.g)first[c.c]={c:c.c,z:c.z,b:c.b,w:c.w||[],g:ls.g};}));
+function buildCHZ(){const first={};L.forEach(ls=>ls.c.forEach(c=>{const o=first[c.c];if(!o||ls.g<o.g)first[c.c]={c:c.c,z:c.z,b:c.b,n:c.n,w:c.w||[],g:ls.g};}));
   CHZ={};CHC=first;Object.values(first).forEach(y=>(CHZ[y.z]=CHZ[y.z]||[]).push(y));}
 // 同音字補充清單（homo_extra.txt）：Ashley 人工加的組，字照她寫的順序，語詞有寫就優先用
 const HOMOX=[{"g": 2, "m": [["作", "工作"], ["做", "做事"], ["坐", "坐下"], ["座", "座位"]]}];
@@ -992,7 +992,7 @@ function wrongOf(c,z,g){if(!CHZ)buildCHZ();const man=[],sc={};
   const rank=x=>(sim[x]||0)>=1?4:homo(x)&&(sim[x]||0)>=.8?3:(sim[x]||0)>=.9?2:1;   /* 同音同聲旁（紙→祇）＞ 同音又像 ＞ 字形很像 */
   /* 只用：同音同聲旁、同音又像（0.8 以上）、字形很像（0.9 以上）、同音同調又學過的字；聲調不同又不像的不用，寧可不出這題 */
   (CHZ[z]||[]).forEach(y=>{if(y.c!==c&&y.g<=g&&sc[y.c]==null)sc[y.c]=.5;});   /* 同音同調、學過的字（教→叫） */
-  const same=x=>CHC[x]&&CHC[x].z===z&&CHC[x].g<=g;
+  const nc=CHC[c]&&CHC[c].n,same=x=>CHC[x]&&CHC[x].z===z&&CHC[x].g<=g&&(!nc||!CHC[x].n||Math.abs(CHC[x].n-nc)<=3);   /* 只同音的字：筆畫要接近（力 2 畫、麗 19 畫就不用） */
   const auto=Object.keys(sc).filter(x=>!man.includes(x)&&!FIX_NO.test(x)&&(rank(x)>=2||same(x))).sort((a,b)=>rank(b)-rank(a)||sc[b]-sc[a]);
   return [...man.filter(x=>!FIX_NO.test(x)),...auto];}
 /* 不出涉及身體隱私、性別議題的字詞（Ashley 要求） */
@@ -1019,14 +1019,22 @@ function fixSheets(items,ans,name,sub,low){const res=[];if(!items.length)return 
   let no=0;
   for(const pg of pages){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${esc(name)}${ans?"（解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
-    s.appendChild(el("div","fx-tip",FXRING||ans?"圈起來的字寫錯了，請把正確的字寫在上面的括號裡。":"每一題都有一個錯字：先把錯字圈起來，再把正確的字寫在上面的括號裡。"));
+    const allRing=FXRING||ans||pg.every(b=>b.every(it=>!it.zs));   /* 語詞題一律先圈（沒有上下文難判斷），句子題要孩子自己找 */
+    s.appendChild(el("div","fx-tip",allRing?"圈起來的字寫錯了，請把正確的字寫在上面的括號裡。":"每一題都有一個錯字：先把錯字圈起來，再把正確的字寫在上面的括號裡。"));
     for(const band of pg){const B=el("div","fxv");B.style.height=bh(band)+"mm";
       for(const it of band){no++;const zs=!low?[]:it.zs||wordZ(it.w.join(""),it.c,it.z||"");   /* 句子用審核過的注音 */
-        const chars=it.w.map((x,j)=>{const ch=j===it.i?it.bad:x;return `<div class="vc"><span class="vt${j===it.i&&(ans||FXRING)?" ring":""}">${esc(ch)}</span>${low?`<span class="vz">${zv(zs[j]||"")}</span>`:""}</div>`;}).join("");
+        const chars=it.w.map((x,j)=>{const ch=j===it.i?it.bad:x;return `<div class="vc"><span class="vt${j===it.i&&(ans||FXRING||!it.zs)?" ring":""}">${esc(ch)}</span>${low?`<span class="vz">${zv(zs[j]||"")}</span>`:""}</div>`;}).join("");
         B.appendChild(el("div","fxcol"+(low?" low":""),`<div class="vbr"><span class="pa">︵</span><span class="ans">${ans?esc(it.c):""}</span><span class="pa">︶</span></div><div class="vno">${no}.</div>${chars}`));}
       s.appendChild(B);}
     res.push(s);}
   return res;}
+/* 審核用：網址加 #review-sentences，把句庫每一句做成解答頁（句庫還沒放上網站時不會有作用） */
+function reviewSentences(){if(!Object.keys(SENTS).length)return false;document.body.innerHTML="";const seen=new Set();
+  for(const g of [1,2,3,4,5,6]){const ls=[];for(const v of Object.values(LV))ls.push(...v.filter(x=>x.g===g));if(!ls.length)continue;
+    const its=fixItems(ls).filter(it=>it.zs&&!seen.has(it.c));its.forEach(it=>seen.add(it.c));if(!its.length)continue;
+    fixSheets(its,true,"改錯字句子審核",`${G[g-1]}年級（${its.length} 句）`,true).forEach(s=>document.body.appendChild(s));}
+  const miss=Object.keys(SENTS).filter(c=>!seen.has(c));if(miss.length)document.body.appendChild(el("div","sheet port",`<div class="ttl"><span>找不到合適錯字、沒有出題的字（${miss.length}）</span></div><p style="font-size:5mm;line-height:1.8">${miss.join("　")}</p>`));
+  $("pagesize").textContent="@page{size:A4 portrait;margin:0}";return true;}
 function sheetsE(ls,ans){const g=ls[0].g;return fixSheets(fixItems(ls),ans,"改錯字練習",`${G[g-1]}上 ${lsRange(ls)}`,true);}   /* 改錯字每個年級都附注音（標正確的讀音），跟學校考卷一樣 */
 function sheetsD(ls,ans){const {g,groups}=homoGroups(ls);return homoSheets(groups,g<=2,ans,"同音不同字練習",`${G[g-1]}上 ${lsRange(ls)}`);}
 // ================= 筆順練習 (stroke order) =================
@@ -1658,7 +1666,7 @@ function edSheets(ans){const res=[];const sz=GRID[edSize()],ROWS=sz.rows,COLS=sz
   return res;}
 
 /* 重新整理或打開網址一律從生字總覽開始；只有舊筆順網址（#stroke）直接進筆順練習。全螢幕畫面的 #print 等從網址拿掉 */
-try{const hv=(location.hash||"").slice(1);if(hv==="stroke")view=hv;else if(hv)history.replaceState(null,"",location.pathname+location.search);}catch(e){}
+try{const hv=(location.hash||"").slice(1);if(hv==="stroke")view=hv;else if(hv==="review-sentences")setTimeout(reviewSentences,0);else if(hv)history.replaceState(null,"",location.pathname+location.search);}catch(e){}
 if(!sel.size)sel=new Set(gLessons().slice(0,1).map(key));
 try{history.replaceState({v:view,prev:false},"");}catch(e){}
 renderBar();render();
