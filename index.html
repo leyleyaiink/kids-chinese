@@ -718,7 +718,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:54<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:55<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1003,7 +1003,7 @@ function renderPrint(m,ls){
   const pages=el("div","pages zoomable");m.appendChild(pages);
   const TS0=COMBO?["A","B","C","D","E","F","G"].filter(t=>PTS.has(t)):[PT],portA=TS0.includes("A")&&TS0.some(t=>t!=="A");   /* 跟直式的合併時，生字表也排成直式，整份同一個方向 */
   const mk={A:(l,a)=>sheetsA(l,a,portA),B:sheetsB,C:sheetsC,D:sheetsD,E:sheetsE,F:sheetsF,G:sheetsG},NAME={A:"生字",B:"部首",C:"多音字",D:"同音字",E:"改錯字",F:"看圖注音",G:"筆順練習紙"},out=[],none=[];
-  if((COMBO?PTS.has("G"):PT==="G")){const need=[...new Set(ls.map(x=>x.g))].filter(g=>g>=3&&!SDONE[g]);
+  if((COMBO?PTS.has("G"):PT==="G")){const need=ls.some(x=>x.g>=3)?[3,4,5,6].filter(g=>!SDONE[g]):[];   /* 字的筆順放在「最早教的年級」那個檔，六年級的字可能在四年級檔，所以三～六年級都要載 */
     if(need.length){pages.appendChild(el("div","empty","筆順資料下載中…"));Promise.all(need.map(loadStrokes)).then(()=>{if(view==="print")render();}).catch(()=>{});return;}}
   const TS=COMBO?["A","B","C","D","E","F","G"].filter(t=>PTS.has(t)):[PT];
   for(const t of TS){const a=mk[t](ls,false);if(!a.length){none.push(NAME[t]);continue;}
@@ -1421,7 +1421,7 @@ function renderStroke(m,ls){
   const chars=WEAKONLY?all.filter(x=>SB.weak(x.c)).sort((a,b)=>SB.misses(b.c)-SB.misses(a.c)):all;
   if(WEAKONLY&&!chars.length){m.appendChild(el("div","empty","這幾課還沒有常錯的字。練習時寫錯過、而且還沒連續寫對兩次的字，會出現在這裡。"));return;}
   // 三年級以上：還沒下載的筆順先下載，好了再畫
-  const need=[...new Set(ls.map(x=>x.g))].filter(g=>g>=3&&!SDONE[g]);
+  const need=ls.some(x=>x.g>=3)?[3,4,5,6].filter(g=>!SDONE[g]):[];   /* 字的筆順放在「最早教的年級」那個檔，三～六年級都要載 */
   if(need.length){const w=el("div","empty","筆順資料下載中…");m.appendChild(w);
     Promise.all(need.map(loadStrokes)).then(()=>{if(view==="stroke"&&!Q)render();}).catch(()=>{w.textContent="筆順資料下載失敗，請確認網路後重新整理。";});return;}
   if(!chars.length){m.appendChild(el("div","empty","這個範圍沒有可以練習的字。"));return;}
