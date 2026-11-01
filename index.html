@@ -706,7 +706,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:44<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:52<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1420,10 +1420,16 @@ function renderStroke(m,ls){
 // ================= 名字或生字練習：輸入任何字（名字或生字），線上照筆順寫，或印出直書筆順練習紙 =================
 // 課本的字用網站裡的筆順；其他字到 g0v zh-stroke-data 下載那個字的筆順檔（只下載字的筆順，名字不會傳到任何地方存起來）
 const NB36="0123456789abcdefghijklmnopqrstuvwxyz",nb=(v,grid)=>{const n=Math.max(0,Math.min(1295,Math.round(v*grid/2048)));return NB36[n/36|0]+NB36[n%36];};
-const NFAIL=new Set();
+const NFAIL=new Set(),CINFO={},CLOAD={};
+/* 教育部 4,808 常用字（課本沒有的部分）放在 strokes/c/XX.txt，一行「字|總筆畫|部首|注音|中線|外框」，用到哪一包才下載 */
+function loadCommon(c){const k=Math.floor((c.codePointAt(0)-0x4E00)/256);if(k<0||k>255)return Promise.resolve();const f=k.toString(16).padStart(2,"0");
+  if(!CLOAD[f])CLOAD[f]=fetch(`strokes/c/${f}.txt`).then(r=>r.ok?r.text():"").then(t=>{for(const l of t.split("\n")){const a=l.split("|");if(a.length<6)continue;
+    CINFO[a[0]]={n:+a[1],b:a[2],z:a[3]};if(!SDATA[a[0]]){addTracks(a[0]+":"+a[4]);SOLRAW[a[0]]=a[5];}}}).catch(()=>{delete CLOAD[f];});
+  return CLOAD[f];}
 async function ensureStroke(chars){
   const need=()=>chars.filter(c=>!SDATA[c]&&!NFAIL.has(c));
   if(need().length){try{await Promise.all([3,4,5,6].map(g=>loadStrokes(g).catch(()=>{})));}catch(e){}}
+  if(need().length)await Promise.all(need().map(loadCommon));   /* 常用字：網站自己的檔案 */
   for(const c of need()){
     try{const r=await fetch(`https://raw.githubusercontent.com/g0v/zh-stroke-data/master/json/${c.codePointAt(0).toString(16)}.json`);if(!r.ok)throw 0;const d=await r.json();
       SDATA[c]=d.map(st=>st.track.map(p=>[Math.round(p.x*256/2048),Math.round(p.y*256/2048)]));
@@ -1459,7 +1465,7 @@ function renderName(m){
   nameSheets(all).forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
 /* 直書筆順練習紙（照新北市生字簿版面）：最右邊是欄名，每個字一直行、由右到左：
    生字＋注音 → 部首、總筆畫 → 筆順（一筆一筆往下長，新的一筆紅色；筆畫多分兩行）→ 描紅 → 練習格。一頁 7 個字 */
-function charInfo(c){for(const v of Object.values(LV))for(const x of v)for(const y of x.c)if(y.c===c)return {b:y.b,n:y.n,z:y.z};return {b:"",n:0,z:(ZYT[c]||[])[0]||""};}
+function charInfo(c){for(const v of Object.values(LV))for(const x of v)for(const y of x.c)if(y.c===c)return {b:y.b,n:y.n,z:y.z};const i=CINFO[c];return {b:i?i.b:"",n:i?i.n:0,z:(i&&i.z)||(ZYT[c]||[])[0]||""};}
 function nameSheets(chars,title){const res=[];title=title||"筆順練習　"+NAMEV;
   for(let p=0;p<chars.length;p+=7){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${esc(title)}</span><small>姓名：＿＿＿＿＿＿　日期：＿＿＿＿</small>`));
