@@ -213,7 +213,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .po{padding:1mm 1.6mm 1mm .6mm;border-radius:3mm;min-width:7.5mm;display:flex;justify-content:center}.po .zv.t{margin-right:0}   /* 選項裡不往左挪，有輕聲、沒輕聲的才會對齊 */.po.ring{outline:1.3px solid #d5392f;color:#d5392f}
 .pzc{display:flex;flex-direction:column;gap:1mm;align-items:flex-start}
 .pwr{display:flex;flex-direction:column;gap:1.5mm;margin-top:1mm}
-.pbx{width:12mm;height:19mm;border:1px solid #3155a2;display:grid;place-items:center;font-size:4.6mm;color:#d5392f}.pfgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:3mm 6mm;margin-bottom:5mm}.pc.pf{display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:4mm;border:1px solid #c9bfbd;border-radius:3mm;padding:1.5mm 4mm;min-height:20mm}.pc.pf .pno{align-self:flex-start}.pc.pf .pim{flex:none;width:16mm;height:16mm}.pfs{display:flex;align-items:center;gap:1mm;flex-wrap:nowrap}.pfg{font-size:5mm}.pfb{display:inline-flex;align-items:center;font-size:6.5mm;color:#534545;letter-spacing:-.5mm}.pfz{display:inline-grid;place-items:center;min-width:9mm;min-height:17mm;font-size:5mm;color:#d5392f}   /* 三個字的語詞（　）（　）（　）排一行，不換行 */.pfz.hint{color:#534545}   /* 看圖填注音：（　）裡填一個字的注音 */   /* 注音直著寫，格子要夠高 */
+.pbx{width:12mm;height:19mm;border:1px solid #3155a2;display:grid;place-items:center;font-size:4.6mm;color:#d5392f}.pfgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:3mm 6mm;margin-bottom:5mm}.pc.pf{display:flex!important;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:4mm;border:1px solid #c9bfbd;border-radius:3mm;padding:1.5mm 4mm;min-height:20mm}.pc.pf .pno{align-self:flex-start}.pc.pf .pim{flex:none;width:16mm;height:16mm}.pfs{display:flex;align-items:center;gap:.3mm;flex-wrap:nowrap}.pfg{font-size:5mm}.pfb{display:inline-flex;align-items:center;font-size:6.5mm;color:#534545;letter-spacing:-1mm}.pfz{display:inline-grid;place-items:center;min-width:6.5mm;min-height:17mm;font-size:5mm;color:#d5392f}   /* 三個字的語詞（　）（　）（　）排一行，不換行 */.pfz.hint{color:#534545}   /* 看圖填注音：（　）裡填一個字的注音 */   /* 注音直著寫，格子要夠高 */
 .pc .pim.sm{width:15mm;height:15mm;margin:1mm 0}
 .fx-tip{font-size:3.8mm;margin:-1mm 0 4mm;color:#534545}
 .fxv{display:flex;flex-direction:row-reverse;justify-content:flex-start;gap:3mm;margin-bottom:5mm;border-bottom:1px dashed #c9bfbd}
@@ -1213,8 +1213,9 @@ function picWrong(z,rnd,kind){const zs=z.slice();const i=Math.floor(rnd()*zs.len
   if(kind==="t"){if(p.n)return null;const o=TONES.filter(t=>t!==p.t);zs[i]=p.b+o[Math.floor(rnd()*o.length)];return zs;}
   const ix=[...p.b].map((c,j)=>ZCONF[c]?j:-1).filter(j=>j>=0);if(!ix.length)return null;const j=ix[Math.floor(rnd()*ix.length)],a=[...p.b];a[j]=ZCONF[a[j]];zs[i]=p.n+a.join("")+p.t;return zs;}
 function picOpts(it,rnd){const ok=it.z,seen=new Set([ok.join(" ")]),out=[ok];
-  for(const k of ["s","t","s","t","s","t"]){if(out.length>=3)break;const w=picWrong(ok,rnd,k);if(w&&!seen.has(w.join(" "))){seen.add(w.join(" "));out.push(w);}}
-  if(out.length<3)return null;for(let i=out.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
+  const ks=rnd()<.5?["s","t","s","t"]:["t","s","t","s"];   /* 兩個選項（Ashley）：正確＋一個易混的錯誤（聲母韻母或聲調，隨機） */
+  for(const k of ks){if(out.length>=2)break;const w=picWrong(ok,rnd,k);if(w&&!seen.has(w.join(" "))){seen.add(w.join(" "));out.push(w);}}
+  if(out.length<2)return null;for(let i=out.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
 const picSvg=it=>`<svg viewBox="0 0 24 24" fill="none" stroke="#534545" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-label="${esc(it.w)}">${it.s}</svg>`;
 const zcol=zs=>`<span class="pzc">${zs.map(z=>zv(z)).join("")}</span>`;
 /* 看圖注音：固定 7 卷（卷A～卷G）。題庫用固定順序打散，第一頁的 20 題七卷互不重複；第二頁先用沒出過的圖，不夠再借別卷的圖（不跟同卷重複） */
