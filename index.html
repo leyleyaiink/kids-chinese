@@ -40,6 +40,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .seg button+button{border-left:1.5px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--green);color:#fff}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
+.g1n{font-size:13.5px;color:var(--muted);line-height:1.7}.g1n .mini{margin-left:6px}
 .chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:.32em .8em;cursor:pointer;font-size:.92rem;max-width:100%;text-align:left}
 .chip[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft);color:var(--green-d)}
 .chip b{font-weight:700;margin-right:.3em}
@@ -632,6 +633,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
   <div class="scope">
     <div class="row"><span class="lab"><i>1</i>選版本、年級</span><div class="vg"><div class="seg" id="vers" role="group" aria-label="版本"><button type="button" data-v="n">南一版</button><button type="button" data-v="k">康軒版</button><button type="button" data-v="h">翰林版</button></div><div class="seg" id="grades" role="group" aria-label="年級"></div></div></div>
     <div class="row"><span class="lab"><i>2</i>選課次</span><div class="chips" id="lessons"></div></div>
+    <div class="row sub" id="g1note" hidden><span class="lab"></span><div class="g1n">一年級的首冊在學注音符號，沒有要寫的生字，生字表從第一冊開始。首冊期間可以練注音符號的筆順：<button class="mini done" id="g1zy" type="button">筆順練習 → 注音符號</button></div></div>
     <div class="row sub"><span class="lab"></span><button class="mini" id="selAll" type="button">全選</button><button class="mini" id="selNone" type="button">清除</button><button class="mini done" id="selDone" type="button">完成</button><span class="selcnt" id="selCnt"></span></div>
   </div>
   <div class="row fnrow"><span class="lab"><i>3</i>選功能</span><div class="tabs" role="tablist">
@@ -661,7 +663,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 13:07<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 13:28<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增注音符號筆順練習</i><i>康軒一上加入「國字真簡單」</i><i>新增改錯字練習</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -734,6 +736,7 @@ function chosen(){const a=gLessons().filter(x=>sel.has(key(x)));return a.length?
 function renderBar(){
   const gs=$("grades");gs.innerHTML="";for(let g=1;g<=6;g++){const b=el("button");b.type="button";b.textContent=G[g-1]+"年級";b.setAttribute("aria-pressed",g===grade);b.onclick=()=>{grade=g;sel=new Set(gLessons().slice(0,1).map(key));save();renderBar();render();};gs.appendChild(b);}
   const lc=$("lessons");lc.innerHTML="";gLessons().forEach(x=>{const b=el("button","chip");b.type="button";const m=x.t.split("：");b.innerHTML=m.length>1?`<b>${esc(m[0].replace("第","").replace("課",""))}、</b>${esc(m[1])}`:esc(x.t);b.title=x.t;b.setAttribute("aria-pressed",sel.has(key(x)));b.onclick=()=>{sel.has(key(x))?sel.delete(key(x)):sel.add(key(x));save();renderBar();render();};lc.appendChild(b);});
+  $("g1note").hidden=grade!==1;
   $("selCnt").textContent=sel.size?`已選 ${gLessons().filter(x=>sel.has(key(x))).length} 課`:"尚未選課";
   ["list","stroke","print","edit","sent"].forEach(v=>$("t-"+v).setAttribute("aria-selected",!Q&&v===view));
   renderScope();
@@ -745,6 +748,7 @@ function renderScope(){const ch=gLessons().filter(x=>sel.has(key(x)));
   $("sumTxt").textContent=`${G[grade-1]}年級・${VN[VER]}・`+(!ch.length?"尚未選課":ch.length===gLessons().length&&ch.length>3?`全部 ${ch.length} 課`:ch.map(shortT).join("、"));
   document.querySelector(".bar").classList.toggle("min",!SCOPE_OPEN);}
 $("sumEdit").onclick=()=>{SCOPE_OPEN=true;renderScope();};
+$("g1zy").onclick=()=>{SKMODE="zy";SCOPE_OPEN=false;go("stroke");};
 $("selDone").onclick=()=>{SCOPE_OPEN=false;renderScope();scrollTo(0,0);};
 $("selAll").onclick=()=>{gLessons().forEach(x=>sel.add(key(x)));save();renderBar();render();};
 $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
