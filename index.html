@@ -720,7 +720,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 20:36<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 20:41<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>看圖注音題庫增為 133 題，可一次印多份</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -733,7 +733,7 @@ document.querySelectorAll("#vers [data-v]").forEach(b=>{const on=b.dataset.v===V
   b.onclick=()=>{if(on)return;try{localStorage.setItem("szs-ver",b.dataset.v);const s=JSON.parse(localStorage.getItem("szs-state")||"{}");s.s=[];localStorage.setItem("szs-state",JSON.stringify(s));}catch(e){}
     location.href=location.pathname+"?v="+b.dataset.v+location.hash;};});
 // Instagram、Facebook、LINE 的內建瀏覽器不能列印，要先用 Safari／Chrome 開
-const INAPP=/Instagram|FBAN|FBAV|FB_IAB|Line\/|MicroMessenger/i.test(navigator.userAgent);
+const INAPP=/Instagram|FBAN|FBAV|FB_IAB|Line\/|MicroMessenger|Barcelona|Threads/i.test(navigator.userAgent);   /* Barcelona＝Threads 內建瀏覽器 */
 const INAPP_MSG="在 Instagram、Facebook、LINE 裡開的網頁不能列印。請按右上角「⋯」，選「在外部瀏覽器開啟」或「用 Safari 開啟」，再按一次「列印／存成 PDF」。";
 // 存成 PDF 的檔名＝網頁標題，印之前換成「南一_G1_1-5_生字部首」這種，印完換回來
 const T0=document.title;addEventListener("afterprint",()=>{document.title=T0;});
@@ -824,7 +824,16 @@ function fvBar(){const b=el("div","fv-bar noprint");
   b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():view==="zy"?doPrint(ZYSUB==="dict"?dictName():ZYSUB==="pic"?"看圖注音練習"+(PAZ?"_含解答":""):"注音筆順練習紙"):view==="name"||view==="edit"&&EDM&&EDM.type==="N"?doPrint("筆順練習_"+NAMEV):doPrint();
   if(view==="zy"&&(ZYSUB==="stroke"||ZYSUB==="sc")&&!ZYSHEET||(view==="name"||view==="edit"&&EDM&&EDM.type==="N")&&(NMODE!=="sheet"||!NAMEV))b.querySelector('[data-fv="print"]').style.visibility="hidden";
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
-function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
+/* 列印說明：依裝置顯示怎麼列印／存 PDF；橫式練習卷提醒 iPhone、Android 方向選「橫向」（手機不吃網頁設定的方向） */
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1,ANDROID=/Android/.test(navigator.userAgent);
+function printTip(){const m=$("main");if(!m||m.querySelector(".ptip")||INAPP&&view==="print")return;const pg=m.querySelector(".pages");if(!pg)return;
+  const land=($("pagesize").textContent||"").includes("landscape"),dir=land?"<b>這份是橫式</b>，":"";
+  const t=INAPP?`在 LINE、Instagram、Facebook、Threads 裡開的網頁<b>不能列印、也存不了 PDF</b>。請按右上角「⋯」，選「用 Safari 開啟」或「用 Chrome 開啟」。`
+   :IOS?`按「列印／存成 PDF」：${dir}${land?"「方向」請選<b>橫向</b>，字才不會變小。":""}有印表機直接按「列印」；<b>沒有印表機</b>：按上方的<b>分享鍵</b>（方框加箭頭），選「儲存到檔案」就是 PDF。`
+   :ANDROID?`按「列印／存成 PDF」：${dir}${land?"「版面配置」請選<b>橫向</b>。":""}有印表機直接選印表機；<b>沒有印表機</b>：印表機選「<b>儲存為 PDF</b>」，再按下載鍵。`
+   :`按「列印／存成 PDF」：${land?"這份是橫式，版面請選<b>橫向</b>。":""}要存檔，印表機選「另存為 PDF」。`;
+  const d=el("div","note ptip",t);pg.parentNode.insertBefore(d,pg);}
+function render(){setTimeout(printTip,0);setTimeout(printTip,600);const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
   if(view==="zy"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());renderZy(m);return;}   /* 注音專區不用選課次 */
   if(view==="name"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());renderName(m);return;}
   if(!ls.length){m.appendChild(el("div","empty","請在上方點選要複習的課次，可以一次選很多課。"));return;}
@@ -1002,7 +1011,7 @@ function renderPrint(m,ls){
   if(PT==="E"||COMBO&&PTS.has("E")){const t=el("div","pr-tip",`${Object.keys(SENTS).length?`<label class="pr-ans"><input type="checkbox" id="fxring"${FXRING?" checked":""}> 句子題也先圈出錯字（簡單版）</label>　語詞題一律先圈出錯字；句子題預設不圈，讓孩子自己找。`:"目前是「語詞改錯」：錯字已經圈起來，把正確的字寫在括號裡。「句子改錯」版本建置中，敬請期待！"}`);
     const cb=t.querySelector("#fxring");if(cb)cb.onchange=e=>{FXRING=e.target.checked;render();};m.appendChild(t);}
   if(INAPP)m.appendChild(copyRow("在 Instagram、Facebook、LINE 裡開的網頁不能列印。請複製網址，貼到 Safari 或 Chrome 打開，再按「列印／存成 PDF」。"));
-  else{m.appendChild(el("div","note","按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 可以直接選印表機，或在列印畫面按分享鍵，選「儲存到檔案」。"));
+  else{
     if(MOBILE)m.appendChild(copyRow("家裡印表機接電腦？用 LINE 把網址傳給自己，到電腦打開再列印。"));}
   const pages=el("div","pages zoomable");m.appendChild(pages);
   const TS0=COMBO?["A","B","G","C","D","E","F"].filter(t=>PTS.has(t)):[PT],portA=TS0.includes("A")&&TS0.some(t=>t!=="A");   /* 跟直式的合併時，生字表也排成直式，整份同一個方向 */
