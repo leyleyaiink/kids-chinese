@@ -705,9 +705,9 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:27<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 16:29<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
-  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
+  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
 <script>
 // 版本：網址 ?v=k 或上次選的，預設南一。換版本會重新載入頁面
@@ -1447,7 +1447,7 @@ function renderName(m){
   /* 產生後列出每個字，點一下就移除，只留想練的字 */
   const chips=el("div","nm-chips");chips.innerHTML=`<span class="zy-note">點字可以移除：</span>${[...new Set(chars)].map(c=>`<button type="button" class="nm-chip" data-rm="${esc(c)}">${esc(c)}<span aria-hidden="true">×</span></button>`).join("")}`;
   chips.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{NAMEV=[...NAMEV].filter(x=>x!==b.dataset.rm).join("");render();});box.appendChild(chips);
-  if(chars.some(c=>!SDATA[c]&&!NFAIL.has(c))){if(!NBUSY){NBUSY=true;m.appendChild(el("div","empty","筆順資料下載中…"));ensureStroke(chars).then(()=>{NBUSY=false;if(view==="name")render();});}else m.appendChild(el("div","empty","筆順資料下載中…"));return;}
+  if(chars.some(c=>!SDATA[c]&&!NFAIL.has(c))){if(!NBUSY){NBUSY=true;m.appendChild(el("div","empty","筆順資料下載中…"));ensureStroke(chars).then(()=>{NBUSY=false;if(view==="name"||view==="edit")render();});}else m.appendChild(el("div","empty","筆順資料下載中…"));return;}
   const miss=chars.filter(c=>!SDATA[c]);
   if(miss.length)m.appendChild(el("div","sk-note",`這些字目前沒有筆順資料：${miss.map(esc).join("、")}，可以到 <a href="https://stroke-order.learningweb.moe.edu.tw/searchW.jsp?ID2=2" target="_blank" rel="noopener">教育部筆順學習網</a> 查詢。練習紙上這個字會保留描紅和練習格。`));
   const ok=[...new Set(chars.filter(c=>SDATA[c]))],all=[...new Set(chars)];
@@ -1490,6 +1490,7 @@ function renderFb(m){
     </div>
     <div class="seg" role="group" aria-label="類型" id="fbType">${["勘誤","建議","提問","其他留言"].map(t=>`<button type="button" aria-pressed="${t===FBS.type}">${t}</button>`).join("")}</div>
     <input type="text" id="fbWho" placeholder="暱稱（可不填）" maxlength="30">
+    <input type="email" id="fbMail" placeholder="Email（想收到回覆再填，可不填）" maxlength="80" autocomplete="email">
     <textarea id="fbText" placeholder="例如：二年級第三課「…」的注音應該是 …" maxlength="1000"></textarea>
     <input type="checkbox" id="fbBot" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
     <button class="btn p" id="fbGo" type="button">送出留言</button>
@@ -1518,14 +1519,15 @@ function renderFb(m){
     const txt=$("fbText").value.trim();const out=$("fbOut");
     if(!txt){out.innerHTML=`<div class="sk-msg warn">請先寫下留言內容。</div>`;$("fbText").focus();return;}
     const scope=FBS.all?"整體意見":[FBS.ver,FBS.g?G[FBS.g-1]+"年級":"",FBS.l].filter(Boolean).join("・")||"整體意見";
-    const who=$("fbWho").value.trim();
+    const who=$("fbWho").value.trim(),mail=$("fbMail").value.trim();
+    if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){out.innerHTML=`<div class="sk-msg warn">Email 格式好像不對，請再確認一下（不想填可以留空）。</div>`;$("fbMail").focus();return;}
     const msg=`【${FBS.type}】${scope}\n${txt}${who?`\n— ${who}`:""}`;
     if(SITE.w3key&&!FBS.sending){
       if($("fbBot").checked)return;
       FBS.sending=true;const btn=$("fbGo");btn.disabled=true;btn.textContent="送出中…";
       fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
         body:JSON.stringify({access_key:SITE.w3key,subject:`【${FBS.type}】${scope}`,from_name:who||"國語生字學習站網友",
-          "類型":FBS.type,"範圍":scope,"暱稱":who||"（未填）","留言內容":txt,"來源網址":location.href,botcheck:false})})
+          "類型":FBS.type,"範圍":scope,"暱稱":who||"（未填）",...(mail?{email:mail,replyto:mail,"Email":mail}:{"Email":"（未填）"}),"留言內容":txt,"來源網址":location.href,botcheck:false})})
       .then(r=>r.json()).then(j=>{if(!j.success)throw 0;
         out.innerHTML=`<div class="sk-msg good">已送出，謝謝你的留言！Ashley 會盡快查看 🙏</div>`;$("fbText").value="";})
       .catch(()=>showCopy())
@@ -1574,7 +1576,9 @@ function renderSearch(m){
   [...new Set(han)].slice(0,12).forEach((ch,ix)=>{
     const s=el("section","sr-sec");const all=XIDX[ch]||[],here=!!IDX[ch],hits=IDX[ch]||(all.length?all:null);
     s.appendChild(head(String(ix+1).padStart(2,"0"),`查「${esc(ch)}」`,"CHARACTER"));
-    if(!hits){s.insertAdjacentHTML("beforeend",`<div class="sr-none">「${esc(ch)}」不在南一、康軒、翰林一～六年級課本的生字、認讀字裡。<br>可以到教育部 <a href="https://pedia.cloud.edu.tw/Entry/Detail/?title=${encodeURIComponent(ch)}" target="_blank" rel="noopener">教育百科</a> 查部首、注音與筆順。</div>`);m.appendChild(s);return;}
+    if(!hits){s.insertAdjacentHTML("beforeend",`<div class="sr-none">「${esc(ch)}」不在南一、康軒、翰林一～六年級課本的生字、認讀字裡。<br>可以到教育部 <a href="https://pedia.cloud.edu.tw/Entry/Detail/?title=${encodeURIComponent(ch)}" target="_blank" rel="noopener">教育百科</a> 查部首、注音與筆順，也可以直接在這裡練筆順：</div>`);
+      const pb=el("button","bs","練習這個字的筆順");pb.type="button";pb.onclick=()=>{NAMEV=ch;NMODE="write";go("edit");EDM.type="N";ED=EDM;render();};s.appendChild(pb);   /* 課本沒有的字：到自編筆順練習（線上照筆順寫，筆順從 g0v 下載） */
+      m.appendChild(s);return;}
     const c=hits[0].c;
     const card=el("article","cc"+(hits.every(h=>h.c.k==="r")?" r":""));
     card.appendChild(el("div","big",`<div class="tz">${esc(c.c)}</div><div class="zc">${zv(c.z)}</div>`));
