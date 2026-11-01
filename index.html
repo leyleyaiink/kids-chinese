@@ -661,7 +661,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:44<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:45<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增改錯字練習</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1029,7 +1029,7 @@ function fixSheets(items,ans,name,sub,low){const res=[];if(!items.length)return 
     res.push(s);}
   return res;}
 /* 審核用：網址加 #review-sentences，把句庫每一句做成解答頁（句庫還沒放上網站時不會有作用） */
-function reviewSentences(){if(!Object.keys(SENTS).length)return false;document.body.innerHTML="";const seen=new Set();
+function reviewSentences(){if(!Object.keys(SENTS).length)return false;[...document.body.children].forEach(e=>{if(!/^(STYLE|SCRIPT)$/.test(e.tagName))e.remove();});const seen=new Set();
   for(const g of [1,2,3,4,5,6]){const ls=[];for(const v of Object.values(LV))ls.push(...v.filter(x=>x.g===g));if(!ls.length)continue;
     const its=fixItems(ls).filter(it=>it.zs&&!seen.has(it.c));its.forEach(it=>seen.add(it.c));if(!its.length)continue;
     fixSheets(its,true,"改錯字句子審核",`${G[g-1]}年級（${its.length} 句）`,true).forEach(s=>document.body.appendChild(s));}
