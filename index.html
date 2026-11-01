@@ -661,7 +661,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:35<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 12:37<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增改錯字練習</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -828,7 +828,7 @@ function drawCard(){const c=$("fc");if(!c||!FC)return;c.innerHTML="";const st=$(
 }
 // ---------- print ----------
 // 上面四個按鈕切換要看的練習卷；按「列印／存成 PDF」才跳出視窗，勾選要匯出哪些（可以多種合併成一份）
-let PT="A",PTS=new Set(["A","B","C","D"]),PA=false,COMBO=false;   /* 合併時一律依種類排（同一種的課接著排，最省紙） */
+let PT="A",PTS=new Set(["A","B","C","D"]),PA=false,COMBO=false,FXRING=false;   /* FXRING：改錯字先圈出錯字（簡單版），預設不圈 */   /* 合併時一律依種類排（同一種的課接著排，最省紙） */
 function exportDialog(){const ls=chosen();
   const bg=el("div","dlg-bg"),d=el("div","dlg");bg.appendChild(d);
   d.innerHTML=`<h3>要匯出哪些練習卷？</h3><div class="dlg-sub">${esc($("sumTxt").textContent)}</div>
@@ -850,7 +850,8 @@ function renderPrint(m,ls){
   if(COMBO)m.appendChild(el("div","pr-tip",`下面是合併匯出的內容（${["A","B","C","D","E"].filter(t=>PTS.has(t)).map(t=>({A:"生字",B:"部首",C:"多音字",D:"同音字",E:"改錯字"})[t]).join("、")}）。點上面任一練習卷可以回到單一預覽。`));
   else if(PT==="A"){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
     tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
-  else if(PT==="E"&&!Object.keys(SENTS).length)m.appendChild(el("div","pr-tip","目前是「語詞改錯」：圈起來的字寫錯了，把正確的字寫在括號裡。「句子改錯」版本建置中，敬請期待！"));
+  if(PT==="E"||COMBO&&PTS.has("E")){const t=el("div","pr-tip",`<label class="pr-ans"><input type="checkbox" id="fxring"${FXRING?" checked":""}> 改錯字先圈出錯字（簡單版）</label>　預設不圈，讓孩子自己找出錯字；解答頁一律圈出。${Object.keys(SENTS).length?"":"「句子改錯」版本建置中，敬請期待！"}`);
+    t.querySelector("#fxring").onchange=e=>{FXRING=e.target.checked;render();};m.appendChild(t);}
   if(INAPP)m.appendChild(copyRow("在 Instagram、Facebook、LINE 裡開的網頁不能列印。請複製網址，貼到 Safari 或 Chrome 打開，再按「列印／存成 PDF」。"));
   else{m.appendChild(el("div","note","按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 可以直接選印表機，或在列印畫面按分享鍵，選「儲存到檔案」。"));
     if(MOBILE)m.appendChild(copyRow("家裡印表機接電腦？用 LINE 把網址傳給自己，到電腦打開再列印。"));}
@@ -1016,10 +1017,10 @@ function fixSheets(items,ans,name,sub,low){const res=[];if(!items.length)return 
   let no=0;
   for(const pg of pages){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${esc(name)}${ans?"（解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
-    s.appendChild(el("div","fx-tip","圈起來的字寫錯了，請把正確的字寫在上面的括號裡。"));
+    s.appendChild(el("div","fx-tip",FXRING||ans?"圈起來的字寫錯了，請把正確的字寫在上面的括號裡。":"每一題都有一個錯字：先把錯字圈起來，再把正確的字寫在上面的括號裡。"));
     for(const band of pg){const B=el("div","fxv");B.style.height=bh(band)+"mm";
       for(const it of band){no++;const zs=!low?[]:it.zs||wordZ(it.w.join(""),it.c,it.z||"");   /* 句子用審核過的注音 */
-        const chars=it.w.map((x,j)=>{const ch=j===it.i?it.bad:x;return `<div class="vc"><span class="vt${j===it.i?" ring":""}">${esc(ch)}</span>${low?`<span class="vz">${zv(zs[j]||"")}</span>`:""}</div>`;}).join("");
+        const chars=it.w.map((x,j)=>{const ch=j===it.i?it.bad:x;return `<div class="vc"><span class="vt${j===it.i&&(ans||FXRING)?" ring":""}">${esc(ch)}</span>${low?`<span class="vz">${zv(zs[j]||"")}</span>`:""}</div>`;}).join("");
         B.appendChild(el("div","fxcol"+(low?" low":""),`<div class="vbr"><span class="pa">︵</span><span class="ans">${ans?esc(it.c):""}</span><span class="pa">︶</span></div><div class="vno">${no}.</div>${chars}`));}
       s.appendChild(B);}
     res.push(s);}
