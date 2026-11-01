@@ -589,6 +589,15 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
 .dlg-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dlg-list label,.dlg-ans{display:flex;gap:8px;align-items:center;font-size:16px}
 .dlg-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:4px}
+.dlg-steps{margin:0;padding-left:1.4em;line-height:1.9;font-size:14px}
+.cpnote{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:8px}.cpnote .cpb{flex:none}
+.zhint{font-size:12.5px;color:var(--muted);text-align:center;margin:12px 0 8px}
+.zoomable .sheet{cursor:zoom-in}
+.zoomv{position:fixed;inset:0;z-index:120;background:#e9e4e1;overflow:auto;-webkit-overflow-scrolling:touch}
+.zoomv .zin{padding:56px 12px 24px;width:max-content}
+.zoomv .zin>.sheet{box-shadow:0 2px 12px rgba(0,0,0,.15);margin:0}
+.zoomv .zx{position:fixed;top:10px;right:12px;z-index:121}
+.a2hs{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.6}
 .dlg .seg{display:grid;grid-template-columns:1fr 1fr}
 @media print{.dlg-bg{display:none!important}}
 .rb.rlab{border-color:#cfdcf0;background:#eef3fb;display:grid;place-items:center}
@@ -639,8 +648,9 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 11:49<span id="views"></span></span></div>
-  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 11:53<span id="views"></span></span></div>
+  <div class="a2hs" id="a2hs" hidden></div>
+  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
 <script>
 // 版本：網址 ?v=k 或上次選的，預設南一。換版本會重新載入頁面
@@ -656,7 +666,20 @@ const INAPP_MSG="在 Instagram、Facebook、LINE 裡開的網頁不能列印。�
 // 存成 PDF 的檔名＝網頁標題，印之前換成「南一_G1_1-5_生字部首」這種，印完換回來
 const T0=document.title;addEventListener("afterprint",()=>{document.title=T0;});
 const fileSafe=s=>String(s||"").replace(/[\\/:*?"<>|\s]+/g,"_").replace(/_+/g,"_").replace(/^_|_$/g,"").slice(0,80);
-function doPrint(name){if(INAPP){alert(INAPP_MSG);return;}if(typeof name==="string"&&name)document.title=fileSafe(name);try{window.print();}catch(e){}}
+// 手機族：複製網址（貼到 Safari，或用 LINE 傳給自己到電腦列印）
+const MOBILE=matchMedia("(max-width:820px),(pointer:coarse)").matches;
+const siteURL=()=>location.origin+location.pathname+"?v="+VER;
+function copyURL(btn){const u=siteURL(),done=()=>{if(btn){const t=btn.textContent;btn.textContent="已複製";setTimeout(()=>btn.textContent=t,1800);}};
+  const fb=()=>{const ta=document.createElement("textarea");ta.value=u;ta.setAttribute("readonly","");ta.style.cssText="position:fixed;opacity:0";document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy");}catch(e){}ta.remove();ok?done():prompt("請長按複製這個網址：",u);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(done,fb);else fb();}
+function copyRow(txt){const d=el("div","note cpnote",`<span>${txt}</span><button type="button" class="mini cpb">複製網址</button>`);d.querySelector(".cpb").onclick=e=>copyURL(e.currentTarget);return d;}
+function inappDialog(){const bg=el("div","dlg-bg"),d=el("div","dlg");bg.appendChild(d);
+  d.innerHTML=`<h3>這裡不能列印</h3><div class="dlg-sub">在 Instagram、Facebook、LINE 裡開的網頁不能列印。</div>
+    <ol class="dlg-steps"><li>按下面「複製網址」</li><li>打開 Safari 或 Chrome，貼上網址</li><li>再按一次「列印／存成 PDF」</li></ol>
+    <div class="dlg-sub">也可以把網址用 LINE 傳給自己，到電腦打開再列印。</div>
+    <div class="dlg-btns"><button class="btn" type="button" data-x="no">關閉</button><button class="btn p" type="button" data-x="cp">複製網址</button></div>`;
+  bg.onclick=e=>{if(e.target===bg)bg.remove();};d.querySelector('[data-x="no"]').onclick=()=>bg.remove();d.querySelector('[data-x="cp"]').onclick=e=>copyURL(e.currentTarget);document.body.appendChild(bg);}
+function doPrint(name){if(INAPP){inappDialog();return;}if(typeof name==="string"&&name)document.title=fileSafe(name);try{window.print();}catch(e){}}
 function lessonNums(ls){const n=ls.map(x=>x.l),f=v=>v===0?"首":v;if(!n.length)return"";const seq=n.every((v,i)=>!i||v===n[i-1]+1);return seq?(n.length>1?f(n[0])+"-"+n[n.length-1]:""+f(n[0])):n.map(f).join("、");}
 function printName(ls){const ts=COMBO?["A","B","C","D"].filter(t=>PTS.has(t)):[PT];
   return VN[VER][0]+"G"+(ls[0]?ls[0].g:"")+"_"+lessonNums(ls)+ts.map(t=>({A:"生字",B:"部首",C:"多音字",D:"同音字"})[t]).join("")+(PA?"_含解答":"");}
@@ -666,6 +689,9 @@ const OLRAW="日:M96lcL93m7Q90mx8rmyQ8in086mgQ7tm07olmQ7kl97kkuQ7jke7pjeQ7uik7wh
 const SITE={by:"Ashley 設計規劃・IG @eating1125",ig:"https://www.instagram.com/eating1125/",form:"",w3key:"083e35a0-7842-426e-93b3-901a4ca46f57",gc:"kids-chinese",gcFrom:"2026/11/1",gcMin:541};
 // gc：GoatCounter 的 Code（例如 kids-chinese），填了才會統計瀏覽人次並在頁尾顯示；空白就不統計；gcFrom 是開始統計的日期，會顯示在人次後面；gcMin 是手動填的最新人次（GoatCounter 公開數字會慢最多 4 小時，顯示時取兩者較大的）
 
+(function(){const a=document.getElementById("a2hs");if(!a)return;const st=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  if(st||!/iPhone|iPad|Android/i.test(navigator.userAgent)||/Instagram|FBAN|FBAV|FB_IAB|Line\//i.test(navigator.userAgent))return;
+  a.textContent=/Android/i.test(navigator.userAgent)?"小技巧：按右上角「⋮」→「加到主畫面」，下次像 App 一樣一點就開。":"小技巧：按分享鍵 →「加入主畫面」，下次像 App 一樣一點就開。";a.hidden=false;})();
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".clog-b");if(!b)return;const p=document.getElementById("clog"),open=p.hidden;p.hidden=!open;b.setAttribute("aria-expanded",open);});
 // 瀏覽人次（GoatCounter，不用 cookie）：記一次瀏覽，再把累計次數顯示在頁尾
 if(SITE.gc&&/^[a-z0-9-]+$/.test(SITE.gc)&&!/^(localhost|127\.)/.test(location.hostname)){/* 統計時網址只留版本（?v=），去掉 IG 等外加的追蹤參數，後台比較乾淨 */
@@ -811,8 +837,11 @@ function renderPrint(m,ls){
   if(COMBO)m.appendChild(el("div","pr-tip",`下面是合併匯出的內容（${["A","B","C","D"].filter(t=>PTS.has(t)).map(t=>({A:"生字",B:"部首",C:"多音字",D:"同音字"})[t]).join("、")}）。點上面任一練習卷可以回到單一預覽。`));
   else if(PT==="A"){const tip=el("div","pr-tip",'這是依課本生字排好的公版。要自己出題，請點 <button class="mini done" type="button">自編生字練習</button>');
     tip.querySelector("button").onclick=()=>go("edit");m.appendChild(tip);}
-  const nt=el("div","note",INAPP?INAPP_MSG:"按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 在列印畫面按右上角分享鍵，選「儲存到檔案」。");m.appendChild(nt);
-  const pages=el("div","pages");m.appendChild(pages);
+  if(INAPP)m.appendChild(copyRow("在 Instagram、Facebook、LINE 裡開的網頁不能列印。請複製網址，貼到 Safari 或 Chrome 打開，再按「列印／存成 PDF」。"));
+  else{m.appendChild(el("div","note","按「列印／存成 PDF」：電腦在印表機選「另存為 PDF」；iPhone、iPad 可以直接選印表機，或在列印畫面按分享鍵，選「儲存到檔案」。"));
+    if(MOBILE)m.appendChild(copyRow("家裡印表機接電腦？用 LINE 把網址傳給自己，到電腦打開再列印。"));}
+  const pages=el("div","pages zoomable");m.appendChild(pages);
+  if(MOBILE)m.insertBefore(el("div","zhint","點練習卷可以放大看"),pages);
   const TS0=COMBO?["A","B","C","D"].filter(t=>PTS.has(t)):[PT],portA=TS0.includes("A")&&TS0.some(t=>t!=="A");   /* 跟直式的合併時，生字表也排成直式，整份同一個方向 */
   const mk={A:(l,a)=>sheetsA(l,a,portA),B:sheetsB,C:sheetsC,D:sheetsD},NAME={A:"生字",B:"部首",C:"多音字",D:"同音字"},out=[],none=[];
   const TS=COMBO?["A","B","C","D"].filter(t=>PTS.has(t)):[PT];
@@ -825,6 +854,9 @@ function renderPrint(m,ls){
   out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});
   fit();
 }
+document.addEventListener("click",e=>{const s=e.target.closest&&e.target.closest(".zoomable .sheet");if(!s||!MOBILE)return;
+  const v=el("div","zoomv"),zin=el("div","zin");zin.appendChild(s.cloneNode(true));v.appendChild(zin);
+  const x=el("button","btn p zx","關閉");x.type="button";x.onclick=()=>v.remove();v.appendChild(x);document.body.appendChild(v);});
 function fit(){const pages=document.querySelector(".pages");if(!pages)return;const W=pages.clientWidth;pages.querySelectorAll(".scale").forEach(sc=>{const s=sc.firstChild;const w=s.offsetWidth,h=s.offsetHeight;const k=Math.min(1,(W-8)/w);sc.style.transform=`scale(${k})`;sc.style.height=(h*k)+"px";sc.style.width=w+"px";});}
 window.addEventListener("resize",fit);
 function sheet(cls){return el("div","sheet "+cls);}
