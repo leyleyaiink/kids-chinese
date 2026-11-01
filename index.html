@@ -602,6 +602,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .zc1 .zv{font-size:.42em;min-width:1.1em;margin-right:.15em}
 .zc1 .zv.t{margin-right:.75em}
 .ctrack .row .k{margin-bottom:6px}
+.zwbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 12px;font-size:14px;color:var(--muted)}
+.zwbar .seg button{padding:.3em 1em;font-size:14px}
+.zwbar .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.nozy .zws .zv{display:none}
+.nozy .zws{gap:6px 4px}
 /* 匯出練習卷：選練習卷種類，跟「選功能」同一種按鈕 */
 .pr-row{gap:14px;padding:4px 0 6px}
 .pr-row .lab i{background:#fbe94e;color:var(--ink)}
@@ -970,7 +975,14 @@ function dictSheets(its,ans){const res=[],ls=chosen(),sub=`${G[ls[0].g-1]}上 ${
     s.appendChild(g);res.push(s);}
   return res;}
 // ---------- list ----------
+/* 造詞、成語的注音開關：一、二年級預設開，三年級以上預設關；記住家長的選擇（低、高年級分開記） */
+function zyOn(){const b=grade<=2?"lo":"hi";try{const s=JSON.parse(localStorage.getItem("szs-zyw")||"{}");if(b in s)return s[b];}catch(e){}return b==="lo";}
+function setZy(on){const b=grade<=2?"lo":"hi";try{const s=JSON.parse(localStorage.getItem("szs-zyw")||"{}");s[b]=on;localStorage.setItem("szs-zyw",JSON.stringify(s));}catch(e){}}
 function renderList(m,ls){
+  const zb=el("div","zwbar",`<span>造詞、成語注音</span><span class="seg" role="group" aria-label="造詞、成語注音"><button type="button" data-z="1">開</button><button type="button" data-z="0">關</button></span>`);
+  const apply=on=>{m.classList.toggle("nozy",!on);zb.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",(b.dataset.z==="1")===on));m.querySelectorAll(".ctrack").forEach(t=>t.dispatchEvent(new Event("refit")));};
+  zb.querySelectorAll("button").forEach(b=>b.onclick=()=>{const on=b.dataset.z==="1";setZy(on);apply(on);});
+  m.appendChild(zb);
   for(const x of ls){const sec=el("section","lesson");const [no,ti]=titleParts(x.t);
     const ns=x.c.filter(c=>c.k==="s").length,nr=x.c.length-ns;
     sec.appendChild(el("div","lhead",`<span class="no">${G[x.g-1]}上・${esc(no||"開場")}</span><h2>${esc(ti)}</h2><span class="cnt">生字 ${ns}${nr?`・認讀字 ${nr}`:""}</span>`));
@@ -986,7 +998,8 @@ function renderList(m,ls){
     pv.onclick=()=>go(cur-1);nx.onclick=()=>go(cur+1);
     tr.tabIndex=0;tr.onkeydown=e=>{if(e.key==="ArrowRight"){go(cur+1);e.preventDefault();}if(e.key==="ArrowLeft"){go(cur-1);e.preventDefault();}};
     let tm;tr.addEventListener("scroll",()=>{clearTimeout(tm);tm=setTimeout(()=>mark(Math.round(tr.scrollLeft/step())),80);},{passive:true});
-    sec.append(strip,tr,nav);requestAnimationFrame(()=>mark(0));addEventListener("resize",fit);m.appendChild(sec);}
+    sec.append(strip,tr,nav);requestAnimationFrame(()=>mark(0));addEventListener("resize",fit);tr.addEventListener("refit",fit);m.appendChild(sec);}
+  apply(zyOn());
 }
 /* 語詞加注音：每個字右邊直排注音（同課本） */
 function zw(w,zs){return `<span class="zw">${[...w].map((ch,i)=>`<span class="zc1"><b>${esc(ch)}</b>${zv(zs[i]||"")}</span>`).join("")}</span>`;}
