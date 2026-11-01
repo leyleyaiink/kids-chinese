@@ -41,6 +41,14 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .seg button[aria-pressed="true"]{background:var(--green);color:#fff}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .zy-sub{margin:12px 0 4px}
+.dict{display:flex;flex-direction:column;gap:12px;margin:8px 0 18px}
+.dnow{display:flex;align-items:center;gap:16px;min-height:64px;padding:8px 16px;border:1px solid var(--line);border-radius:18px;background:#fff}
+.dno{font-weight:700;font-size:18px}.dw{font-family:var(--kai);font-size:34px}.dz{display:flex;gap:6px;font-size:20px;color:#d5392f}
+.dbtns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dgrid{display:grid;grid-template-columns:repeat(5,1fr);border:1.2px solid #3155a2}
+.dcell{border-right:1px solid #3155a2;border-bottom:1px solid #3155a2;display:flex;flex-direction:column;align-items:center;padding:6mm 0 3mm;position:relative;min-height:56mm}
+.dcell:nth-child(5n){border-right:0}
+.dwd{font-family:var(--kai);font-size:6mm;margin-bottom:1.5mm}
 .g1n{font-size:13.5px;color:var(--muted);line-height:1.7}.g1n .mini{margin-left:6px}
 .chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:.32em .8em;cursor:pointer;font-size:.92rem;max-width:100%;text-align:left}
 .chip[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft);color:var(--green-d)}
@@ -676,9 +684,9 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 14:27<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 14:29<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
-  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增注音專區：注音筆順、看圖注音練習</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
+  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增注音專區：注音筆順、看圖注音、語詞聽寫</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
 <script>
 // 版本：網址 ?v=k 或上次選的，預設南一。換版本會重新載入頁面
@@ -775,8 +783,8 @@ window.addEventListener("popstate",e=>{const v=(e.state&&e.state.v)||location.ha
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
   b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":view==="sent"?"自編照樣造句":view==="zy"?"注音專區":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
-  b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():view==="zy"?doPrint("看圖注音練習"+(PAZ?"_含解答":"")):doPrint();
-  if(view==="zy"&&ZYSUB!=="pic")b.querySelector('[data-fv="print"]').style.visibility="hidden";
+  b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():view==="zy"?doPrint(ZYSUB==="dict"?dictName():"看圖注音練習"+(PAZ?"_含解答":"")):doPrint();
+  if(view==="zy"&&ZYSUB==="stroke")b.querySelector('[data-fv="print"]').style.visibility="hidden";
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
 function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
   if(view==="zy"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());renderZy(m);return;}   /* 注音專區不用選課次 */
@@ -788,15 +796,50 @@ function titleParts(t){const m=t.split("：");return m.length>1?[m[0],m[1]]:["",
 let ZYSUB="stroke",PAZ=false;
 function renderZy(m){
   const sg=el("div","row zy-sub");
-  sg.innerHTML=`<div class="seg" role="group" aria-label="注音專區">${[["stroke","注音符號筆順"],["pic","看圖注音練習卷"]].map(([k,n])=>`<button type="button" data-zs="${k}" aria-pressed="${ZYSUB===k}">${n}</button>`).join("")}</div>`;
+  sg.innerHTML=`<div class="seg" role="group" aria-label="注音專區">${[["stroke","注音符號筆順"],["pic","看圖注音練習卷"],["dict","語詞聽寫"]].map(([k,n])=>`<button type="button" data-zs="${k}" aria-pressed="${ZYSUB===k}">${n}</button>`).join("")}</div>`;
   sg.querySelectorAll("[data-zs]").forEach(b=>b.onclick=()=>{ZYSUB=b.dataset.zs;render();});m.appendChild(sg);
   if(ZYSUB==="stroke"){zyStroke(m);return;}
+  if(ZYSUB==="dict"){zyDict(m);return;}
   const t=el("div","pr-tip",`注音大會考題型：看圖圈出正確的讀音、看圖寫注音。錯的選項用孩子容易搞混的符號（ㄣ／ㄥ、ㄓ／ㄗ…）和聲調。 <label class="pr-ans"><input type="checkbox" id="paz"${PAZ?" checked":""}> 附解答頁</label> <button class="mini done" type="button" id="zyNew">換一份題目</button>`);
   m.appendChild(t);$("paz").onchange=e=>{PAZ=e.target.checked;render();};$("zyNew").onclick=()=>{PSEED++;render();};
   const pages=el("div","pages zoomable");m.appendChild(pages);
   const out=[...sheetsF([],false),...(PAZ?sheetsF([],true):[])];
   $("pagesize").textContent="@page{size:A4 portrait;margin:0}";
   out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
+// 語詞聽寫：用選好的課次裡每個生字的課本語詞（教育部生字表的語詞和注音），手機／電腦內建語音念，孩子寫注音
+let DI=0,DANS=false,DSHUF=false;
+function dictItems(){const out=[],seen=new Set();for(const x of chosen())for(const c of x.c){if(c.k!=="s"||!c.p||!c.p[0]||!c.p[1])continue;const w=c.p[0];if(seen.has(w)||[...w].length>4)continue;seen.add(w);out.push({w,z:c.p[1].split("."),l:x});}
+  if(DSHUF){const r=prng(PSEED*31+7);for(let i=out.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[out[i],out[j]]=[out[j],out[i]];}}return out;}
+const dictName=()=>{const ls=chosen();return ls.length?VN[VER][0]+"G"+ls[0].g+"_"+lessonNums(ls)+"語詞聽寫":"語詞聽寫";};
+let ZHVOICE=null;function say(t){try{const S=speechSynthesis;S.cancel();if(!ZHVOICE)ZHVOICE=S.getVoices().find(v=>/zh[-_]TW/i.test(v.lang))||S.getVoices().find(v=>/^zh/i.test(v.lang))||null;
+  const u=new SpeechSynthesisUtterance(t);u.lang="zh-TW";u.rate=.75;if(ZHVOICE)u.voice=ZHVOICE;S.speak(u);}catch(e){alert("這台裝置不支援語音朗讀，請改用印出來的家長念讀稿。");}}
+function zyDict(m){const ls=chosen();
+  if(!ls.length){m.appendChild(el("div","empty","請先在上方選版本、年級和課次，語詞聽寫會用那幾課的課本語詞。"));return;}
+  const its=dictItems();if(!its.length){m.appendChild(el("div","empty","這幾課沒有可以聽寫的語詞。"));return;}
+  DI=Math.min(DI,its.length-1);
+  const box=el("div","dict");
+  box.innerHTML=`<div class="pr-tip">${esc(VN[VER])}・${G[ls[0].g-1]}年級・${esc(lsRange(ls))}：共 ${its.length} 個語詞。按「念題目」，孩子在紙上寫出注音（可以印下面的聽寫卷）。沒有聲音的話，請確認手機沒有開靜音、音量有打開。</div>
+    <div class="dnow"><span class="dno">第 ${DI+1} / ${its.length} 題</span>${DANS?`<span class="dw">${esc(its[DI].w)}</span><span class="dz">${its[DI].z.map(z=>zv(z)).join("")}</span>`:""}</div>
+    <div class="dbtns"><button class="btn" type="button" data-d="prev">上一題</button><button class="btn p" type="button" data-d="say">念題目</button><button class="btn" type="button" data-d="next">下一題</button></div>
+    <div class="dbtns"><label class="pr-ans"><input type="checkbox" data-d="ans"${DANS?" checked":""}> 顯示答案</label><label class="pr-ans"><input type="checkbox" data-d="shuf"${DSHUF?" checked":""}> 打亂順序</label><label class="pr-ans"><input type="checkbox" id="paz"${PAZ?" checked":""}> 印出時附念讀稿／解答</label></div>`;
+  m.appendChild(box);
+  box.querySelector('[data-d="say"]').onclick=()=>say(its[DI].w);
+  box.querySelector('[data-d="prev"]').onclick=()=>{DI=Math.max(0,DI-1);render();say(dictItems()[DI].w);};
+  box.querySelector('[data-d="next"]').onclick=()=>{DI=Math.min(its.length-1,DI+1);render();say(dictItems()[DI].w);};
+  box.querySelector('[data-d="ans"]').onchange=e=>{DANS=e.target.checked;render();};
+  box.querySelector('[data-d="shuf"]').onchange=e=>{DSHUF=e.target.checked;DI=0;PSEED++;render();};
+  $("paz").onchange=e=>{PAZ=e.target.checked;render();};
+  const pages=el("div","pages zoomable");m.appendChild(pages);$("pagesize").textContent="@page{size:A4 portrait;margin:0}";
+  [...dictSheets(its,false),...(PAZ?dictSheets(its,true):[])].forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
+/* 聽寫卷：每題依字數畫注音格（直書），一頁 5 欄；解答版是家長念讀稿（語詞＋注音） */
+function dictSheets(its,ans){const res=[],ls=chosen(),sub=`${G[ls[0].g-1]}上 ${lsRange(ls)}`;
+  for(let p=0;p<its.length;p+=20){const s=sheet("port");
+    s.appendChild(el("div","ttl",`<span>語詞聽寫${ans?"（家長念讀稿・解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
+    s.appendChild(el("div","fx-tip",ans?"請照順序念語詞（每題念兩次），孩子寫出注音後對答案。":"仔細聽，把語詞的注音寫在格子裡。"));
+    const g=el("div","dgrid");
+    its.slice(p,p+20).forEach((it,k)=>g.appendChild(el("div","dcell",`<div class="pno">${p+k+1}</div>${ans?`<div class="dwd">${esc(it.w)}</div>`:""}<div class="pwr">${it.z.map(z=>`<span class="pbx">${ans?zv(z):""}</span>`).join("")}</div>`)));
+    s.appendChild(g);res.push(s);}
+  return res;}
 // ---------- list ----------
 function renderList(m,ls){
   for(const x of ls){const sec=el("section","lesson");const [no,ti]=titleParts(x.t);
