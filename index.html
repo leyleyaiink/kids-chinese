@@ -40,6 +40,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .seg button+button{border-left:1.5px solid var(--line)}
 .seg button[aria-pressed="true"]{background:var(--green);color:#fff}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
+.zy-sub{margin:12px 0 4px}
 .g1n{font-size:13.5px;color:var(--muted);line-height:1.7}.g1n .mini{margin-left:6px}
 .chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:.32em .8em;cursor:pointer;font-size:.92rem;max-width:100%;text-align:left}
 .chip[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft);color:var(--green-d)}
@@ -564,8 +565,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .seg.ed-ty button{border-radius:0!important}
 @media (max-width:600px){.fv-bar{gap:6px}.fv-bar .fv-t{font-size:14px;white-space:nowrap}.fv-bar .btn{padding:0 .9em;font-size:14px;height:38px;min-height:38px}}
 /* 選功能 5 個按鈕：電腦一排；手機上面 3 個、下面 2 個 */
-.fnrow .tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important;max-width:1060px}
-@media (max-width:820px){.fnrow .tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:row!important}.fnrow .tabs .tab{grid-column:span 2}.fnrow .tabs .tab:nth-child(n+4){grid-column:span 3}}
+.fnrow .tabs{grid-template-columns:repeat(6,minmax(0,1fr))!important;max-width:1200px}
+@media (max-width:820px){.fnrow .tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row!important}.fnrow .tabs .tab{grid-column:auto!important}}
 .pr-row .tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 @media (max-width:820px){.pr-row .tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}.pr-row .tabs .tab{grid-column:auto!important}}
 /* 練習卷按鈕：放不下就換行，字不會擠在一起（任何螢幕寬度、放大字體都一樣） */
@@ -644,7 +645,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
   <div class="scope">
     <div class="row"><span class="lab"><i>1</i>選版本、年級</span><div class="vg"><div class="seg" id="vers" role="group" aria-label="版本"><button type="button" data-v="n">南一版</button><button type="button" data-v="k">康軒版</button><button type="button" data-v="h">翰林版</button></div><div class="seg" id="grades" role="group" aria-label="年級"></div></div></div>
     <div class="row"><span class="lab"><i>2</i>選課次</span><div class="chips" id="lessons"></div></div>
-    <div class="row sub" id="g1note" hidden><span class="lab"></span><div class="g1n">一年級的首冊在學注音符號，沒有要寫的生字，生字表從第一冊開始。首冊期間可以練注音符號的筆順：<button class="mini done" id="g1zy" type="button">筆順練習 → 注音符號</button></div></div>
+    <div class="row sub" id="g1note" hidden><span class="lab"></span><div class="g1n">一年級的首冊在學注音符號，沒有要寫的生字，生字表從第一冊開始。首冊期間可以到注音專區練注音符號：<button class="mini done" id="g1zy" type="button">注音專區</button></div></div>
     <div class="row sub"><span class="lab"></span><button class="mini" id="selAll" type="button">全選</button><button class="mini" id="selNone" type="button">清除</button><button class="mini done" id="selDone" type="button">完成</button><span class="selcnt" id="selCnt"></span></div>
   </div>
   <div class="row fnrow"><span class="lab"><i>3</i>選功能</span><div class="tabs" role="tablist">
@@ -653,6 +654,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
     <button class="tab f4" role="tab" id="t-print" aria-selected="false" type="button"><span class="tf">匯出練習卷</span><span class="ts">匯出練習卷</span></button>
     <button class="tab f6" role="tab" id="t-edit" aria-selected="false" type="button"><span class="tf">自編生字練習</span><span class="ts">自編生字練習</span></button>
     <button class="tab f6" role="tab" id="t-sent" aria-selected="false" type="button"><span class="tf">自編照樣造句</span><span class="ts">自編照樣造句</span></button>
+    <button class="tab f1" role="tab" id="t-zy" aria-selected="false" type="button"><span class="tf">注音專區</span><span class="ts">注音專區</span></button>
   </div></div>
 </div></div>
 <main class="wrap" id="main"></main>
@@ -674,9 +676,9 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 14:24<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 14:27<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
-  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增看圖注音練習（注音大會考題型）</i><i>新增注音符號筆順練習</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
+  <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>新增注音專區：注音筆順、看圖注音練習</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
 <script>
 // 版本：網址 ?v=k 或上次選的，預設南一。換版本會重新載入頁面
@@ -750,7 +752,7 @@ function renderBar(){
   const lc=$("lessons");lc.innerHTML="";gLessons().forEach(x=>{const b=el("button","chip");b.type="button";const m=x.t.split("：");b.innerHTML=m.length>1?`<b>${esc(m[0].replace("第","").replace("課",""))}、</b>${esc(m[1])}`:esc(x.t);b.title=x.t;b.setAttribute("aria-pressed",sel.has(key(x)));b.onclick=()=>{sel.has(key(x))?sel.delete(key(x)):sel.add(key(x));save();renderBar();render();};lc.appendChild(b);});
   $("g1note").hidden=grade!==1;
   $("selCnt").textContent=sel.size?`已選 ${gLessons().filter(x=>sel.has(key(x))).length} 課`:"尚未選課";
-  ["list","stroke","print","edit","sent"].forEach(v=>$("t-"+v).setAttribute("aria-selected",!Q&&v===view));
+  ["list","stroke","print","edit","sent","zy"].forEach(v=>$("t-"+v).setAttribute("aria-selected",!Q&&v===view));
   renderScope();
 }
 // 選好年級、課次就摺成一行摘要，下面的功能畫面比較大；按「展開」再打開
@@ -760,26 +762,41 @@ function renderScope(){const ch=gLessons().filter(x=>sel.has(key(x)));
   $("sumTxt").textContent=`${G[grade-1]}年級・${VN[VER]}・`+(!ch.length?"尚未選課":ch.length===gLessons().length&&ch.length>3?`全部 ${ch.length} 課`:ch.map(shortT).join("、"));
   document.querySelector(".bar").classList.toggle("min",!SCOPE_OPEN);}
 $("sumEdit").onclick=()=>{SCOPE_OPEN=true;renderScope();};
-$("g1zy").onclick=()=>{SKMODE="zy";SCOPE_OPEN=false;go("stroke");};
+$("g1zy").onclick=()=>{ZYSUB="stroke";go("zy");};
 $("selDone").onclick=()=>{SCOPE_OPEN=false;renderScope();scrollTo(0,0);};
 $("selAll").onclick=()=>{gLessons().forEach(x=>sel.add(key(x)));save();renderBar();render();};
 $("selNone").onclick=()=>{sel.clear();save();renderBar();render();};
 // 換功能記在瀏覽器歷史裡：手機的返回鍵、往右滑、主畫面 App 都能回到上一個功能
 function go(v){clearQ();view=v;FULL=true;SCOPE_OPEN=false;save();try{history.pushState({v,prev:true},"",location.pathname+location.search+"#"+v);}catch(e){}renderBar();render();scrollTo(0,0);}
 function goBack(){if(history.state&&history.state.prev)history.back();else go("list");}
-window.addEventListener("popstate",e=>{const v=(e.state&&e.state.v)||location.hash.slice(1)||"list";if(!["list","stroke","print","edit","sent"].includes(v))return;clearQ();view=v;FULL=true;renderBar();render();});
-["list","stroke","print","edit","sent"].forEach(v=>$("t-"+v).onclick=()=>go(v));
+window.addEventListener("popstate",e=>{const v=(e.state&&e.state.v)||location.hash.slice(1)||"list";if(!["list","stroke","print","edit","sent","zy"].includes(v))return;clearQ();view=v;FULL=true;renderBar();render();});
+["list","stroke","print","edit","sent","zy"].forEach(v=>$("t-"+v).onclick=()=>go(v));
 // 匯出練習卷・自編生字練習：點開就是全螢幕，上方固定「返回」和「列印」
 let FULL=true;
 function fvBar(){const b=el("div","fv-bar noprint");
-  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":view==="sent"?"自編照樣造句":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
-  b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():doPrint();
+  b.innerHTML=`<button class="btn" type="button" data-fv="tog">${FULL?"返回":"全螢幕編輯"}</button><span class="fv-t">${FULL?(view==="print"?"匯出練習卷":view==="sent"?"自編照樣造句":view==="zy"?"注音專區":"自編生字練習"):""}</span><button class="btn p" type="button" data-fv="print">列印／存成 PDF</button>`;
+  b.querySelector('[data-fv="print"]').onclick=()=>view==="print"?exportDialog():view==="zy"?doPrint("看圖注音練習"+(PAZ?"_含解答":"")):doPrint();
+  if(view==="zy"&&ZYSUB!=="pic")b.querySelector('[data-fv="print"]').style.visibility="hidden";
   b.querySelector('[data-fv="tog"]').onclick=()=>{FULL=!FULL;render();scrollTo(0,0);};return b;}
 function render(){const m=$("main");m.innerHTML="";document.body.classList.remove("fullv");if(SB.stop)SB.stop();if(Q){renderSearch(m);return;}const ls=chosen();
+  if(view==="zy"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());renderZy(m);return;}   /* 注音專區不用選課次 */
   if(!ls.length){m.appendChild(el("div","empty","請在上方點選要複習的課次，可以一次選很多課。"));return;}
   if(view==="print"||view==="edit"||view==="sent"){document.body.classList.toggle("fullv",FULL);m.appendChild(fvBar());}
   if(view==="list")renderList(m,ls);else if(view==="stroke")renderStroke(m,ls);else if(view==="edit"||view==="sent")renderEdit(m,ls);else if(view==="card")renderCards(m,ls);else renderPrint(m,ls);}
 function titleParts(t){const m=t.split("：");return m.length>1?[m[0],m[1]]:["",t];}
+// ---------- 注音專區：注音符號筆順、看圖注音練習卷（不分版本、不用選課次） ----------
+let ZYSUB="stroke",PAZ=false;
+function renderZy(m){
+  const sg=el("div","row zy-sub");
+  sg.innerHTML=`<div class="seg" role="group" aria-label="注音專區">${[["stroke","注音符號筆順"],["pic","看圖注音練習卷"]].map(([k,n])=>`<button type="button" data-zs="${k}" aria-pressed="${ZYSUB===k}">${n}</button>`).join("")}</div>`;
+  sg.querySelectorAll("[data-zs]").forEach(b=>b.onclick=()=>{ZYSUB=b.dataset.zs;render();});m.appendChild(sg);
+  if(ZYSUB==="stroke"){zyStroke(m);return;}
+  const t=el("div","pr-tip",`注音大會考題型：看圖圈出正確的讀音、看圖寫注音。錯的選項用孩子容易搞混的符號（ㄣ／ㄥ、ㄓ／ㄗ…）和聲調。 <label class="pr-ans"><input type="checkbox" id="paz"${PAZ?" checked":""}> 附解答頁</label> <button class="mini done" type="button" id="zyNew">換一份題目</button>`);
+  m.appendChild(t);$("paz").onchange=e=>{PAZ=e.target.checked;render();};$("zyNew").onclick=()=>{PSEED++;render();};
+  const pages=el("div","pages zoomable");m.appendChild(pages);
+  const out=[...sheetsF([],false),...(PAZ?sheetsF([],true):[])];
+  $("pagesize").textContent="@page{size:A4 portrait;margin:0}";
+  out.forEach(s=>{const sc=el("div","scale");sc.appendChild(s);pages.appendChild(sc);});fit();}
 // ---------- list ----------
 function renderList(m,ls){
   for(const x of ls){const sec=el("section","lesson");const [no,ti]=titleParts(x.t);
@@ -1267,19 +1284,19 @@ let WEAKONLY=false;
 // 注音符號筆順：聲符 21 個、介符 3 個、韻符 13 個（教育部順序）
 const ZY_SETS={"聲符":"ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ","介符":"ㄧㄨㄩ","韻符":"ㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ"};
 let SKMODE="hz",ZYSET="全部";   /* hz 國字、zy 注音符號 */
+function zyStroke(m,back){const top=el("div","row");top.style.margin="10px 0";
+  top.innerHTML=`${back?'<button class="mini" id="skBack" type="button">返回</button>':""}<div class="seg" role="group" aria-label="注音符號">${["全部","聲符","介符","韻符"].map(k=>`<button type="button" data-zys="${k}" aria-pressed="${ZYSET===k}">${k}</button>`).join("")}</div>`;
+  m.appendChild(top);if(back)$("skBack").onclick=()=>goBack();
+  top.querySelectorAll("[data-zys]").forEach(b=>b.onclick=()=>{ZYSET=b.dataset.zys;render();});
+  const s=ZYSET==="全部"?Object.values(ZY_SETS).join(""):ZY_SETS[ZYSET];
+  SB.mount(m,[...s].filter(c=>SDATA[c]).map(c=>({c,z:"",k:"s"})));}
 function renderStroke(m,ls){
   const incR=(()=>{try{return localStorage.getItem("szs-skr")!=="0"}catch(e){return true}})();
   const mode=el("div","seg sk-mode");mode.setAttribute("role","group");mode.setAttribute("aria-label","練習內容");
   mode.innerHTML=[["hz","國字"],["zy","注音符號"]].map(([k,n])=>`<button type="button" data-skm="${k}" aria-pressed="${SKMODE===k}">${n}</button>`).join("");
   mode.querySelectorAll("[data-skm]").forEach(b=>b.onclick=()=>{SKMODE=b.dataset.skm;WEAKONLY=false;render();});
   m.appendChild(mode);
-  if(SKMODE==="zy"){
-    const top=el("div","row");top.style.margin="10px 0";
-    top.innerHTML=`<button class="mini" id="skBack" type="button">返回</button><div class="seg" role="group" aria-label="注音符號">${["全部","聲符","介符","韻符"].map(k=>`<button type="button" data-zys="${k}" aria-pressed="${ZYSET===k}">${k}</button>`).join("")}</div>`;
-    m.appendChild(top);$("skBack").onclick=()=>goBack();
-    top.querySelectorAll("[data-zys]").forEach(b=>b.onclick=()=>{ZYSET=b.dataset.zys;render();});
-    const s=ZYSET==="全部"?Object.values(ZY_SETS).join(""):ZY_SETS[ZYSET];
-    SB.mount(m,[...s].filter(c=>SDATA[c]).map(c=>({c,z:"",k:"s"})));return;}
+  if(SKMODE==="zy"){zyStroke(m,true);return;}
   const top=el("div","row");top.style.margin="14px 0 10px";
   const seen=new Set(),all=[],missing=[];
   ls.forEach(x=>x.c.forEach(c=>{if(c.k==="r"&&!incR)return;if(seen.has(c.c))return;seen.add(c.c);(SDATA[c.c]?all:missing).push({c:c.c,z:c.z,k:c.k});}));
