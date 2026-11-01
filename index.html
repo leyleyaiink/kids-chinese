@@ -720,7 +720,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:31<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月1日 17:47<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/1</b><span><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1089,11 +1089,14 @@ function sheetsC(ls,ans){const all=[];ls.forEach(x=>x.c.forEach(c=>{if(c.o.lengt
   return polySheets(all,ans,"多音字練習",`${G[ls[0].g-1]}上 ${lsRange(ls)}`);}
 // 造詞格：國字＋注音（注音格只有低年級，跟教育部作業簿規格一樣）。解答頁填上語詞和注音
 // 只有兩格：先挑兩個字的語詞；只有長語詞（迫不及待、待會兒）就取含這個字、而且是真的詞的兩個字，都沒有就留白
-const pickW=(ws,c)=>{ws=ws||[];const two=ws.find(w=>[...w].length===2);if(two||!c)return two||ws[0]||"";
+// 造詞格：先挑兩個字的語詞；沒有就挑三個字的語詞（這個字就給三格）；再沒有用 ANSW 指定的，最後取長語詞裡含這個字的兩字詞
+const ANSW={"又":"又一次"};   /* 課本只有四字語詞的字，指定參考答案 */
+const pickW=(ws,c)=>{ws=ws||[];const by=n=>ws.find(w=>[...w].length===n);if(!c)return by(2)||ws[0]||"";
+  const w=by(2)||by(3)||ANSW[c];if(w)return w;
   if(typeof WSET==="undefined"||!WSET)buildWSET();for(const w of ws){const ch=[...w];for(let i=0;i<ch.length-1;i++){const p=ch[i]+ch[i+1];if(p.includes(c)&&WSET.has(p))return p;}}return "";};
 function wordZ(w,c,z){const ch=[...w];const rd=typeof autoRead==="function"?autoRead(ch):[];return ch.map((x,i)=>x===c?z:(rd[i]||(ZYT[x]||[])[0]||""));}
-function wordCells(w,c,z,ans,low){const ch=[...w].slice(0,2),zs=ans&&w?wordZ(w,c,z):[];
-  return [0,1].map(i=>`<div class="wc"><div class="tz">${ans&&ch[i]?esc(ch[i]):""}</div>${low?`<div class="zy">${ans&&zs[i]?zv(zs[i]):""}</div>`:""}</div>`).join("");}
+function wordCells(w,c,z,ans,low){const n=[...w].length===3?3:2,ch=[...w].slice(0,n),zs=ans&&w?wordZ(w,c,z):[];   /* 三個字的語詞給三格 */
+  return [...Array(n).keys()].map(i=>`<div class="wc"><div class="tz">${ans&&ch[i]?esc(ch[i]):""}</div>${low?`<div class="zy">${ans&&zs[i]?zv(zs[i]):""}</div>`:""}</div>`).join("");}
 // D: 同音不同字。字只從「該年級以下（含）課本教過的生字、認讀字」挑，不會出現太難的字
 let CHZ=null;
 let CHC=null;
@@ -1117,10 +1120,13 @@ function homoGroups(ls){if(!CHZ)buildCHZ();const g=Math.max(...ls.map(x=>x.g)),m
 function homoSheets(groups,low,ans,name,sub){const res=[];if(!groups.length)return res;
   const W=190,CW=22,GAP=5,rows=[[]];let used=0;   // 每頁 3 排，每排盡量放滿 A4 寬度
   for(const gr of groups){const w=gr.m.length*CW+3;if(rows[rows.length-1].length&&used+GAP+w>W){rows.push([]);used=0;}used+=(used?GAP:0)+w;rows[rows.length-1].push(gr);}
-  for(let p=0;p<rows.length;p+=3){const s=sheet("port");
+  /* 每頁 3 排；有三格語詞的排比較高（算 1.25 排），放不下就換頁 */
+  const rh=row=>row.some(gr=>gr.m.some(y=>[...pickW(y.w,y.c)].length===3))?1.25:1,pages=[[]];let hsum=0;
+  for(const row of rows){const h=rh(row);if(pages[pages.length-1].length&&hsum+h>3.01){pages.push([]);hsum=0;}hsum+=h;pages[pages.length-1].push(row);}
+  for(const pg of pages){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${esc(name)}${ans?"（解答）":""}　${esc(sub)}</span><small>姓名：＿＿＿＿＿＿</small>`));
     const D=el("div","wsD"+(low?"":" hi"));
-    for(const row of rows.slice(p,p+3)){const r=el("div","dr");
+    for(const row of pg){const r=el("div","dr");
       for(const gr of row){const b=el("div","dg");b.appendChild(el("div","zh",`<span>讀音</span><span class="zz">${zv(gr.z)}</span>`));
         const cs=el("div","cs");
         for(const y of gr.m)cs.appendChild(el("div","dc",`<div class="hz"><div class="tz">${esc(y.c)}</div></div><div class="lb">造詞</div>`+wordCells(pickW(y.w,y.c),y.c,y.z,ans,low)));
