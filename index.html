@@ -825,7 +825,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 20:34<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 20:36<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>查國字加入下學期教過的字</i><i>造詞改用字典有收的詞</i><i>生字字卡放大，可滑動，加入成語</i><i>勘誤：不適合的造詞換成常用詞</i><i>查國字可直接跳到那課字卡</i><i>看圖注音改成分題型印</i><i>點成語看意思、聽教育部語音</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -2097,7 +2097,7 @@ function renderEdit(m,ls){
     </div>
     ${TY!=="A"?"":`<div class="panel ed-p3">
       <h3>③ 點預覽裡的字來調整</h3>
-      <div class="seg" role="group" aria-label="點字功能"><button type="button" data-pick="mode">切換空格</button><button type="button" data-pick="read">改讀音</button></div>
+      <div class="seg" role="group" aria-label="點字功能"><button type="button" data-pick="mode">切換空格</button><button type="button" data-pick="read">改讀音</button><button type="button" data-pick="word">改語詞</button></div>
       <div class="sk-note" id="edPickNote"></div>
       <div class="ed-legend"><span><i class="lg0"></i>都顯示</span><span><i class="lg1"></i>國字空格</span><span><i class="lg2"></i>注音空格</span><span><i class="lg3"></i>都空白</span></div>
       <div class="ed-bulk">
@@ -2165,7 +2165,7 @@ function renderEdit(m,ls){
     ED.title=k==="blank"?"我的練習卷":`${lsName} 生字練習`;
     q("#edTitle").value=ED.title;q("#edKind").value=ED.kind;q("#edText").value=ED.items.map(it=>it.t).join("\n");sync();});
   const setPick=p=>{EDPICK=p;w.querySelectorAll("[data-pick]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.pick===p));
-    q("#edPickNote").textContent=p==="mode"?"點一下字：都顯示 → 國字空格 → 注音空格 → 都空白，一直循環。":"點一下多音字（有小藍點的字），就會換下一個讀音。";};
+    q("#edPickNote").textContent=p==="mode"?"點一下字：都顯示 → 國字空格 → 注音空格 → 都空白，一直循環。":p==="read"?"點一下多音字（有小藍點的字），就會換下一個讀音。":"點一下練習卷上的語詞，左邊「內容」會選取那個詞，直接打字就能改。";};
   w.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>setPick(b.dataset.pick));if(TY==="A")setPick(EDPICK);
   const lessonSet=new Set();ls.forEach(x=>x.c.forEach(c=>{if(c.k==="s")lessonSet.add(c.c);}));
   w.querySelectorAll("[data-bulk]").forEach(b=>b.onclick=()=>{const v=b.dataset.bulk;
@@ -2188,6 +2188,9 @@ function renderEdit(m,ls){
   q("#edPrint").onclick=()=>doPrint(ED.title||"自編練習卷");
   // preview click
   q("#edPages").addEventListener("click",e=>{const c=e.target.closest("[data-i]");if(!c||c.closest(".ans"))return;const it=ED.items[+c.dataset.i],j=+c.dataset.j;if(!it)return;
+    if(EDPICK==="word"){const ta=q("#edText");if(!ta)return;const i=+c.dataset.i;   /* 點語詞 → 選取左邊內容裡的那一題（題目用空白或換行分開，第 i 個就是第 i 題） */
+      const ms=[...ta.value.matchAll(/[^\s　]+/g)],m=ms[i];if(!m)return;const s=m.index,L=m[0].length,ln=ta.value.slice(0,s).split("\n").length-1;
+      ta.scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>{ta.focus();ta.setSelectionRange(s,s+L);const lh=parseFloat(getComputedStyle(ta).lineHeight)||20;ta.scrollTop=Math.max(0,ln*lh-ta.clientHeight/2);},250);return;}
     const ch=[...it.t][j];if(!isHan(ch))return;
     if(EDPICK==="mode"){it.m[j]=(it.m[j]+1)%4;}
     else{const rs=ZYT[ch]||[];if(rs.length<2){alertMsg(`「${ch}」只有一個讀音。`);return;}const cur=itemZ(it,j);const k=rs.indexOf(cur);it.r[j]=rs[(k+1)%rs.length];alertMsg(`「${ch}」改成 ${it.r[j]}（共 ${rs.length} 個讀音：${rs.join("、")}）`);}
