@@ -567,7 +567,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .cstrip button{font-family:var(--kai);font-size:26px;line-height:1;width:46px;height:46px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;padding:0}
 .cstrip button.r{color:var(--read)}
 .cstrip button[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
-.ctrack{outline:none;display:grid}   /* 全部字卡疊在同一格，高度取這課最高的那張，換卡時大小不變 */
+.ctrack{outline:none;display:grid;touch-action:pan-y;overflow:hidden}   /* 全部字卡疊在同一格，高度取這課最高的那張，換卡時大小不變 */
 .ctrack>.cc{grid-area:1/1;visibility:hidden;align-content:start;min-width:0;padding:24px;gap:28px;grid-template-columns:auto minmax(0,1fr)}
 .ctrack .big .tz{width:150px;height:150px;font-size:124px;border-width:2px}
 .ctrack .big .zc{width:60px;font-size:30px;border-width:2px}
@@ -586,8 +586,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .idm .more{margin-left:.5em;border:1px solid var(--line);background:#fff;border-radius:999px;font-size:.85rem;padding:.15em .8em;color:var(--muted);cursor:pointer;vertical-align:middle}
 .ctrack>.cc.on{visibility:visible}
 .ctrack>.cc.in-r{animation:cin-r .22s ease-out}.ctrack>.cc.in-l{animation:cin-l .22s ease-out}
-@keyframes cin-r{from{opacity:0}to{opacity:1}}
-@keyframes cin-l{from{opacity:0}to{opacity:1}}
+@keyframes cin-r{from{transform:translateX(60px);opacity:0}to{transform:none;opacity:1}}
+@keyframes cin-l{from{transform:translateX(-60px);opacity:0}to{transform:none;opacity:1}}
 .cnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 6px}   /* 上一字在左下、下一字在右下，手指好按 */
 .cnav .cv{flex:0 1 200px;min-width:0;height:60px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font-size:17px;font-weight:600;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;white-space:nowrap}
 .cnav .cv:not(:disabled):hover{background:var(--ink);color:#fff}
@@ -1019,7 +1019,7 @@ function renderList(m,ls){
   for(const x of ls){const sec=el("section","lesson");const [no,ti]=titleParts(x.t);
     const ns=x.c.filter(c=>c.k==="s").length,nr=x.c.length-ns;
     sec.appendChild(el("div","lhead",`<span class="no">${G[x.g-1]}上・${esc(no||"開場")}</span><h2>${esc(ti)}</h2><span class="cnt">生字 ${ns}${nr?`・認讀字 ${nr}`:""}</span>`));
-    /* 上面一排是這課全部的字，點了跳到那張字卡；一次只顯示一張、固定不動，按左右鍵或點上面的字換卡（Ashley：字卡要固定在版面，手指碰到不能移動） */
+    /* 上面一排是這課全部的字，點了跳到那張字卡；一次只顯示一張，按左右鍵、點上面的字或手指左右滑換卡（Ashley：只能左右滑，上下不能動） */
     const strip=el("div","cstrip"),tr=el("div","ctrack"),nav=el("div","cnav");
     x.c.forEach((c,i)=>{const b=el("button",c.k==="r"?"r":"",esc(c.c));b.type="button";b.onclick=()=>go(i);strip.appendChild(b);tr.appendChild(card(c,x.g));});
     const arrow=d=>`<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
@@ -1034,6 +1034,15 @@ function renderList(m,ls){
       [...strip.children].forEach((b,k)=>b.setAttribute("aria-current",k===i?"true":"false"));};
     pv.onclick=()=>go(cur-1,-1);nx.onclick=()=>go(cur+1,1);
     tr.tabIndex=0;tr.onkeydown=e=>{if(e.key==="ArrowRight"){go(cur+1,1);e.preventDefault();}if(e.key==="ArrowLeft"){go(cur-1,-1);e.preventDefault();}};
+    /* 手指左右滑換卡：卡片只跟著手指左右移動，不會上下動；上下滑照常捲動網頁 */
+    let sx=null,sy=0,dx=0,horiz=null;
+    tr.addEventListener("touchstart",e=>{if(e.touches.length!==1)return;sx=e.touches[0].clientX;sy=e.touches[0].clientY;dx=0;horiz=null;},{passive:true});
+    tr.addEventListener("touchmove",e=>{if(sx===null)return;const mx=e.touches[0].clientX-sx,my=e.touches[0].clientY-sy;
+      if(horiz===null&&(Math.abs(mx)>8||Math.abs(my)>8))horiz=Math.abs(mx)>Math.abs(my);
+      if(!horiz)return;e.preventDefault();dx=(cur===0&&mx>0)||(cur===x.c.length-1&&mx<0)?mx/4:mx;
+      const c=tr.children[cur];c.style.transition="none";c.style.transform=`translateX(${dx}px)`;},{passive:false});
+    tr.addEventListener("touchend",()=>{if(sx===null)return;sx=null;const c=tr.children[cur];c.style.transition="transform .2s ease-out";c.style.transform="";
+      if(horiz&&Math.abs(dx)>60)dx<0?go(cur+1,1):go(cur-1,-1);},{passive:true});
     go(0);
     sec.append(strip,tr,nav);m.appendChild(sec);}
   apply(zyOn());
