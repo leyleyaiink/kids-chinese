@@ -588,16 +588,17 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .ctrack>.cc.in-r{animation:cin-r .22s ease-out}.ctrack>.cc.in-l{animation:cin-l .22s ease-out}
 @keyframes cin-r{from{opacity:0}to{opacity:1}}
 @keyframes cin-l{from{opacity:0}to{opacity:1}}
-.cnav{display:flex;align-items:center;justify-content:center;gap:40px;margin:0 0 14px}
-.cnav .cv{width:76px;height:76px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.cnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 6px}   /* 上一字在左下、下一字在右下，手指好按 */
+.cnav .cv{flex:0 1 200px;min-width:0;height:60px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font-size:17px;font-weight:600;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;white-space:nowrap}
 .cnav .cv:not(:disabled):hover{background:var(--ink);color:#fff}
 .cnav .cv:disabled{opacity:.3;cursor:default}
-.cnav .cct{font-family:var(--mono);font-size:16px;min-width:5em;text-align:center}
+.cnav .cct{font-family:var(--mono);font-size:16px;min-width:4.5em;flex:none;text-align:center}
 @media (max-width:820px){
   .ctrack>.cc{grid-template-columns:minmax(0,1fr);padding:18px;gap:18px;justify-items:center}
   .ctrack .meta{width:100%}
   .ctrack .big .tz{width:132px;height:132px;font-size:108px}
-  .cstrip button{width:42px;height:42px;font-size:24px}}
+  .cstrip button{width:42px;height:42px;font-size:24px}
+  .cnav{gap:8px}.cnav .cv{padding:0 10px;font-size:16px;height:56px}.cnav .cv svg{width:20px;height:20px}.cnav .cct{min-width:0;font-size:14px}}
 .zws{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .zws span+span::before{content:none}
 .zws .zw:not(:last-child)::after{content:"、";color:var(--muted);margin-left:-.1em;align-self:center}
@@ -803,7 +804,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:45<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:47<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>點成語看意思和例句</i><i>生字字卡放大，可滑動，加入成語（附注音）</i><i>勘誤：爸爸、更換等 14 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1016,8 +1017,8 @@ function renderList(m,ls){
     /* 上面一排是這課全部的字，點了跳到那張字卡；一次只顯示一張、固定不動，按左右鍵或點上面的字換卡（Ashley：字卡要固定在版面，手指碰到不能移動） */
     const strip=el("div","cstrip"),tr=el("div","ctrack"),nav=el("div","cnav");
     x.c.forEach((c,i)=>{const b=el("button",c.k==="r"?"r":"",esc(c.c));b.type="button";b.onclick=()=>go(i);strip.appendChild(b);tr.appendChild(card(c,x.g));});
-    const arrow=d=>`<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
-    const pv=el("button","cv",arrow("M15 5l-7 7 7 7")),nx=el("button","cv",arrow("M9 5l7 7-7 7")),ct=el("span","cct","");pv.type=nx.type="button";pv.setAttribute("aria-label","上一個字");nx.setAttribute("aria-label","下一個字");
+    const arrow=d=>`<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
+    const pv=el("button","cv",arrow("M15 5l-7 7 7 7")+"<span>上一字</span>"),nx=el("button","cv","<span>下一字</span>"+arrow("M9 5l7 7-7 7")),ct=el("span","cct","");pv.type=nx.type="button";pv.setAttribute("aria-label","上一個字");nx.setAttribute("aria-label","下一個字");
     nav.append(pv,ct,nx);
     let cur=-1;
     const go=(i,dir)=>{i=Math.max(0,Math.min(x.c.length-1,i));if(i===cur)return;const d=dir||(i>cur?1:-1);
@@ -1028,7 +1029,7 @@ function renderList(m,ls){
     pv.onclick=()=>go(cur-1,-1);nx.onclick=()=>go(cur+1,1);
     tr.tabIndex=0;tr.onkeydown=e=>{if(e.key==="ArrowRight"){go(cur+1,1);e.preventDefault();}if(e.key==="ArrowLeft"){go(cur-1,-1);e.preventDefault();}};
     go(0);
-    sec.append(strip,nav,tr);m.appendChild(sec);}
+    sec.append(strip,tr,nav);m.appendChild(sec);}
   apply(zyOn());
 }
 /* 語詞加注音：每個字右邊直排注音（同課本） */
