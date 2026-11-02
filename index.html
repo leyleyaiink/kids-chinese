@@ -825,7 +825,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 20:20<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 20:28<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>查國字加入下學期教過的字</i><i>造詞改用字典有收的詞</i><i>生字字卡放大，可滑動，加入成語</i><i>勘誤：不適合的造詞換成常用詞</i><i>查國字可直接跳到那課字卡</i><i>看圖注音改成分題型印</i><i>點成語看意思、聽教育部語音</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -2138,7 +2138,8 @@ function renderEdit(m,ls){
   const KN={han:"看注音寫國字",zy:"看國字寫注音",all:"國字注音都空白",pub:TY==="C"?"多音字":"同音字",blank:"自己出題",own:"查國字加入"};
   const showNow=()=>{w.querySelectorAll(".ed-tpl [data-tpl]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tpl!=="blank"&&ED["tpl"+TY]===b.dataset.tpl));const n=q("#edNow");if(!n)return;const k=ED["tpl"+TY];n.textContent=!k?"還沒有套用公版。":k==="blank"?"目前是自己出題。":k==="own"?"目前內容：從查國字加入的多音字（全部讀音）。":`目前內容：${lsName}的公版（${KN[k]||""}）。`;};
   if(q("#edGoTpl"))q("#edGoTpl").onclick=()=>{const p=q(".ed-p2");p.scrollIntoView({behavior:"smooth",block:"center"});p.classList.add("flash");setTimeout(()=>p.classList.remove("flash"),1200);};
-  const sync=()=>{edSave();drawSheets();showNow();};
+  const nameSync=()=>{const n=q("#edName");if(n&&!ED.nameUser)n.value=ED.title||"";};   /* 練習卷名稱跟著標題（換課次、換公版都會變），自己改過名稱就不動 */
+  const sync=()=>{edSave();drawSheets();showNow();nameSync();};
   q("#edTitle").oninput=e=>{ED.title=e.target.value;sync();};
   if(TY==="S"){const sl=q("#edSLes");sl.value=ED.sLes&&[...sl.options].some(o=>o.value===ED.sLes)?ED.sLes:"";sl.onchange=()=>{ED.sLes=sl.value;ED.title=sTitle();q("#edTitle").value=ED.title;sync();};}
   if(TY==="A")q("#edKind").oninput=e=>{ED.kind=e.target.value;sync();};
@@ -2153,7 +2154,7 @@ function renderEdit(m,ls){
   const scopeKey=VER+"|"+ls.map(key).join(",");
   w.querySelectorAll("[data-tpl]").forEach(b=>b.onclick=()=>{const k=b.dataset.tpl;
     if(k!=="blank"&&!ls.length){alertMsg("請先在上方選課次。");return;}
-    ED["from"+TY]=scopeKey;ED["tpl"+TY]=k;   /* 記住這份是哪個範圍、哪種公版做的 */
+    ED["from"+TY]=scopeKey;ED["tpl"+TY]=k;ED.nameUser=false;   /* 記住這份是哪個範圍、哪種公版做的 */
     if(TY==="S"){const ex=k==="example";ED.srcP=ex?EX_P:"";ED.srcQ=ex?EX_Q:"";ED.title=sTitle();q("#edTitle").value=ED.title;q("#edTextP").value=ED.srcP;q("#edTextQ").value=ED.srcQ;sync();return;}
     if(TY!=="A"){const nm=TY==="C"?"多音字練習":"同音字練習";
       ED["src"+TY]=k==="blank"?"":TY==="C"?[...new Set(ls.flatMap(x=>[...x.c.filter(c=>c.o.length).map(c=>c.c),...polyExtra(x).map(e=>e[0])]))].join("\n"):homoGroups(ls).groups.map(g=>g.m.map(y=>y.c).join(" ")).join("\n");
@@ -2172,7 +2173,7 @@ function renderEdit(m,ls){
   function alertMsg(t){const n=q("#edPickNote")||q(".ed-side .sk-note");if(n)n.textContent=t;}
   // saves
   const listSaves=()=>{let a=[];try{a=JSON.parse(localStorage.getItem(EDLIST)||"[]")}catch(e){}return Array.isArray(a)?a:[];};
-  q("#edName").value=ED.name||ED.title||"";q("#edName").oninput=ev=>{ED.name=ev.target.value;edSave();};
+  q("#edName").value=ED.nameUser?(ED.name||ED.title||""):(ED.title||"");q("#edName").oninput=ev=>{ED.name=ev.target.value;ED.nameUser=!!ev.target.value.trim();edSave();};
   const fillSaves=()=>{const s=q("#edLoad");s.innerHTML='<option value="">選一份來打開…</option>'+listSaves().map((x,i)=>`<option value="${i}">${esc(x.name||x.title||"未命名")}</option>`).join("");};
   fillSaves();
   q("#edSaveAs").onclick=()=>{ED.name=(q("#edName").value.trim()||ED.title||"未命名");q("#edName").value=ED.name;const a=listSaves();const i=a.findIndex(x=>(x.name||x.title)===ED.name);const copy=JSON.parse(JSON.stringify(ED));if(i>=0)a[i]=copy;else a.unshift(copy);
