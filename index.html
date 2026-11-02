@@ -816,7 +816,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 09:56<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 10:01<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>點成語看意思、聽教育部語音</i><i>生字字卡放大，可滑動，加入成語（附注音）</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1079,7 +1079,7 @@ const TTS="speechSynthesis" in window&&typeof SpeechSynthesisUtterance!=="undefi
 let TTSV=null;function ttsVoice(){if(TTSV)return TTSV;const vs=speechSynthesis.getVoices().filter(v=>/zh[-_]TW/i.test(v.lang));TTSV=vs.find(v=>/美佳|Meijia/i.test(v.name))||vs.find(v=>/Hanhan|HsiaoChen|Yating/i.test(v.name))||vs[0]||null;return TTSV;}
 if(TTS)speechSynthesis.onvoiceschanged=()=>{TTSV=null;};
 function cardText(c,g){   /* Ashley 指定：呼，部首，口部。打招呼、呼吸、呼一口氣。（破音字才先念「長大的長」，語音才不會念錯） */
-  const w0=c.w.find(w=>w.includes(c.c)&&w!==c.c),poly=c.o.length||(ZYT[c.c]||[]).length>1;
+  const w0=c.w.find(w=>w.includes(c.c)&&w!==c.c),poly=c.o.length>0;   /* 只有字卡標「多音字」的才先念語詞（噴這種一般只念一個音的，直接念字） */
   return `${poly&&w0?`${c.c}，${w0}的${c.c}`:c.c}，部首，${c.b}部。`+(c.w.length?`${c.w.join("、")}。`:"");}
 let TTSB=null;
 function speakCard(c,g,btn,done){if(AU){AU.pause();AU.dataset.on="";}
