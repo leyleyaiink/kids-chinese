@@ -1957,7 +1957,7 @@ function renderEdit(m,ls){
   $("pagesize").textContent="@page{size:A4 portrait;margin:0}";   /* 一律直式列印；橫式練習卷列印時自動轉 90 度（app.tpl print CSS） */
   const w=el("div","ed");
   if(TY!=="S")m.appendChild(tySeg(TY));
-  else m.appendChild(el("div","s-ban","自編照樣造句因為版權問題，所以沒有公版。<small>課本、習作的句子有版權，請自己輸入例句和句型。</small>"));
+  else m.appendChild(el("div","s-ban","自編照樣造句因為版權問題，所以沒有公版。<br>請自己輸入例句和句型。"));
   const lsName=ls.length?`${VN[VER].replace("版","")} ${G[ls[0].g-1]}上 ${ls.map(x=>titleParts(x.t)[0].replace("第","").replace("課","")).join("、")}課`:"";
   w.innerHTML=`
   <div class="ed-side">
