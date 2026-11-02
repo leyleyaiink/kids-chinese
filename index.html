@@ -628,6 +628,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .idbody ul{margin:0;padding-left:1.2em;font-size:16px;line-height:1.7}
 .idbody .idms{margin:0;padding-left:1.4em;font-size:17px;line-height:1.7}
 .idsrc{font-size:13px!important;color:var(--muted)}
+.idex{display:block;font-size:15px;color:var(--muted);margin:2px 0 6px;line-height:1.6}
 .idau{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:2px 0 4px}.idau small{font-size:12px;color:var(--muted)}
 .idmore{display:inline-block;margin-top:12px;font-size:15px;color:var(--ink)}
 .idcr{font-size:12px;color:var(--muted);margin-top:6px}
@@ -810,7 +811,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:53<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:55<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>點成語看意思、聽教育部語音</i><i>生字字卡放大，可滑動，加入成語（附注音）</i><i>勘誤：爸爸、更換等 14 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1084,13 +1085,14 @@ function idiomDlg(x){if(!x)return;const bg=el("div","dlg-bg"),d=el("div","dlg id
   (IDJ=IDJ||fetch("idioms.json").then(r=>{if(!r.ok)throw 0;return r.json();}).catch(e=>{IDJ=null;throw e;})).then(J=>{const v=J[x.w]||{};
     /* 有《簡編本》的成語：意思、第一句例句用簡編本（跟教育部錄音念的一樣）；《成語典》的放「詳細說明」 */
     const ce=v.c||[],md=(v.m||v.f||"").split("＆").map(s=>s.trim()).filter(Boolean);
-    const ms=ce.length?ce.map(p=>p[0]):md;
-    const ex=[...new Set([...ce.flatMap(p=>p[1]),...(v.e||[])])].slice(0,3);
+    const ms=ce.length?ce.map(p=>p[0]):md,cex=new Set(ce.flatMap(p=>p[1]));
+    const ex=(v.e||[]).filter(s=>!cex.has(s)).slice(0,ce.length?2:3);   /* 簡編本的例句已經跟在意思下面（錄音的順序），這裡放《成語典》的 */
     const det=ce.length?(v.f||v.m||"").replace(/[※◎]/g,"").replace(/＆/g,""):(v.f&&!v.f.startsWith(v.m)?v.f.replace(/[※◎]/g,""):"");
-    const ol=a=>a.length>1?`<ol class="idms">${a.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>`:`<p>${esc(a[0]||"")}</p>`;
+    const exl=i=>ce[i]&&ce[i][1].length?ce[i][1].map(s=>`<span class="idex">例：${esc(s)}</span>`).join(""):"";   /* 跟錄音一樣：每個意思後面接它的例句 */
+    const ol=a=>a.length>1?`<ol class="idms">${a.map((s,i)=>`<li>${esc(s)}${exl(i)}</li>`).join("")}</ol>`:`<p>${esc(a[0]||"")}</p>${exl(0)}`;
     d.querySelector(".idbody").innerHTML=(v.id?`<div class="idau"><button type="button" class="btn idplay">▶ 聽教育部的語音</button><small>教育部《國語辭典簡編本》錄音：念成語、意思和例句</small></div>`:"")+
       `<h4>意思</h4>${ol(ms)}`+(det?`<h4>詳細說明</h4><p>${esc(det)}</p>`:"")+
-      (ex.length?`<h4>例句</h4><ul>${ex.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`:"")+
+      (ex.length?`<h4>${ce.length?"更多例句":"例句"}</h4><ul>${ex.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>`:"")+
       (v.s?`<h4>意思相近</h4><p>${esc(v.s)}</p>`:"")+(v.a?`<h4>意思相反</h4><p>${esc(v.a)}</p>`:"")+
       `<a class="idmore" href="https://pedia.cloud.edu.tw/Entry/Detail/?title=${encodeURIComponent(x.w)}" target="_blank" rel="noopener">到教育百科看完整說明（典故、用法）</a><div class="idcr">資料來源：教育部《成語典》、《國語辭典簡編本》（CC 姓名標示-禁止改作）</div>`;
     const pb=d.querySelector(".idplay");if(pb){let au=null;pb.onclick=()=>{if(!au){au=new Audio(`https://pedia.cloud.edu.tw/api/SoundApi?strName=dict_concised_music_www%5C${v.id}.wav`);au.onerror=()=>{pb.textContent="這個成語沒有錄音";pb.disabled=true;};au.onended=()=>pb.textContent="▶ 聽教育部的語音";}
