@@ -633,6 +633,11 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .s-ban{margin:12px 0 4px;padding:14px 18px;border-radius:16px;background:#fff7d6;border:1.5px solid #e9c43b;font-size:18px;font-weight:700;color:var(--ink);line-height:1.5}
 .s-ban small{display:block;font-size:14px;font-weight:400;color:var(--muted);margin-top:2px}
 body.v-sent #lessons,body.v-sent .row:has(>#lessons){display:none}
+.idt{border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:.35em 1em;font-size:15px;cursor:pointer;display:inline-flex;gap:.4em;align-items:center}
+.idt span{transition:transform .15s}.idt[aria-expanded="true"]{background:var(--ink);color:#fff}.idt[aria-expanded="true"] span{transform:rotate(180deg)}
+.idlist{margin-top:2px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.acts .bs{margin-top:0!important}
 /* 匯出練習卷：選練習卷種類，跟「選功能」同一種按鈕 */
 .pr-row{gap:14px;padding:4px 0 6px}
 .pr-row .lab i{background:#fbe94e;color:var(--ink)}
@@ -804,7 +809,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:48<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:50<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>點成語看意思和例句</i><i>生字字卡放大，可滑動，加入成語（附注音）</i><i>勘誤：爸爸、更換等 14 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1023,6 +1028,7 @@ function renderList(m,ls){
     let cur=-1;
     const go=(i,dir)=>{i=Math.max(0,Math.min(x.c.length-1,i));if(i===cur)return;const d=dir||(i>cur?1:-1);
       [...tr.children].forEach((c,k)=>{c.classList.toggle("on",k===i);c.classList.remove("in-r","in-l");});
+      tr.querySelectorAll('.idt[aria-expanded="true"]').forEach(b=>b.click());
       if(cur>=0){const c=tr.children[i];void c.offsetWidth;c.classList.add(d>0?"in-r":"in-l");}
       cur=i;ct.textContent=`${i+1} / ${x.c.length}`;pv.disabled=i===0;nx.disabled=i===x.c.length-1;
       [...strip.children].forEach((b,k)=>b.setAttribute("aria-current",k===i?"true":"false"));};
@@ -1047,13 +1053,17 @@ function card(c,g){const card=el("article","cc"+(c.k==="r"?" r":""));
   const h=homos(c,g);if(h.length)mt.appendChild(el("div","homo row",`<span class="k">同音字</span>`+h.map(y=>`<span class="hm"><b>${esc(y.c)}</b>${y.w?`（${esc(y.w)}）`:""}</span>`).join("")));
   idiomRow(mt,c.c);
   if(SDATA[c.c]){const bs=el("button","bs","練筆順");bs.type="button";bs.onclick=()=>{strokeStart=c.c;view="stroke";save();renderBar();render();window.scrollTo(0,0);};mt.appendChild(bs);}
+  const ac=el("div","acts"),it=mt.querySelector(".idt"),bs=mt.querySelector(".bs");   /* 成語、練筆順按鈕排同一行 */
+  if(it||bs){if(it)ac.appendChild(it);if(bs)ac.appendChild(bs);const il=mt.querySelector(".idm");mt.insertBefore(ac,il||null);}
   card.appendChild(mt);return card;}
 /* 成語（教育部《成語典》主條，簡編本有收的排前面）：先列 6 個，按「更多」看全部 */
 function idiomRow(mt,ch){const all=IDIOMS.filter(x=>x.w.includes(ch));if(!all.length)return;
   const ib=x=>`<button type="button" class="idb" data-w="${esc(x.w)}" aria-label="${esc(x.w)}的意思">${zw(x.w,x.z)}</button>`;
-  const r=el("div","idm row",`<span class="k">成語<small>點成語看意思</small></span><span class="words zws">${all.slice(0,6).map(ib).join("")}</span>`);
+  /* 成語預設摺起來，字卡大小才會一致；換卡時自動摺回 */
+  const r=el("div","idm row",`<button type="button" class="idt" aria-expanded="false">成語 ${all.length} 個<span>▾</span></button><div class="idlist" hidden><span class="k">點成語看意思</span><span class="words zws">${all.slice(0,6).map(ib).join("")}</span></div>`);
+  const tg=r.querySelector(".idt");tg.onclick=e=>{e.stopPropagation();const open=tg.getAttribute("aria-expanded")!=="true";tg.setAttribute("aria-expanded",open);r.querySelector(".idlist").hidden=!open;};
   r.onclick=e=>{const b=e.target.closest(".idb");if(b)idiomDlg(IDIOMS.find(x=>x.w===b.dataset.w));};
-  if(all.length>6){const mo=el("button","more",`更多（${all.length}）`);mo.type="button";mo.onclick=e=>{e.stopPropagation();r.querySelector(".words").innerHTML=all.map(ib).join("");mo.remove();};r.appendChild(mo);}
+  if(all.length>6){const mo=el("button","more",`更多（${all.length}）`);mo.type="button";mo.onclick=e=>{e.stopPropagation();r.querySelector(".words").innerHTML=all.map(ib).join("");mo.remove();};r.querySelector(".idlist").appendChild(mo);}
   mt.appendChild(r);}
 /* 成語說明（教育部《成語典》，idioms.json 第一次點才下載） */
 let IDJ=null;
