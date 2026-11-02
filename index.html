@@ -567,7 +567,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .cstrip button{font-family:var(--kai);font-size:26px;line-height:1;width:46px;height:46px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;padding:0}
 .cstrip button.r{color:var(--read)}
 .cstrip button[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
-.ctrack{outline:none;touch-action:pan-y;overflow:hidden}
+.ctrack{outline:none;overflow:hidden}
 .ctrack>.cc{display:none;min-width:0;padding:24px;gap:28px;grid-template-columns:auto minmax(0,1fr)}
 .ctrack .big .tz{width:150px;height:150px;font-size:124px;border-width:2px}
 .ctrack .big .zc{width:60px;font-size:30px;border-width:2px}
@@ -586,8 +586,8 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .idm .more{margin-left:.5em;border:1px solid var(--line);background:#fff;border-radius:999px;font-size:.85rem;padding:.15em .8em;color:var(--muted);cursor:pointer;vertical-align:middle}
 .ctrack>.cc.on{display:grid}
 .ctrack>.cc.in-r{animation:cin-r .22s ease-out}.ctrack>.cc.in-l{animation:cin-l .22s ease-out}
-@keyframes cin-r{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
-@keyframes cin-l{from{transform:translateX(-40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes cin-r{from{opacity:0}to{opacity:1}}
+@keyframes cin-l{from{opacity:0}to{opacity:1}}
 .cnav{display:flex;align-items:center;justify-content:center;gap:40px;margin:0 0 14px}
 .cnav .cv{width:76px;height:76px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
 .cnav .cv:not(:disabled):hover{background:var(--ink);color:#fff}
@@ -803,7 +803,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:22<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月2日 08:45<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><b>11/2</b><span><i>點成語看意思和例句</i><i>生字字卡放大，可滑動，加入成語（附注音）</i><i>勘誤：爸爸、更換等 14 詞注音</i></span></li><li><b>11/1</b><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></li><li><b>10/31</b><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></li></ul></div>
 </footer>
@@ -1013,7 +1013,7 @@ function renderList(m,ls){
   for(const x of ls){const sec=el("section","lesson");const [no,ti]=titleParts(x.t);
     const ns=x.c.filter(c=>c.k==="s").length,nr=x.c.length-ns;
     sec.appendChild(el("div","lhead",`<span class="no">${G[x.g-1]}上・${esc(no||"開場")}</span><h2>${esc(ti)}</h2><span class="cnt">生字 ${ns}${nr?`・認讀字 ${nr}`:""}</span>`));
-    /* 上面一排是這課全部的字，點了跳到那張字卡；一次只顯示一張，按左右鍵或手指左右滑換卡（iPad 用捲動對不齊又卡頓，改成這樣） */
+    /* 上面一排是這課全部的字，點了跳到那張字卡；一次只顯示一張、固定不動，按左右鍵或點上面的字換卡（Ashley：字卡要固定在版面，手指碰到不能移動） */
     const strip=el("div","cstrip"),tr=el("div","ctrack"),nav=el("div","cnav");
     x.c.forEach((c,i)=>{const b=el("button",c.k==="r"?"r":"",esc(c.c));b.type="button";b.onclick=()=>go(i);strip.appendChild(b);tr.appendChild(card(c,x.g));});
     const arrow=d=>`<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;
@@ -1027,8 +1027,6 @@ function renderList(m,ls){
       [...strip.children].forEach((b,k)=>b.setAttribute("aria-current",k===i?"true":"false"));};
     pv.onclick=()=>go(cur-1,-1);nx.onclick=()=>go(cur+1,1);
     tr.tabIndex=0;tr.onkeydown=e=>{if(e.key==="ArrowRight"){go(cur+1,1);e.preventDefault();}if(e.key==="ArrowLeft"){go(cur-1,-1);e.preventDefault();}};
-    let sx=null,sy=0;tr.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
-    tr.addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)dx<0?go(cur+1,1):go(cur-1,-1);},{passive:true});
     go(0);
     sec.append(strip,nav,tr);m.appendChild(sec);}
   apply(zyOn());
