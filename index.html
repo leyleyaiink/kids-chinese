@@ -164,6 +164,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .note{font-size:.9rem;color:var(--muted);background:var(--amber-soft);border:1px solid #f6c3a8;border-radius:10px;padding:8px 12px;line-height:1.5}
 .pages{display:flex;flex-direction:column;align-items:center;gap:18px;overflow-x:auto;padding-bottom:10px}
 .sheet{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);flex:none;position:relative;font-family:var(--kai);color:#534545}
+.ar,.ar *{color:#d93a2b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}   /* 解答頁：填答的字、注音用紅字（Ashley） */
 .pgno{position:absolute;left:0;right:0;bottom:4mm;text-align:center;font-family:"Noto Sans TC",sans-serif;font-size:3.2mm;letter-spacing:.1em;color:#8a7c7a}
 .sheet.land{width:297mm;height:210mm;padding:9mm}
 .sheet.port{width:210mm;height:297mm;padding:10mm}
@@ -213,6 +214,7 @@ body.fullv .ed-side{top:76px;max-height:calc(100vh - 88px)}
 .pb .rc .wc:last-child{border-bottom:0}
 .pb .rc .wc .tz{flex:none;width:16mm;border:0;display:grid;place-items:center;font-size:11mm;color:#d5392f}   /* 造詞格是 16×16 正方形田字格（Ashley：不要壓扁） */
 .pb .rc .wc .zy{width:8mm;border-left:1px solid #3155a2;display:grid;place-items:center;font-size:3.6mm;color:#d5392f}.pb .rc .wc.s3{height:10.67mm}.pb .rc .wc.s3 .tz{font-size:7mm}.pb .rc .wc.s3 .zy{font-size:2.6mm}.dc .wc.s3{height:10.67mm}.wsD.hi .dc .wc.s3{height:14.67mm}.dc .wc.s3 .tz{font-size:8.5mm}.dc .wc.s3 .zy{font-size:2.8mm}   /* 解答三個字擠進兩格高度 */
+.pb .rc .wc.s4{height:8mm}.pb .rc .wc.s4 .tz{font-size:5.6mm}.pb .rc .wc.s4 .zy{font-size:2.2mm}.dc .wc.s4{height:8mm}.wsD.hi .dc .wc.s4{height:11mm}.dc .wc.s4 .tz{font-size:6.6mm}.dc .wc.s4 .zy{font-size:2.3mm}   /* 只有四字成語的讀音（例：心寬體胖），解答四個字擠進兩格高度 */
 /* worksheet D: 同音不同字 */
 .wsD{display:flex;flex-direction:column;gap:6mm}
 .dr{display:flex;gap:5mm;justify-content:flex-start;align-items:flex-start}
@@ -859,9 +861,9 @@ footer .about .fsh .no{background:#c7a4a7!important;color:#fff!important}   /* �
       <li>97年地方特考三等教育行政類科及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button><button type="button" class="clog-b" aria-expanded="false" aria-controls="privp">隱私權政策</button></span></div><span>最後更新：2026年11月4日 07:30<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button><button type="button" class="clog-b" aria-expanded="false" aria-controls="privp">隱私權政策</button></span></div><span>最後更新：2026年11月4日 07:58<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
-  <div class="clog" id="clog" hidden><ul><li><details open><summary><b>11/4</b><em>2 項</em></summary><span><i>練習卷可以只印解答頁</i><i>勘誤：待在家的待唸一聲</i></span></details></li><li><details><summary><b>11/3</b><em>16 項</em></summary><span><i>多音字字卡每個讀音列字義和造詞</i><i>練習卷加頁碼</i><i>新增空白稿紙（生字練習格）</i><i>筆順練習紙新增考前快速複習版</i><i>同音字加入更多常見字</i><i>自編：點語詞跳出小框選語詞</i><i>勘誤：種下、種地等的種唸四聲</i><i>同音字練習每組最多 6 個字</i><i>名字筆順多收 80 個字（如茜）</i><i>多音字字卡加「字義」（教育部字典原文）</i><i>勘誤：番茄、螞蟻等 29 張字卡讀音</i><i>公版語詞改用課本語詞（教育百科）</i><i>新增生字複習卷（可跨版本、跨年級）</i><i>生字練習：以前學過的字也要寫</i><i>自編練習可自己打字改注音</i><i>查國字補上下學期生字的多音字讀音</i></span></details></li><li><details><summary><b>11/2</b><em>10 項</em></summary><span><i>多音字語詞讀音依字典補齊</i><i>勘誤：看圖注音耳朵、蘿蔔標輕聲</i><i>查國字加入下學期教過的字</i><i>造詞改用字典有收的詞</i><i>生字字卡放大，可滑動，加入成語</i><i>勘誤：不適合的造詞換成常用詞</i><i>查國字可直接跳到那課字卡</i><i>看圖注音改成分題型印</i><i>點成語看意思、聽教育部語音</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></details></li><li><details><summary><b>11/1</b><em>20 項</em></summary><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></details></li><li><details><summary><b>10/31</b><em>18 項</em></summary><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></details></li></ul></div>
+  <div class="clog" id="clog" hidden><ul><li><details open><summary><b>11/4</b><em>3 項</em></summary><span><i>解答頁答案改紅字</i><i>練習卷可以只印解答頁</i><i>勘誤：待在家的待唸一聲</i></span></details></li><li><details><summary><b>11/3</b><em>16 項</em></summary><span><i>多音字字卡每個讀音列字義和造詞</i><i>練習卷加頁碼</i><i>新增空白稿紙（生字練習格）</i><i>筆順練習紙新增考前快速複習版</i><i>同音字加入更多常見字</i><i>自編：點語詞跳出小框選語詞</i><i>勘誤：種下、種地等的種唸四聲</i><i>同音字練習每組最多 6 個字</i><i>名字筆順多收 80 個字（如茜）</i><i>多音字字卡加「字義」（教育部字典原文）</i><i>勘誤：番茄、螞蟻等 29 張字卡讀音</i><i>公版語詞改用課本語詞（教育百科）</i><i>新增生字複習卷（可跨版本、跨年級）</i><i>生字練習：以前學過的字也要寫</i><i>自編練習可自己打字改注音</i><i>查國字補上下學期生字的多音字讀音</i></span></details></li><li><details><summary><b>11/2</b><em>10 項</em></summary><span><i>多音字語詞讀音依字典補齊</i><i>勘誤：看圖注音耳朵、蘿蔔標輕聲</i><i>查國字加入下學期教過的字</i><i>造詞改用字典有收的詞</i><i>生字字卡放大，可滑動，加入成語</i><i>勘誤：不適合的造詞換成常用詞</i><i>查國字可直接跳到那課字卡</i><i>看圖注音改成分題型印</i><i>點成語看意思、聽教育部語音</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></details></li><li><details><summary><b>11/1</b><em>20 項</em></summary><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></details></li><li><details><summary><b>10/31</b><em>18 項</em></summary><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></details></li></ul></div>
   <div class="clog privp" id="privp" hidden><div class="pp">
       <p>本站是 Ashley 個人製作的免費學習網站，<b>不需要註冊、不會要求登入，也不蒐集孩子的個人資料</b>。以下說明網站會處理哪些資料：</p>
       <p><b>1. 只存在您裝置上的資料</b><br>為了方便使用，網站會在您的瀏覽器（localStorage）記住：選過的版本、年級與課次、自編練習卷與照樣造句的內容、筆順練習的星星與常寫錯的字、音效開關等設定。這些資料<b>只存在您的裝置</b>，不會上傳到本站或任何地方；清除瀏覽器資料就會刪除，也可以在筆順練習按「清除練習紀錄」。</p>
@@ -1460,7 +1462,7 @@ function gridA(its,ans,port,g,head,blank){const res=[];
         if(it===undefined)cell.innerHTML='<div class="ch tz"></div><div class="zy"></div>';
         else if(it===null)cell.innerHTML='<div class="sep">○</div>';
         else if(it.lab)cell.innerHTML=`<div class="lab">${esc(it.lab)}</div>`;
-        else cell.innerHTML=`<div class="ch tz">${(!it.t||ans)?esc(it.ch):""}</div><div class="zy${it.t?" hl":""}">${zv(it.z)}</div>`;
+        else cell.innerHTML=`<div class="ch tz${ans&&it.t?" ar":""}">${(!it.t||ans)?esc(it.ch):""}</div><div class="zy${it.t?" hl":""}">${zv(it.z)}</div>`;
         ce.appendChild(cell);}
       cs.appendChild(ce);}
     A.appendChild(cs);s.appendChild(A);if(ans)s.appendChild(el("div","ansflag","解答"));res.push(s);}
@@ -1473,7 +1475,7 @@ function sheetsB(ls,ans){const res=[];if(!ls.length)return res;const multi=ls.le
   const head=multi?`${G[ls[0].g-1]}上 ${esc((no||"").replace(/課$/,""))}～${esc((last||"").replace(/^第/,""))}`:`${G[ls[0].g-1]}上 ${esc(no)} ${esc(ti)}`;
   for(let p=0;p<cells.length;p+=25){const s=sheet("port");
     s.appendChild(el("div","ttl",`<span>${head}　部首測驗${ans?"（解答）":""}</span><small>姓名：＿＿＿＿＿＿　得分：＿＿＿</small>`));
-    const B=el("div","wsB");for(const c of cells.slice(p,p+25)){B.appendChild(c.lab?el("div","rb rlab",`<div class="lab">${esc(c.lab)}</div>`):el("div","rb",`<div class="top"><div class="tz">${esc(c.c)}</div><div class="zy">${zv(c.z)}</div></div><div class="lb">部首</div><div class="wr">${ans?esc(c.b):""}</div>`));}
+    const B=el("div","wsB");for(const c of cells.slice(p,p+25)){B.appendChild(c.lab?el("div","rb rlab",`<div class="lab">${esc(c.lab)}</div>`):el("div","rb",`<div class="top"><div class="tz">${esc(c.c)}</div><div class="zy">${zv(c.z)}</div></div><div class="lb">部首</div><div class="wr ar">${ans?esc(c.b):""}</div>`));}
     s.appendChild(B);res.push(s);}
   return res;}
 // C: polyphone, 2 per row, 3 rows per sheet
@@ -1494,7 +1496,7 @@ function polySheets(items,ans,name,sub){const res=[];
     for(const c of grp){
       const b=el("div","pb"+(c.reads.length>=3?" w3":""));b.appendChild(el("div","hz",`<div class="tz">${esc(c.c)}</div>`));
       const rd=el("div","rd");
-      for(const [z,ws] of c.reads)rd.appendChild(el("div","rc",`<div class="lb">讀音</div><div class="zyb">${ans?zv(z):""}</div>`+wordCells(pickW(ws,c.c),c.c,z,ans,c.low)));
+      for(const [z,ws] of c.reads)rd.appendChild(el("div","rc",`<div class="lb">讀音</div><div class="zyb ar">${ans?zv(z):""}</div>`+wordCells(pickW(ws,c.c),c.c,z,ans,c.low)));
       b.appendChild(rd);C.appendChild(b);}
     s.appendChild(C);res.push(s);}
   return res;}
@@ -1509,10 +1511,11 @@ function sheetsC(ls,ans){const all=[];ls.forEach(x=>{x.c.forEach(c=>{if(c.o.leng
 const ANSW={"又":"又一次"};   /* 課本只有四字語詞的字，指定參考答案 */
 const pickW=(ws,c)=>{ws=ws||[];const by=n=>ws.find(w=>[...w].length===n);if(!c)return by(2)||ws[0]||"";
   const w=by(2)||by(3)||ANSW[c];if(w)return w;
+  {const p=ws.find(x=>[...x].length===2&&x.includes(c))||"";if(!p){const f=by(4);if(f)return f;}}   /* 只有四字成語：解答放成語 */
   if(typeof WSET==="undefined"||!WSET)buildWSET();for(const w of ws){const ch=[...w];for(let i=0;i<ch.length-1;i++){const p=ch[i]+ch[i+1];if(p.includes(c)&&WSET.has(p))return p;}}return "";};
 function wordZ(w,c,z){const ch=[...w];const rd=typeof autoRead==="function"?autoRead(ch):[];return ch.map((x,i)=>x===c?z:(rd[i]||(ZYT[x]||[])[0]||""));}
-function wordCells(w,c,z,ans,low){const three=ans&&[...w].length===3,n=three?3:2,ch=[...w].slice(0,n),zs=ans&&w?wordZ(w,c,z):[];   /* 學生版一律兩格；解答是三個字的語詞時，三格擠進兩格的高度（Ashley） */
-  return [...Array(n).keys()].map(i=>`<div class="wc${three?" s3":""}"><div class="tz">${ans&&ch[i]?esc(ch[i]):""}</div>${low?`<div class="zy">${ans&&zs[i]?zv(zs[i]):""}</div>`:""}</div>`).join("");}
+function wordCells(w,c,z,ans,low){const L=[...w].length,three=ans&&L===3,four=ans&&L===4,n=four?4:three?3:2,ch=[...w].slice(0,n),zs=ans&&w?wordZ(w,c,z):[];   /* 學生版一律兩格；解答是三個字的語詞時，三格擠進兩格的高度（Ashley） */
+  return [...Array(n).keys()].map(i=>`<div class="wc${four?" s4":three?" s3":""}"><div class="tz ar">${ans&&ch[i]?esc(ch[i]):""}</div>${low?`<div class="zy ar">${ans&&zs[i]?zv(zs[i]):""}</div>`:""}</div>`).join("");}
 // D: 同音不同字。字只從「該年級以下（含）課本教過的生字、認讀字」挑，不會出現太難的字
 let CHZ=null;
 let CHC=null;
@@ -1608,7 +1611,7 @@ function fixSheets(items,ans,name,sub,low){const res=[];if(!items.length)return 
     for(const band of pg){const B=el("div","fxv");B.style.height=bh(band)+"mm";
       for(const it of band){no++;const zs=!low?[]:(it.zs||it.pz||wordZ(it.w.join(""),it.c,it.z||"")).map((z,j)=>it.w[j]==="一"&&/^ㄧ[ˊˋ]$/.test(z)?"ㄧ":it.w[j]==="不"&&z==="ㄅㄨˊ"?"ㄅㄨˋ":z);   /* 句子用審核過的注音、語詞用課本注音；一、不標本調（教育部標準） */
         const chars=it.w.map((x,j)=>{const ch=j===it.i?it.bad:x;return `<div class="vc"><span class="vt${j===it.i&&(ans||FXRING||!it.zs)?" ring":""}">${esc(ch)}</span>${low?`<span class="vz">${zv(zs[j]||"")}</span>`:""}</div>`;}).join("");
-        B.appendChild(el("div","fxcol"+(low?" low":""),`<div class="vbr"><span class="pa">︵</span><span class="ans">${ans?esc(it.c):""}</span><span class="pa">︶</span></div><div class="vno">${no}.</div>${chars}`));}
+        B.appendChild(el("div","fxcol"+(low?" low":""),`<div class="vbr"><span class="pa">︵</span><span class="ans ar">${ans?esc(it.c):""}</span><span class="pa">︶</span></div><div class="vno">${no}.</div>${chars}`));}
       s.appendChild(B);}
     res.push(s);}
   return res;}
@@ -1653,7 +1656,7 @@ function sheetsF(ls,ans){const {rnd,pool}=picPool(),used=new Set(),tag=PTY==="AL
   const head=s=>s.appendChild(el("div","ttl",`<span>看圖注音練習${tag?"　"+tag:""}${ans?"（解答）":""}　一年級</span><small>姓名：＿＿＿＿＿＿</small>`));
   const secA=(s,A,no)=>{s.appendChild(el("div","pq",`${no}、看圖圈出正確的讀音。`));const T=el("div","pgrid");A.forEach(({it,o},n)=>T.appendChild(el("div","pc",`<div class="pno">${n+1}</div><div class="pim">${picSvg(it)}</div><div class="pop">${o.map(z=>`<span class="po${ans&&z.join(" ")===it.z.join(" ")?" ring":""}">${zcol(z)}</span>`).join("")}</div>`)));s.appendChild(T);};
   const secB=(s,B,no)=>{s.appendChild(el("div","pq",`${no}、看圖寫注音。`));const U=el("div","pgrid");B.forEach((it,n)=>U.appendChild(el("div","pc",`<div class="pno">${n+1}</div><div class="pim sm">${picSvg(it)}</div><div class="pwr">${it.z.map(z=>`<span class="pbx">${ans?zv(z):""}</span>`).join("")}</div>`)));s.appendChild(U);};
-  const blank=z=>`<span class="pfb">（<span class="pfz">${ans?zv(z):""}</span>）</span>`;
+  const blank=z=>`<span class="pfb">（<span class="pfz ar">${ans?zv(z):""}</span>）</span>`;
   const secC=(s,C,no)=>{s.appendChild(el("div","pq",`${no}、看圖，在（　）裡填上注音。`));const V=el("div","pfgrid");C.forEach(({it,h},n)=>V.appendChild(el("div","pc pf",`<div class="pno">${n+1}</div><div class="pim sm">${picSvg(it)}</div><div class="pfs"><span class="pfg">${zv("ㄓㄜˋ")}</span><span class="pfg">${zv("ㄕˋ")}</span>${it.z.map((z,i)=>i===h?blank(z):`<span class="pfg">${zv(z)}</span>`).join("")}</div>`)));s.appendChild(V);};
   const secD=(s,D,no)=>{s.appendChild(el("div","pq",`${no}、看圖，寫出名稱的注音（一格寫一個字的注音）。`));const Y=el("div","pfgrid");D.forEach(({it,h},n)=>Y.appendChild(el("div","pc pf",`<div class="pno">${n+1}</div><div class="pim sm">${picSvg(it)}</div><div class="pfs">${it.z.map((z,i)=>i===h?`<span class="pfb">（<span class="pfz hint">${zv(z)}</span>）</span>`:blank(z)).join("")}</div>`)));s.appendChild(Y);};
   const F={A:secA,B:secB,C:secC,D:secD};
@@ -2477,7 +2480,7 @@ function edSheets(ans){const res=[];const sz=GRID[edSize()],ROWS=sz.rows,COLS=sz
         else if(x.lab)cell.innerHTML=`<div class="lab">${esc(x.lab)}</div>`;
         else{const showH=ans||x.m===0||x.m===2,showZ=ans||x.m===0||x.m===1;
           cell.dataset.i=x.i;cell.dataset.j=x.j;cell.className="cell m"+x.m+(x.poly?" poly":"");
-          cell.innerHTML=`<div class="ch tz">${showH?esc(x.c):`<span class="gh">${esc(x.c)}</span>`}</div><div class="zy${x.m&&!ans?" hl":""}">${x.z?(showZ?zv(x.z):`<span class="gh">${zv(x.z)}</span>`):""}</div>`;}
+          cell.innerHTML=`<div class="ch tz${ans&&(x.m===1||x.m===3)?" ar":""}">${showH?esc(x.c):`<span class="gh">${esc(x.c)}</span>`}</div><div class="zy${x.m&&!ans?" hl":""}${ans&&(x.m===2||x.m===3)?" ar":""}">${x.z?(showZ?zv(x.z):`<span class="gh">${zv(x.z)}</span>`):""}</div>`;}
         ce.appendChild(cell);}
       cs.appendChild(ce);}
     A.appendChild(cs);s.appendChild(A);if(ans)s.appendChild(el("div","ansflag","解答"));res.push(s);}
