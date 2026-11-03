@@ -1320,13 +1320,13 @@ function renderPrint(m,ls){
     const d=box.querySelector(".prevd");if(d){d.open=PREVOPEN;d.ontoggle=()=>{PREVOPEN=d.open;};}
     m.appendChild(box);}
   if(!COMBO&&PT==="R"){const rs=rvSel(),pool=rvPool(),{b,nb}=rvBatch(),box=el("div","prev rv");
-    box.innerHTML=`<div class="sk-note">勾要複習的年級和版本（同一個年級可以勾好幾個版本），會抓那些課的公版語詞混在一起，每次隨機出 ${RVN} 個字（看注音寫國字）。</div>
+    box.innerHTML=`<div class="sk-note">每個年級勾孩子當時用的版本（點別的版本會自動換過去，再點一次可以取消這個年級），會抓那些課的公版語詞混在一起，每次隨機出 ${RVN} 個字（看注音寫國字）。</div>
       <div class="prevbtns"><button type="button" class="mini" data-rvall="clear">全部清除</button><button type="button" class="mini" data-rvall="reset">恢復預設</button></div>
       <div class="prevt"><span></span>${["n","k","h"].map(v=>`<b>${VN[v].slice(0,2)}</b>`).join("")}${[...PG()].reverse().map(g=>`<span>${rowName(g)}</span>`+["n","k","h"].map(v=>`<input type="checkbox" data-rv="${g+v}" aria-label="複習${G[g-1]}年級${VN[v]}"${rs.has(g+v)?" checked":""}>`).join("")).join("")}</div>
       <div class="sk-note">現在是${G[grade-1]}年級${CUR_SEM}學期，以前學過的範圍自動抓到${SEMS().length?(([g,m])=>G[g-1]+"年級"+m+"學期")(SEMS()[SEMS().length-1]):""}為止。<br>字庫來源：教育部教育百科「生字詞彙表」的現行課本，上學期用 115 學年度、下學期用 114 學年度（目前最新的資料）。以前的年級也是用這份現行課本的生字；孩子當年讀的是較早的學年度，課本若有改版，會有少數生字不同。</div>
       <div class="rvbar"><label class="pr-ans">每次 <select id="rvN">${[20,40,60].map(n=>`<option${n===RVN?" selected":""}>${n}</option>`).join("")}</select> 個字</label>
         <button class="btn" type="button" id="rvNext"${nb>1?"":" disabled"}>換一批</button><span class="sk-note">第 ${pool.length?b+1:0} / ${nb} 批・共 ${pool.length} 個字${nb>1?`，${nb} 批就能全部複習完`:""}</span></div>`;
-    box.querySelectorAll("[data-rv]").forEach(c=>c.onchange=()=>{c.checked?rs.add(c.dataset.rv):rs.delete(c.dataset.rv);rvSave();RVB=0;render();});
+    box.querySelectorAll("[data-rv]").forEach(c=>c.onchange=()=>{const g=c.dataset.rv.slice(0,-1);["n","k","h"].forEach(v=>rs.delete(g+v));if(c.checked)rs.add(c.dataset.rv);rvSave();RVB=0;render();});   /* 每個年級只選一個版本：點別的版本自動換過去；再點一次同一格就不複習這個年級 */
     box.querySelectorAll("[data-rvall]").forEach(b=>b.onclick=()=>{rs.clear();if(b.dataset.rvall==="reset")PG().forEach(g=>rs.add(g+VER));rvSave();RVB=0;render();});
     box.querySelector("#rvN").onchange=e=>{RVN=+e.target.value;RVB=0;render();};
     box.querySelector("#rvNext").onclick=()=>{RVB++;render();};
