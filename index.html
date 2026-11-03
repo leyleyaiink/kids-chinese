@@ -867,7 +867,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p><p class="about-ig">喜歡這個網站的話，歡迎追蹤 <a href="https://www.instagram.com/eating1125/" target="_blank" rel="noopener">Ashley 的 IG</a>，有新功能會第一時間在限動分享！</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月3日 21:05<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月3日 21:06<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><details open><summary><b>11/3</b><em>14 項</em></summary><span><i>新增空白稿紙（生字練習格）</i><i>筆順練習紙新增考前快速複習版</i><i>同音字加入更多常見字</i><i>自編：點語詞跳出小框選語詞</i><i>勘誤：種下、種地等的種唸四聲</i><i>同音字練習每組最多 6 個字</i><i>名字筆順多收 80 個字（如茜）</i><i>多音字字卡加「字義」（教育部字典原文）</i><i>勘誤：番茄、螞蟻等 29 張字卡讀音</i><i>公版語詞改用課本語詞（教育百科）</i><i>新增生字複習卷（可跨版本、跨年級）</i><i>生字練習：以前學過的字也要寫</i><i>自編練習可自己打字改注音</i><i>查國字補上下學期生字的多音字讀音</i></span></details></li><li><details><summary><b>11/2</b><em>10 項</em></summary><span><i>多音字語詞讀音依字典補齊</i><i>勘誤：看圖注音耳朵、蘿蔔標輕聲</i><i>查國字加入下學期教過的字</i><i>造詞改用字典有收的詞</i><i>生字字卡放大，可滑動，加入成語</i><i>勘誤：不適合的造詞換成常用詞</i><i>查國字可直接跳到那課字卡</i><i>看圖注音改成分題型印</i><i>點成語看意思、聽教育部語音</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></details></li><li><details><summary><b>11/1</b><em>20 項</em></summary><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></details></li><li><details><summary><b>10/31</b><em>18 項</em></summary><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></details></li></ul></div>
 </footer>
@@ -1355,8 +1355,8 @@ function renderPrint(m,ls){
   ctl.querySelectorAll("[data-t]").forEach(b=>{b.setAttribute("aria-selected",!COMBO&&b.dataset.t===PT);b.onclick=()=>{PT=b.dataset.t;COMBO=false;render();};});
   $("pa").onchange=e=>{PA=e.target.checked;render();};
   if(COMBO)m.appendChild(el("div","pr-tip",`下面是合併匯出的內容（${["A","B","G","C","D","E","F"].filter(t=>PTS.has(t)).map(t=>({A:"生字",B:"部首",C:"多音字",D:"同音字",E:"改錯字",F:"看圖注音",G:"筆順練習紙"})[t]).join("、")}）。點上面任一練習卷可以回到單一預覽。`));
-  else if(PT==="A"){const tip=el("div","pr-tip",`<div class="seg" role="group" aria-label="內容"><button type="button" data-ab="0" aria-pressed="${!ABLANK}">課本生字公版</button><button type="button" data-ab="1" aria-pressed="${ABLANK}">空白稿紙</button></div><div style="margin-top:8px">${ABLANK?"一樣的國字格、注音格，全部空白，印幾張都可以。":"這是依課本生字排好的公版。要自己出題，請點"} <button class="mini done" type="button" data-aed>自編生字練習</button></div>`);
-    tip.querySelector("[data-aed]").onclick=()=>go("edit");tip.querySelectorAll("[data-ab]").forEach(b=>b.onclick=()=>{ABLANK=b.dataset.ab==="1";render();});m.appendChild(tip);}
+  else if(PT==="A"){const tip=el("div","pr-tip",`<div class="seg" role="group" aria-label="內容"><button type="button" data-ab="0" aria-pressed="${!ABLANK}">課本生字公版</button><button type="button" data-ab="1" aria-pressed="${ABLANK}">空白稿紙</button></div>${ABLANK?`<div class="seg" role="group" aria-label="面數" style="margin-top:8px"><button type="button" data-abn="1" aria-pressed="${ABN===1}">一面</button><button type="button" data-abn="2" aria-pressed="${ABN===2}">兩面（雙面列印）</button></div>`:""}<div style="margin-top:8px">${ABLANK?"一樣的國字格、注音格，全部空白。選「兩面」會印兩頁，印表機選雙面列印，正反面都是稿紙。":"這是依課本生字排好的公版。要自己出題，請點"} <button class="mini done" type="button" data-aed>自編生字練習</button></div>`);
+    tip.querySelector("[data-aed]").onclick=()=>go("edit");tip.querySelectorAll("[data-ab]").forEach(b=>b.onclick=()=>{ABLANK=b.dataset.ab==="1";render();});tip.querySelectorAll("[data-abn]").forEach(b=>b.onclick=()=>{ABN=+b.dataset.abn;render();});m.appendChild(tip);}
   if(!COMBO&&PT==="A"&&!ABLANK){const k=prevKeys(),box=el("div","prev");
     box.innerHTML=`<div class="sk-note">語詞裡以前學過的字也會空出國字格（學過的字本來就要會寫）。</div>`+(SEMS().length?`
       <details class="prevd"><summary>換過版本嗎？點這裡</summary>
@@ -1422,8 +1422,8 @@ const GRID={L:{g:20,z:8,rows:9,cols:8,prows:13,pcols:5},M:{g:15,z:6,rows:12,cols
 function gridVars(A,sz){A.classList.add("fix");A.style.setProperty("--g",sz.g+"mm");A.style.setProperty("--z",sz.z+"mm");A.style.setProperty("--rows",sz.rows);}
 // 選好幾課時接著排、不換頁，每課開頭放一格「第幾課」標籤，節省紙張；只選一課時跟以前一樣
 /* 空白稿紙（Ashley）：跟生字語詞練習表一樣的格子（國字田字格＋注音格），全部空白，一張 */
-let ABLANK=false;
-function sheetsA(ls,ans,port){if(ABLANK)return ans?[]:gridA([],false,port,grade,"<span>稿紙</span>",true);if(!ls.length)return [];const its=[],multi=ls.length>1;
+let ABLANK=false,ABN=1;   /* ABN：印幾面（2＝兩頁，雙面列印正反面都是稿紙） */
+function sheetsA(ls,ans,port){if(ABLANK)return ans?[]:Array.from({length:ABN},()=>gridA([],false,port,grade,"<span>稿紙</span>",true)[0]);if(!ls.length)return [];const its=[],multi=ls.length>1;
   for(const x of ls){
     if(multi)its.push([{lab:titleParts(x.t)[0]||x.t}]);
     const seen={};   /* 同一課兩個生字用同一個語詞（遊、戲→遊戲），只出一題，兩個字都空 */
