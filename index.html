@@ -723,6 +723,8 @@ body.v-sent #lessons,body.v-sent .row:has(>#lessons){display:none}
 @media (max-width:820px){.pr-row .tabs{display:grid!important;grid-template-columns:1fr!important;width:100%!important;max-width:none!important}.pr-row .tabs .tab{width:100%!important;min-width:0!important;justify-content:center;text-align:center;min-height:44px}.pr-row .pr-ans{width:100%;justify-content:flex-start}}   /* 手機：練習卷按鈕一顆一行、跟螢幕一樣寬（Ashley：要整齊、等寬） */
 @media (min-width:821px){.pr-row{flex-wrap:wrap}.pr-row .tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;max-width:840px!important;flex:1 1 640px!important}.pr-row .tabs .tab{width:100%!important;min-width:0!important;justify-content:center;text-align:center;min-height:42px}.pr-row .pr-ans{flex-basis:100%;padding-left:6.4em}.prev{max-width:840px}}   /* 電腦：按鈕一排三顆、等寬；附解答頁放下面；說明文字不要拉太長 */
 @media (max-width:820px){.prevt{width:100%!important;max-width:none!important;grid-template-columns:5.5em repeat(3,minmax(0,1fr))!important;justify-items:center;gap:10px 0;padding:10px 8px;border:1px solid var(--line);border-radius:14px;background:#fff;box-sizing:border-box}.prevt>span{justify-self:start;padding-right:0}.prevt input{width:24px;height:24px}.prevbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}.prevbtns:has(>:only-child){grid-template-columns:1fr}.prevbtns .mini{width:100%;min-height:40px;font-size:15px}.rvbar .btn.p{flex:1 1 100%;min-height:48px}}   /* 手機：選版本表格撐滿寬度、置中整齊（Ashley） */
+.rvh{font-weight:700;color:var(--ink);font-size:15px;margin:6px 0 2px}.rvR .rvbar{margin-top:0}
+@media (min-width:821px){.prev.rv{max-width:900px;margin:0 auto 16px}.rvcols{display:grid;grid-template-columns:330px 1fr;gap:28px;border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px 22px;margin-top:10px}.rvR{display:flex;flex-direction:column;gap:10px;border-left:1px dashed var(--line);padding-left:26px}.rvR .rvbar .btn.p{min-width:180px;min-height:52px;font-size:18px}.rvR .sk-note{margin-top:0}.rvL .prevt{margin-top:10px}}   /* 電腦：複習卷設定包成一個框，左邊選版本、右邊列印（Ashley：用順眼的排法） */
 .brandA .tg{display:block;font-style:normal;font-size:13px;letter-spacing:.18em;color:var(--ink);margin-top:2px}
 .sr-where span{border-radius:10px!important;line-height:1.5}
 /* 筆順按鈕：上一字、重寫、下一字同一排（下一字在最右邊） */
@@ -1350,12 +1352,15 @@ function renderPrint(m,ls){
     m.appendChild(box);}
   if(!COMBO&&PT==="R"){const rs=rvSel(),pool=rvPool(),{b,nb,rng}=rvBatch(),done=rvDone(),box=el("div","prev rv");
     box.innerHTML=`<div class="sk-note">每個年級勾孩子當時用的版本（點別的版本會自動換過去，再點一次可以取消這個年級；想同一年級練好幾個版本，勾下面的選項），會抓那些課的公版語詞混在一起隨機出題（看注音寫國字），分成好幾卷，每卷排滿兩張 A4 雙面（四頁），同一個字只會出現在其中一卷。</div>
+      <div class="rvcols"><div class="rvL"><div class="rvh">孩子各年級用的版本</div>
       <div class="prevbtns"><button type="button" class="mini" data-rvall="clear">全部清除</button><button type="button" class="mini" data-rvall="reset">恢復預設</button></div>
       <div class="prevt"><span></span>${["n","k","h"].map(v=>`<b>${VN[v].slice(0,2)}</b>`).join("")}${[...PG()].reverse().map(g=>`<span>${rowName(g)}</span>`+["n","k","h"].map(v=>`<input type="checkbox" data-rv="${g+v}" aria-label="複習${G[g-1]}年級${VN[v]}"${rs.has(g+v)?" checked":""}>`).join("")).join("")}</div>
       <label class="pr-ans rvm"><input type="checkbox" id="rvMulti"${RVMULTI?" checked":""}> 同一年級可以勾多個版本（想多練別的版本時用）</label>
-      <div class="sk-note">現在是${G[grade-1]}年級${CUR_SEM}學期，以前學過的範圍自動抓到${SEMS().length?(([g,m])=>G[g-1]+"年級"+m+"學期")(SEMS()[SEMS().length-1]):""}為止。<br>字庫來源：教育部教育百科「生字詞彙表」的現行課本，上學期用 115 學年度、下學期用 114 學年度（目前最新的資料）。以前的年級也是用這份現行課本的生字；孩子當年讀的是較早的學年度，課本若有改版，會有少數生字不同。</div>
+      </div><div class="rvR">
       <div class="rvbar">${pool.length?`<button class="btn p" type="button" id="rvPrint">印第 ${b+1} 卷</button><span class="sk-note">共 ${nb} 卷・這卷 ${rng[1]-rng[0]} 個字${done?`・已印到第 ${Math.min(done,nb)} 卷${done>=nb?"（全部印完一輪了）":""}`:""}</span>`:""}</div>
-      ${pool.length&&nb>1?`<div class="rvmore"><label>選其他卷 <select id="rvPick">${Array.from({length:nb},(_,i)=>`<option value="${i}"${i===b?" selected":""}>第 ${i+1} 卷${i<done?"（印過）":""}</option>`).join("")}</select></label>${done?`<button type="button" class="mini" id="rvRestart">從第 1 卷重新開始</button>`:""}</div>`:""}`;
+      ${pool.length&&nb>1?`<div class="rvmore"><label>選其他卷 <select id="rvPick">${Array.from({length:nb},(_,i)=>`<option value="${i}"${i===b?" selected":""}>第 ${i+1} 卷${i<done?"（印過）":""}</option>`).join("")}</select></label>${done?`<button type="button" class="mini" id="rvRestart">從第 1 卷重新開始</button>`:""}</div>`:""}
+      <div class="sk-note">現在是${G[grade-1]}年級${CUR_SEM}學期，以前學過的範圍自動抓到${SEMS().length?(([g,m])=>G[g-1]+"年級"+m+"學期")(SEMS()[SEMS().length-1]):""}為止。<br>字庫來源：教育部教育百科「生字詞彙表」的現行課本，上學期用 115 學年度、下學期用 114 學年度（目前最新的資料）。以前的年級也是用這份現行課本的生字；孩子當年讀的是較早的學年度，課本若有改版，會有少數生字不同。</div>
+      </div></div>`;
     const okChange=()=>!done||confirm(`已經印到第 ${Math.min(done,nb)} 卷了。改了範圍，題目會重新排，要從第 1 卷重新開始。確定要改嗎？`);   /* 印過再改勾選先提醒 */
     box.querySelectorAll("[data-rv]").forEach(c=>c.onchange=()=>{if(!okChange()){render();return;}const g=c.dataset.rv.slice(0,-1);if(!RVMULTI)["n","k","h"].forEach(v=>rs.delete(g+v));c.checked?rs.add(c.dataset.rv):rs.delete(c.dataset.rv);rvSave();render();});
     box.querySelector("#rvMulti").onchange=e=>{const on=e.target.checked;
