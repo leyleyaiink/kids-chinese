@@ -843,7 +843,7 @@ footer .about .fsh .no{background:#eb53d0!important;color:#fff!important}
       <li>97 年地方特考教育行政三等及格</li>
       <li>曾服務於縣市政府教育局，公職歷練 15 年，歷經科員、股長、首長秘書、督學等職務。</li>
     </ul><p>有豐富的行政資歷，同時也是一個二寶媽。有國小教師證，但沒當過老師。</p><p>熱愛 vibe coding，深諳國語生字練習的重要性及家長、老師的痛點，所以做了這個免費學習網站。</p><p>希望能對社會有一些小小的貢獻。</p></div></div></div>
-  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月3日 12:49<span id="views"></span></span></div>
+  <div class="fbot"><div class="fby"><span class="byrow"><span id="by">Ashley 設計規劃</span><button type="button" class="clog-b" aria-expanded="false" aria-controls="clog">更新紀錄</button></span></div><span>最後更新：2026年11月3日 12:53<span id="views"></span></span></div>
   <div class="a2hs" id="a2hs" hidden></div>
   <div class="clog" id="clog" hidden><ul><li><details open><summary><b>11/3</b><em>4 項</em></summary><span><i>新增生字複習卷（可跨版本、跨年級）</i><i>生字練習：以前學過的字也要寫</i><i>自編練習可自己打字改注音</i><i>查國字補上下學期生字的多音字讀音</i></span></details></li><li><details><summary><b>11/2</b><em>10 項</em></summary><span><i>多音字語詞讀音依字典補齊</i><i>勘誤：看圖注音耳朵、蘿蔔標輕聲</i><i>查國字加入下學期教過的字</i><i>造詞改用字典有收的詞</i><i>生字字卡放大，可滑動，加入成語</i><i>勘誤：不適合的造詞換成常用詞</i><i>查國字可直接跳到那課字卡</i><i>看圖注音改成分題型印</i><i>點成語看意思、聽教育部語音</i><i>勘誤：爸爸、更換等 16 詞注音</i></span></details></li><li><details><summary><b>11/1</b><em>20 項</em></summary><span><i>看圖注音 7 卷（卷A～G）</i><i>勘誤：筆順分數改顯示完成字數</i><i>勘誤：注音依審訂表全面核對</i><i>勘誤：年、回等10字筆順多一筆</i><i>勘誤：多音字解答被切成兩字</i><i>勘誤：列印時版面跑掉</i><i>多音字新增長、奇、哪</i><i>筆順練習紙可自動排滿一張 A4</i><i>更多名字用字可以練筆順</i><i>注音專區可印注音筆順練習紙</i><i>課本生字筆順全部補齊</i><i>查國字：課本沒有的字也能練筆順</i><i>留言可以留 Email 收回覆</i><i>新增筆順練習紙（公版課文生字，自編可改成名字）</i><i>新增注音專區：注音筆順、看圖注音</i><i>康軒一上加入「國字真簡單」</i><i>手機可複製網址、放大看練習卷</i><i>顯示累計瀏覽人次</i><i>新增更新紀錄</i><i>PDF 自動命名</i></span></details></li><li><details><summary><b>10/31</b><em>18 項</em></summary><span><i>練習卷標題加上課次</i><i>查國字顯示所有讀音</i><i>多種練習卷一次匯出</i><i>自編練習標出第幾課</i><i>補齊三～六年級筆順</i><i>手機可按返回上一頁</i><i>生字練習表更省紙</i><i>筆順測驗可看答案</i><i>記住常寫錯的字</i><i>新增自編照樣造句</i><i>新增翰林版</i><i>新增留言勘誤表單</i><i>自編多音字、同音字</i><i>新增同音不同字練習</i><i>格子改用作業簿規格</i><i>筆順改楷書、可連續播放</i><i>新增康軒版</i><i>網站上線</i></span></details></li></ul></div>
 </footer>
@@ -1302,14 +1302,14 @@ function renderPrint(m,ls){
     box.innerHTML=`<div class="sk-note">語詞裡以前學過的字也會空出國字格（學過的字本來就要會寫）。</div>`+(SEMS().length?`
       <details class="prevd"><summary>以前的學期用${[...new Set([...k].map(x=>x.slice(-1)))].map(v=>VN[v]).join("、")||"（沒有勾）"}・孩子換過版本？點這裡改</summary>
       <div class="prevt"><span></span>${["n","k","h"].map(v=>`<b>${VN[v].slice(0,2)}</b>`).join("")}${Array.from({length:grade-1},(_,i)=>i+1).map(g=>`<span>${G[g-1]}年級</span>`+["n","k","h"].map(v=>`<input type="radio" name="pk${g}" data-pk="${g+v}" aria-label="${G[g-1]}年級${VN[v]}"${k.has(g+"上"+v)?" checked":""}>`).join("")).join("")}</div>
-      <div class="sk-note">選孩子每個年級用的版本。以前學期的字用現行課本的生字表（上學期 115 學年度、下學期 114 學年度），可能和孩子當年的課本差幾個字。</div></details>`:"");
+      <div class="sk-note">選孩子每個年級用的版本。<br>註：以前年級的生字，採用現行課本的生字表（上學期 115 學年度、下學期 114 學年度）。</div></details>`:"");
     box.querySelectorAll("[data-pk]").forEach(c=>c.onchange=()=>{const g=c.dataset.pk.slice(0,-1),v=c.dataset.pk.slice(-1);["上","下"].forEach(m=>{["n","k","h"].forEach(x=>k.delete(g+m+x));k.add(g+m+v);});prevSave();PREVOPEN=true;render();});   /* 每個年級選一個版本（上下學期同一個版本） */
     const d=box.querySelector(".prevd");if(d){d.open=PREVOPEN;d.ontoggle=()=>{PREVOPEN=d.open;};}
     m.appendChild(box);}
   if(!COMBO&&PT==="R"){const rs=rvSel(),pool=rvPool(),{b,nb}=rvBatch(),box=el("div","prev rv");
     box.innerHTML=`<div class="sk-note">勾要複習的年級和版本（同一個年級可以勾好幾個版本），會抓那些課的公版語詞混在一起，每次隨機出 ${RVN} 個字（看注音寫國字）。</div>
       <div class="prevt"><span></span>${["n","k","h"].map(v=>`<b>${VN[v].slice(0,2)}</b>`).join("")}${RGS().map(g=>`<span>${G[g-1]}年級</span>`+["n","k","h"].map(v=>`<input type="checkbox" data-rv="${g+v}" aria-label="複習${G[g-1]}年級${VN[v]}"${rs.has(g+v)?" checked":""}>`).join("")).join("")}</div>
-      <div class="sk-note">每個年級包含上、下學期。以前的字用現行課本的生字表（上學期 115 學年度、下學期 114 學年度），可能和孩子當年的課本差幾個字。</div>
+      <div class="sk-note">每個年級包含上、下學期。<br>註：以前年級的生字，採用現行課本的生字表（上學期 115 學年度、下學期 114 學年度）。</div>
       <div class="rvbar"><label class="pr-ans">每次 <select id="rvN">${[20,40,60].map(n=>`<option${n===RVN?" selected":""}>${n}</option>`).join("")}</select> 個字</label>
         <button class="btn" type="button" id="rvNext"${nb>1?"":" disabled"}>換一批</button><span class="sk-note">第 ${pool.length?b+1:0} / ${nb} 批・共 ${pool.length} 個字${nb>1?`，${nb} 批就能全部複習完`:""}</span></div>`;
     box.querySelectorAll("[data-rv]").forEach(c=>c.onchange=()=>{c.checked?rs.add(c.dataset.rv):rs.delete(c.dataset.rv);rvSave();RVB=0;render();});
